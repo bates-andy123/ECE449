@@ -1,3 +1,23 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 02/18/2019 03:40:02 PM
+-- Design Name: 
+-- Module Name: barrelShiftLeft_TB - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -10,16 +30,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity barallelShiftLeft_TB is end barallelShiftLeft_TB;
+entity barrelShiftLeft_TB is end barrelShiftLeft_TB;
 
-architecture Behavioral of barallelShiftLeft_TB is
+architecture Behavioral of barrelShiftLeft_TB is
 
-component barallelShiftLeft
+component barrelShiftLeft
  port(
     input : in std_logic_vector(15 downto 0);
     shiftBy : in std_logic_vector(3 downto 0);
-    output : out std_logic_vector(15 downto 0)   
-);
+    output : out std_logic_vector(15 downto 0));
 end component;
 
 signal input : std_logic_vector(15 downto 0);
@@ -28,22 +47,20 @@ signal output : std_logic_vector(15 downto 0);
 
 begin
 
-u0 : barallelShiftLeft port map(input=>input, shiftBy=>shiftBy, output=>output);
+u0 : barrelShiftLeft port map(input=>input, shiftBy=>shiftBy, output=>output);
 
 process begin
-
-input <= X"88aa";
-shiftBy <= "0000";
-wait for 10us;
-shiftBy <= "0001";
-wait for 10us;
-shiftBy <= "0010";
-wait for 10us;
-shiftBy <= "0100";
-wait for 10us;
-shiftBy <= "1000";
-wait;
-
+    input <= X"88aa";
+    shiftBy <= "0000";
+    wait for 10us;
+    shiftBy <= "0001";
+    wait for 10us;
+    shiftBy <= "0010";
+    wait for 10us;
+    shiftBy <= "0100";
+    wait for 10us;
+    shiftBy <= "1000";
+    wait;
 end process;
 
 end Behavioral;

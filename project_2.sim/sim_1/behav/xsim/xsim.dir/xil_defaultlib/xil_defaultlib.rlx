@@ -2,11 +2,10 @@
 2017.4
 Dec 15 2017
 21:07:18
-C:/Users/abates/project_2/project_2.srcs/sim_1/imports/new/RF8_16TB.vhd,1550533437,vhdl,,,,test_alu,,,,,,,,
-C:/Users/abates/project_2/project_2.srcs/sim_1/new/barallelShiftLeft_TB.vhd,1550540172,vhdl,,,,barallelshiftleft_tb,,,,,,,,
-C:/Users/abates/project_2/project_2.srcs/sim_1/new/barallelShiftRight_TB.vhd,1550540637,vhdl,,,,barallelshiftright_tb,,,,,,,,
-C:/Users/abates/project_2/project_2.srcs/sources_1/new/RF8_16.vhd,1550104088,vhdl,,,,register_file,,,,,,,,
-C:/Users/abates/project_2/project_2.srcs/sources_1/new/alu.vhd,1550544103,vhdl,,,,alu,,,,,,,,
-C:/Users/abates/project_2/project_2.srcs/sources_1/new/barallelShiftLeft.vhd,1550543085,vhdl,,,,barallelshiftleft,,,,,,,,
-C:/Users/abates/project_2/project_2.srcs/sources_1/new/barrallel_shift_right.vhd,1550538404,vhdl,,,,barrallel_shift_right,,,,,,,,
-C:/Users/abates/project_2/project_2.srcs/sources_1/new/mux.vhd,1550537925,vhdl,C:/Users/abates/project_2/project_2.srcs/sources_1/new/barallelShiftLeft.vhd,,,mux2_1;mux2_2;mux2_4;mux2_8,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/imports/new/RF8_16TB.vhd,1550605843,vhdl,,,,test_alu,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/new/barallelShiftLeft_TB.vhd,1550607969,vhdl,,,,barrelshiftleft_tb,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/new/barallelShiftRight_TB.vhd,1550607972,vhdl,,,,barrelshiftright_tb,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/alu.vhd,1550607548,vhdl,,,,alu,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barallelShiftLeft.vhd,1550607894,vhdl,,,,barrelshiftleft,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrallel_shift_right.vhd,1550607902,vhdl,,,,barrelshiftright,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/mux.vhd,1550605843,vhdl,C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrallel_shift_right.vhd,,,mux2_1;mux2_2;mux2_4;mux2_8,,,,,,,,

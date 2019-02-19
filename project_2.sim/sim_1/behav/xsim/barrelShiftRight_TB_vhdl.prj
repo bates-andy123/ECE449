@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../project_2.srcs/sources_1/new/mux.vhd" \
+"../../../../project_2.srcs/sources_1/new/barrallel_shift_right.vhd" \
+"../../../../project_2.srcs/sim_1/new/barallelShiftRight_TB.vhd" \
+
+# Do not sort compile order
+nosort
