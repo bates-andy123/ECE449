@@ -1,6 +1,3 @@
-
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -13,9 +10,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity barallelShiftRight_TB is end barallelShiftRight_TB;
+entity barallelShiftLeft_TB is end barallelShiftLeft_TB;
 
-architecture Behavioral of barallelShiftRight_TB is
+architecture Behavioral of barallelShiftLeft_TB is
 
 component barallelShiftLeft
  port(
@@ -35,7 +32,7 @@ u0 : barallelShiftLeft port map(input=>input, shiftBy=>shiftBy, output=>output);
 
 process begin
 
-input <= X"AA88";
+input <= X"88aa";
 shiftBy <= "0000";
 wait for 10us;
 shiftBy <= "0001";
@@ -50,4 +47,3 @@ wait;
 end process;
 
 end Behavioral;
-
