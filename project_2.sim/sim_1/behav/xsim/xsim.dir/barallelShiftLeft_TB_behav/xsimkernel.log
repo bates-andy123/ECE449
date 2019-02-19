@@ -2,3 +2,6 @@ Running: xsim.dir/barallelShiftLeft_TB_behav/xsimk.exe -simmode gui -wdb baralle
 Design successfully loaded
 Design Loading Memory Usage: 6048 KB (Peak: 6048 KB)
 Design Loading CPU Usage: 46 ms
+Simulation completed
+Simulation Memory Usage: 6680 KB (Peak: 6680 KB)
+Simulation CPU Usage: 46 ms

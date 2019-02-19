@@ -46,16 +46,25 @@ end alu;
 architecture Behavioral of alu is
 
 component barrallel_shift_right port(
-    input, shiftBy : in std_logic_vector(15 downto 0);
+    input : in std_logic_vector(15 downto 0);
+    shiftBy : in std_logic_vector(3 downto 0);
+    output : out std_logic_vector(15 downto 0)   
+);
+end component;
+component barallelShiftLeft port(
+    input : in std_logic_vector(15 downto 0);
+    shiftBy : in std_logic_vector(3 downto 0);
     output : out std_logic_vector(15 downto 0)   
 );
 end component;
 
-signal bsr_output : std_logic_vector(15 downto 0);
+signal barallelShiftRightOutput : std_logic_vector(15 downto 0);
+signal barallelShiftLeftOutput  : std_logic_vector(15 downto 0);
 
 begin
 
-u0 : barrallel_shift_right port map(input=>in1, shiftBy=>in2(3 downto 0), output=>bsr_output);
+u0 : barrallel_shift_right port map(input=>in1, shiftBy=>in2(3 downto 0), output=>barallelShiftRightOutput);
+u1 : barallelShiftLeft port map(input=>in1, shiftBy=>in2(3 downto 0), output=>barallelShiftLeftOutput);
 
 process(clk)
 begin
@@ -65,7 +74,8 @@ begin
         when "001" => result <= (in1 + in2);
         when "010" => result <= (in1 - in2);
         when "100" => result <= (in1 nand in2);
-        when "110" => result  <= bsr_output;
+        when "101" => result  <= barallelShiftLeftOutput;
+        when "110" => result  <= barallelShiftRightOutput;
         when others => result <= X"0101"; 
         end case;
     end if;
