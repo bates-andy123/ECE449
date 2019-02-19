@@ -1,6 +1,6 @@
 Vivado Simulator 2017.4
 Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
-Running: C:/Xilinx/Vivado/2017.4/bin/unwrapped/win64.o/xelab.exe -wto e88acb7d2b234aa0b7a6978052500f30 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot test_alu_behav xil_defaultlib.test_alu -log elaborate.log 
+Running: C:/Xilinx/Vivado/2017.4/bin/unwrapped/win64.o/xelab.exe -wto e88acb7d2b234aa0b7a6978052500f30 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot barrelShiftRight_TB_behav xil_defaultlib.barrelShiftRight_TB -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
 Completed static elaboration
@@ -10,14 +10,10 @@ Time Resolution for simulation is 1ps
 Compiling package std.standard
 Compiling package std.textio
 Compiling package ieee.std_logic_1164
-Compiling package ieee.std_logic_arith
-Compiling package ieee.std_logic_unsigned
 Compiling architecture behavioral of entity xil_defaultlib.mux2_8 [mux2_8_default]
 Compiling architecture behavioral of entity xil_defaultlib.mux2_4 [mux2_4_default]
 Compiling architecture behavioral of entity xil_defaultlib.mux2_2 [mux2_2_default]
 Compiling architecture behavioral of entity xil_defaultlib.mux2_1 [mux2_1_default]
 Compiling architecture behavioral of entity xil_defaultlib.barrelShiftRight [barrelshiftright_default]
-Compiling architecture behavioral of entity xil_defaultlib.barrelShiftLeft [barrelshiftleft_default]
-Compiling architecture behavioral of entity xil_defaultlib.alu [alu_default]
-Compiling architecture behavioural of entity xil_defaultlib.test_alu
-Built simulation snapshot test_alu_behav
+Compiling architecture behavioral of entity xil_defaultlib.barrelshiftright_tb
+Built simulation snapshot barrelShiftRight_TB_behav

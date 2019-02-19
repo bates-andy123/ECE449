@@ -1,4 +1,4 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/alu.vhd" into library xil_defaultlib
-INFO: [VRFC 10-307] analyzing entity alu
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/imports/new/RF8_16TB.vhd" into library xil_defaultlib
-INFO: [VRFC 10-307] analyzing entity test_alu
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrelShiftRight.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity barrelShiftRight
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/new/barrelShiftRight_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity barrelShiftRight_TB
