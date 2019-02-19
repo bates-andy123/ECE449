@@ -55,7 +55,7 @@ generic map (
  MEMORY_INIT_PARAM => "0", -- String
  MEMORY_OPTIMIZATION => "true", -- String
  MEMORY_PRIMITIVE => "auto", -- String
- MEMORY_SIZE => 128, -- DECIMAL
+ MEMORY_SIZE => (128*8), -- DECIMAL
  MESSAGE_CONTROL => 0, -- DECIMAL
  READ_DATA_WIDTH_A => 16, -- DECIMAL
  READ_LATENCY_A => 2, -- DECIMAL
