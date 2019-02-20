@@ -3,21 +3,52 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="ROMController_TB_behav.wdb" id="1">
+      <db_ref path="decodeStage_TB_behav.wdb" id="1">
          <top_modules>
-            <top_module name="ROMController_TB" />
-            <top_module name="vcomponents" />
+            <top_module name="decodeStage_TB" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="119363636365fs"></ZoomEndTime>
-      <Cursor1Time time="1000000000fs"></Cursor1Time>
+      <ZoomEndTime time="241000000000fs"></ZoomEndTime>
+      <Cursor1Time time="241000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="128"></NameColumnWidth>
-      <ValueColumnWidth column_width="67"></ValueColumnWidth>
+      <ValueColumnWidth column_width="63"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="0" />
+   <WVObjectSize size="8" />
+   <wvobject fp_name="/decodeStage_TB/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/decodeStage_TB/instruction" type="array">
+      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/decodeStage_TB/useALU" type="logic">
+      <obj_property name="ElementShortName">useALU</obj_property>
+      <obj_property name="ObjectShortName">useALU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/decodeStage_TB/modeALU" type="array">
+      <obj_property name="ElementShortName">modeALU[2:0]</obj_property>
+      <obj_property name="ObjectShortName">modeALU[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/decodeStage_TB/operand1" type="array">
+      <obj_property name="ElementShortName">operand1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">operand1[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/decodeStage_TB/operand2" type="array">
+      <obj_property name="ElementShortName">operand2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">operand2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/decodeStage_TB/u0/u0/rd_index1" type="array">
+      <obj_property name="ElementShortName">rd_index1[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_index1[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/decodeStage_TB/u0/u0/rd_index2" type="array">
+      <obj_property name="ElementShortName">rd_index2[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_index2[2:0]</obj_property>
+   </wvobject>
 </wave_config>

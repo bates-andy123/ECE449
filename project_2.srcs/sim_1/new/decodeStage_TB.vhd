@@ -40,7 +40,8 @@ component decodeStage port(
     instruction : in std_logic_vector(15 downto 0);
     useALU : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
-    operand1, operand2 : out std_logic_vector(15 downto 0)
+    operand1, operand2 : out std_logic_vector(15 downto 0);
+    outputReg : out std_logic_vector(2 downto 0)
 );
 end component;
 
@@ -49,6 +50,7 @@ signal instruction : std_logic_vector(15 downto 0) := X"0000";
 signal useALU : std_logic;
 signal modeALU : std_logic_vector(2 downto 0);
 signal operand1, operand2 : std_logic_vector(15 downto 0);
+signal outputReg : std_logic_vector(2 downto 0);
 
 begin
 
@@ -58,7 +60,30 @@ u0 : decodeStage port map(
     useALU => useALU,
     modeALU => modeALU,
     operand1 => operand1,
-    operand2 => operand2
+    operand2 => operand2,
+    outputReg => outputReg
 );
+
+process begin
+    clk <= '0';
+    wait for 10 us;
+    clk <= '1';
+    wait for 10us;
+end process;
+
+process begin
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                     
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                      
+    wait until falling_edge(clk); instruction <= "0000001011010001"; -- ADD    r3,    r2,    r1           
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                                            
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                      
+    wait until falling_edge(clk); instruction <= "0000101011000010"; -- SHL    r3,    2                
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                                            
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                      
+    wait until falling_edge(clk); instruction <= "0000011010001011"; -- MUL    r2,    r1,    r3           
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP   
+    wait;                   
+
+end process;
 
 end Behavioral;

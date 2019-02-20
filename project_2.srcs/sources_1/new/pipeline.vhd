@@ -46,14 +46,45 @@ component fetchStage port(
 );
 end component;
 
+component decodeStage port(
+    clk : in std_logic;
+    instruction : in std_logic_vector(15 downto 0);
+    useALU : out std_logic;
+    modeALU : out std_logic_vector(2 downto 0);
+    operand1, operand2 : out std_logic_vector(15 downto 0);
+    outputReg : out std_logic_vector(2 downto 0)
+);
+end component;
+
 signal fetchedInstruction: std_logic_vector(15 downto 0);
 signal fetchedInstructionBuffer: std_logic_vector(15 downto 0);
+
+signal useALU : std_logic;
+signal useALUBuffer : std_logic;
+signal modeALU : std_logic_vector(2 downto 0);
+signal modeALUBuffer :  std_logic_vector(2 downto 0);
+signal operand1, operand2 : std_logic_vector(15 downto 0);
+signal operand1Buffer : std_logic_vector(15 downto 0);
+signal operand2Buffer : std_logic_vector(15 downto 0);
+signal outputReg : std_logic_vector(2 downto 0);
+signal outputRegBuffer : std_logic_vector(2 downto 0);
+
 
 begin
 
 u0 : fetchStage port map(
     clk=>clk,
     instruction=>fetchedInstruction
+);
+
+u1 : decodeStage port map(
+    clk => clk,
+    instruction => fetchedInstructionBuffer,
+    useALU => useALU,
+    modeALU => modeALU,
+    operand1 => operand1,
+    operand2 => operand2,
+    outputReg => outputReg
 );
 
 process(clk)
