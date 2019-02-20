@@ -48,7 +48,7 @@ component ROMController port(
 );
 end component;
 
-signal addrROM : std_logic_vector (7 downto 0);
+signal addrROM : std_logic_vector (7 downto 0) := X"00";
 signal doutROM : std_logic_vector (15 downto 0);
 
 signal PC : std_logic_vector(7 downto 0) := X"00";
