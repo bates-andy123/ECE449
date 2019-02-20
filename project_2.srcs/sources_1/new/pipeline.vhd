@@ -31,13 +31,38 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity pipeline is
---  Port ( );
+entity pipeline is Port (
+    clk : in  STD_LOGIC;
+    input : in std_logic_vector(15 downto 0);
+    output : out std_logic_vector(15 downto 0) 
+);
 end pipeline;
 
 architecture Behavioral of pipeline is
 
+component fetchStage port(
+    clk : in std_logic;
+    instruction: out std_logic_vector(15 downto 0)
+);
+end component;
+
+signal fetchedInstruction: std_logic_vector(15 downto 0);
+signal fetchedInstructionBuffer: std_logic_vector(15 downto 0);
+
 begin
 
+u0 : fetchStage port map(
+    clk=>clk,
+    instruction=>fetchedInstruction
+);
+
+process(clk)
+begin
+
+    if rising_edge(clk) then
+        fetchedInstructionBuffer <= fetchedInstruction;
+    end if;
+
+end process;
 
 end Behavioral;
