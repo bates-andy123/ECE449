@@ -39,7 +39,9 @@ component decodeStage port(
     clk : in std_logic;
     instruction : in std_logic_vector(15 downto 0);
     useALU : out std_logic;
+    useIO : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
+    modeIO : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
     outputReg : out std_logic_vector(2 downto 0)
 );
@@ -48,7 +50,9 @@ end component;
 signal clk : std_logic := '0';
 signal instruction : std_logic_vector(15 downto 0) := X"0000";
 signal useALU : std_logic;
+signal useIO : std_logic;
 signal modeALU : std_logic_vector(2 downto 0);
+signal modeIO : std_logic;
 signal operand1, operand2 : std_logic_vector(15 downto 0);
 signal outputReg : std_logic_vector(2 downto 0);
 
@@ -58,7 +62,9 @@ u0 : decodeStage port map(
     clk => clk,
     instruction => instruction,
     useALU => useALU,
+    useIO => useIO,
     modeALU => modeALU,
+    modeIO => modeIO,
     operand1 => operand1,
     operand2 => operand2,
     outputReg => outputReg
@@ -72,6 +78,9 @@ process begin
 end process;
 
 process begin
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP
+    wait until falling_edge(clk); instruction <= "0100001010000000"; -- IN	r2                    
+    wait until falling_edge(clk); instruction <= "0100001011000000"; -- IN	r3                    
     wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                     
     wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                      
     wait until falling_edge(clk); instruction <= "0000001011010001"; -- ADD    r3,    r2,    r1           
@@ -81,7 +90,12 @@ process begin
     wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                                            
     wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP                      
     wait until falling_edge(clk); instruction <= "0000011010001011"; -- MUL    r2,    r1,    r3           
-    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP   
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP  
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP  
+    wait until falling_edge(clk); instruction <= "0100000010000000"; -- OUT	r2  
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP  
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP  
+    wait until falling_edge(clk); instruction <= "0000000000000000"; -- NOP  
     wait;                   
 
 end process;

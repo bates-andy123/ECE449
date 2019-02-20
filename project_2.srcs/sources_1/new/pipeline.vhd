@@ -56,6 +56,22 @@ component decodeStage port(
 );
 end component;
 
+component executeStage port(
+    clk : in std_logic;
+    useALU : in std_logic;
+    useIO : in std_logic;
+    modeALU : in std_logic_vector(2 downto 0);
+    modeIO : in std_logic;
+    operand1, operand2 : in std_logic_vector(15 downto 0);
+    inputCPU : in std_logic_vector(15 downto 0);
+    outputRegIn : in std_logic_vector(2 downto 0);
+    outputRegOut : out std_logic_vector(2 downto 0);
+    result : out std_logic_vector(15 downto 0);
+    outputCPU : out std_logic_vector(15 downto 0);
+    execFreezePipe : out std_logic
+);
+end component;
+
 signal fetchedInstruction: std_logic_vector(15 downto 0);
 signal fetchedInstructionBuffer: std_logic_vector(15 downto 0);
 
@@ -85,6 +101,22 @@ u1 : decodeStage port map(
     operand1 => operand1,
     operand2 => operand2,
     outputReg => outputReg
+);
+
+u2 : executeStage port map(
+    clk ,
+    useALU ,
+    useIO ,
+    modeALU,
+    modeIO ,
+    operand1, 
+    operand2,
+    inputCPU,
+    outputRegIn,
+    outputRegOut,
+    result,
+    outputCPU,
+    execFreezePipe
 );
 
 process(clk)

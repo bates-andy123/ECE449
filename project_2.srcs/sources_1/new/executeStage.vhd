@@ -34,10 +34,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity executeStage is Port(
     clk : in std_logic;
     useALU : in std_logic;
+    useIO : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
+    modeIO : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
-    outputReg : in std_logic_vector(2 downto 0);
-    result : out std_logic_vector(15 downto 0)
+    inputCPU : in std_logic_vector(15 downto 0);
+    outputRegIn : in std_logic_vector(2 downto 0);
+    outputRegOut : out std_logic_vector(2 downto 0);
+    result : out std_logic_vector(15 downto 0);
+    outputCPU : out std_logic_vector(15 downto 0);
+    execFreezePipe : out std_logic
 );
 end executeStage;
 
@@ -68,10 +74,18 @@ u1:alu port map(
 --    z=>z
 );
 
+outputRegOut <= outputRegIn;
+
 process(clk) begin
     if rising_edge(clk) then
         if useALU = '1' then 
             rstALU <= '0';
+        elsif useIO = '1' then
+            if modeIO = '1' then  -- Input, write the operand rand to memory
+                result <= operand1;
+            else
+                outputCPU <= operand1;
+            end if;
         else
             rstALU <= '1';
         end if;

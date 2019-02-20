@@ -35,7 +35,9 @@ entity decodeStage is Port (
     clk : in std_logic;
     instruction : in std_logic_vector(15 downto 0);
     useALU : out std_logic;
+    useIO : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
+    modeIO : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
     outputReg : out std_logic_vector(2 downto 0)
 );
@@ -93,9 +95,10 @@ begin
 
     if rising_edge(clk) then
         
-        case instruction(15 downto 12) is
-            when alu_op =>
+        case instruction(15 downto 9) is
+            when nop_op | add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op =>
                 useALU <= '1';
+                useIO <= '0';
                 modeALU <= instruction(11 downto 9);
                 case instruction(15 downto 9) is
                     when add_op | sub_op | mul_op | nand_op =>
@@ -114,8 +117,20 @@ begin
                         operand1 <= rd_data1;
                     when others =>
                 end case;
-            when others => 
+            when in_op | out_op => 
                 useALU <= '0';
+                useIO <= '1';
+                case instruction(15 downto 9) is
+                    when in_op =>
+                        modeIO <= '1';
+                        outputReg <= instruction(8 downto 6);
+                    when out_op =>
+                        modeIO <= '0';
+                        rd_index1 <= instruction(8 downto 6);
+                        operand1 <= rd_data1;
+                    when others =>
+                end case;
+            when others => 
         end case;
     end if;
 
