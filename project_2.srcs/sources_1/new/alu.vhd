@@ -78,14 +78,14 @@ signal barrelShiftRightOutput : std_logic_vector(15 downto 0); -- Signal for the
 signal barrelShiftLeftOutput  : std_logic_vector(15 downto 0); -- Signal for the output from the left shift operation
 signal unaryOutput : std_logic_vector(15 downto 0); -- Signal for the output from the add/subtract operation
 signal multiplierOutput : std_logic_vector(15 downto 0); -- Signal for the output from the multiply operation
-signal overflow : std_logic; -- Overflow flag for add/subtract operation, 0 = no overflow, 1 = overflow
+signal unaryOverflow : std_logic; -- Overflow flag for add/subtract operation, 0 = no overflow, 1 = overflow
 
 begin
 
 -- Component instantiations
 u0 : barrelShiftRight port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftRightOutput);
 u1 : barrelShiftLeft port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftLeftOutput);
-u2 : unary port map(in1 => in1, in2 => in2, operation => mode, output => unaryOutput, overflow => overflow);
+u2 : unary port map(in1 => in1, in2 => in2, operation => mode, output => unaryOutput, overflow => unaryOverflow);
 u3 : multiplier port map(multiplicand => in1, multiplier => in2, clk => clk, product => multiplierOutput);
 
 process(clk)

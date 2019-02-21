@@ -55,6 +55,8 @@ signal inter01, inter02, inter03, inter04, inter05, inter06, inter07, inter08  :
 signal inter11, inter12, inter13, inter14 : std_logic_vector(15 downto 0); -- Second 4 sums
 signal inter21, inter22 : std_logic_vector(15 downto 0); -- Third 2 sums
 
+-- Individual overflow signals for each addition operation
+
 begin
     -- Obtain 15 left shifts of multiplicand
     shift1 : entity work.barrelShiftLeft port map(input => multiplicand, shiftby => "0001", output => multi1);
