@@ -3,64 +3,76 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="decodeStage_TB_behav.wdb" id="1">
+      <db_ref path="test_alu_behav.wdb" id="1">
          <top_modules>
-            <top_module name="decodeStage_TB" />
+            <top_module name="test_alu" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="241000000001fs"></ZoomEndTime>
-      <Cursor1Time time="1000000000fs"></Cursor1Time>
+      <ZoomEndTime time="211000000001fs"></ZoomEndTime>
+      <Cursor1Time time="211000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="125"></NameColumnWidth>
-      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+      <NameColumnWidth column_width="128"></NameColumnWidth>
+      <ValueColumnWidth column_width="59"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="11" />
-   <wvobject fp_name="/decodeStage_TB/clk" type="logic">
+   <WVObjectSize size="14" />
+   <wvobject fp_name="/test_alu/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_alu/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/instruction" type="array">
-      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
+   <wvobject fp_name="/test_alu/n" type="logic">
+      <obj_property name="ElementShortName">n</obj_property>
+      <obj_property name="ObjectShortName">n</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/useALU" type="logic">
-      <obj_property name="ElementShortName">useALU</obj_property>
-      <obj_property name="ObjectShortName">useALU</obj_property>
+   <wvobject fp_name="/test_alu/z" type="logic">
+      <obj_property name="ElementShortName">z</obj_property>
+      <obj_property name="ObjectShortName">z</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/modeALU" type="array">
-      <obj_property name="ElementShortName">modeALU[2:0]</obj_property>
-      <obj_property name="ObjectShortName">modeALU[2:0]</obj_property>
+   <wvobject fp_name="/test_alu/mode" type="array">
+      <obj_property name="ElementShortName">mode[2:0]</obj_property>
+      <obj_property name="ObjectShortName">mode[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/operand1" type="array">
-      <obj_property name="ElementShortName">operand1[15:0]</obj_property>
-      <obj_property name="ObjectShortName">operand1[15:0]</obj_property>
+   <wvobject fp_name="/test_alu/in1" type="array">
+      <obj_property name="ElementShortName">in1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">in1[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/operand2" type="array">
-      <obj_property name="ElementShortName">operand2[15:0]</obj_property>
-      <obj_property name="ObjectShortName">operand2[15:0]</obj_property>
+   <wvobject fp_name="/test_alu/in2" type="array">
+      <obj_property name="ElementShortName">in2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">in2[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/u0/u0/rd_index1" type="array">
-      <obj_property name="ElementShortName">rd_index1[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_index1[2:0]</obj_property>
+   <wvobject fp_name="/test_alu/result" type="array">
+      <obj_property name="ElementShortName">result[15:0]</obj_property>
+      <obj_property name="ObjectShortName">result[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/u0/u0/rd_index2" type="array">
-      <obj_property name="ElementShortName">rd_index2[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_index2[2:0]</obj_property>
+   <wvobject fp_name="/test_alu/u1/u3/productTemp" type="array">
+      <obj_property name="ElementShortName">productTemp[31:0]</obj_property>
+      <obj_property name="ObjectShortName">productTemp[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/useIO" type="logic">
-      <obj_property name="ElementShortName">useIO</obj_property>
-      <obj_property name="ObjectShortName">useIO</obj_property>
+   <wvobject fp_name="/test_alu/u1/u3/multiplicand" type="array">
+      <obj_property name="ElementShortName">multiplicand[15:0]</obj_property>
+      <obj_property name="ObjectShortName">multiplicand[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/modeIO" type="logic">
-      <obj_property name="ElementShortName">modeIO</obj_property>
-      <obj_property name="ObjectShortName">modeIO</obj_property>
+   <wvobject fp_name="/test_alu/u1/u3/multiplier" type="array">
+      <obj_property name="ElementShortName">multiplier[15:0]</obj_property>
+      <obj_property name="ObjectShortName">multiplier[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/decodeStage_TB/outputReg" type="array">
-      <obj_property name="ElementShortName">outputReg[2:0]</obj_property>
-      <obj_property name="ObjectShortName">outputReg[2:0]</obj_property>
+   <wvobject fp_name="/test_alu/u1/u3/product" type="array">
+      <obj_property name="ElementShortName">product[15:0]</obj_property>
+      <obj_property name="ObjectShortName">product[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_alu/u1/mulStatus" type="logic">
+      <obj_property name="ElementShortName">mulStatus</obj_property>
+      <obj_property name="ObjectShortName">mulStatus</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_alu/u1/mulStart" type="logic">
+      <obj_property name="ElementShortName">mulStart</obj_property>
+      <obj_property name="ObjectShortName">mulStart</obj_property>
    </wvobject>
 </wave_config>

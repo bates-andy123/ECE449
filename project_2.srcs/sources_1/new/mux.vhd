@@ -18,7 +18,6 @@
 -- 
 ----------------------------------------------------------------------------------
 
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -31,87 +30,86 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+-- 2 8 bit channels
 entity mux2_8 is
-Port (
-    ch0, ch1 : in std_logic_vector(7 downto 0);
-    sel : in std_logic;
-    output : out std_logic_vector(7 downto 0)
-);
+    Port (
+        ch0, ch1 : in std_logic_vector(7 downto 0);
+        sel : in std_logic;
+        output : out std_logic_vector(7 downto 0));
 end mux2_8;
 
 architecture Behavioral of mux2_8 is
     
 begin
-
-with sel select
-    output <=   ch0 when '0',
-                ch1 when '1',
-                X"00" when others;
-
+    with sel select
+        output <=
+            ch0 when '0',
+            ch1 when '1',
+            X"00" when others; 
 end Behavioral;
+
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- 2 4 bit channels
 entity mux2_4 is
-Port (
-    ch0, ch1 : in std_logic_vector(3 downto 0);
-    sel : in std_logic;
-    output : out std_logic_vector(3 downto 0)
-);
+    Port (
+        ch0, ch1 : in std_logic_vector(3 downto 0);
+        sel : in std_logic;
+        output : out std_logic_vector(3 downto 0));
 end mux2_4;
 
 architecture Behavioral of mux2_4 is
     
 begin
-
-with sel select
-    output <=   ch0 when '0',
-                ch1 when '1',
-                X"0" when others;
-
+    with sel select
+        output <=
+            ch0 when '0',
+            ch1 when '1',
+            X"0" when others;
 end Behavioral;
+
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- 2 2 bit channels
 entity mux2_2 is
-Port (
-    ch0, ch1 : in std_logic_vector(1 downto 0);
-    sel : in std_logic;
-    output : out std_logic_vector(1 downto 0)
-);
+    Port (
+        ch0, ch1 : in std_logic_vector(1 downto 0);
+        sel : in std_logic;
+        output : out std_logic_vector(1 downto 0));
 end mux2_2;
 
 architecture Behavioral of mux2_2 is
     
 begin
-
-with sel select
-    output <=   ch0 when '0',
-                ch1 when '1',
-                "00" when others;
-
+    with sel select
+        output <=
+            ch0 when '0',
+            ch1 when '1',
+            "00" when others;
 end Behavioral;
+
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- 2 1 bit channels
 entity mux2_1 is
-Port (
-    ch0, ch1 : in std_logic;
-    sel : in std_logic;
-    output : out std_logic
-);
+    Port (
+        ch0, ch1 : in std_logic;
+        sel : in std_logic;
+        output : out std_logic);
 end mux2_1;
 
 architecture Behavioral of mux2_1 is
     
 begin
-
-with sel select
-    output <=   ch0 when '0',
-                ch1 when '1',
-                '0' when others;
-
+    with sel select
+        output <=
+            ch0 when '0',
+            ch1 when '1',
+            '0' when others;
 end Behavioral;
