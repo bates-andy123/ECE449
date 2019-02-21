@@ -42,7 +42,9 @@ architecture Behavioral of pipeline is
 
 component fetchStage port(
     clk : in std_logic;
-    instruction: out std_logic_vector(15 downto 0)
+    instruction: out std_logic_vector(15 downto 0);
+    inputIn: in std_logic_vector(15 downto 0);
+    InputOut: out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -58,7 +60,8 @@ component decodeStage port(
     doWriteBack : out std_logic;
     regWriteEnable : in std_logic;
     regWriteAddress : in std_logic_vector(2 downto 0);
-    writeBackValue : in std_logic_vector(15 downto 0)
+    writeBackValue : in std_logic_vector(15 downto 0);
+    inputIn : in std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -69,7 +72,6 @@ component executeStage port(
     modeALU : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
-    inputCPU : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn : in std_logic;
@@ -93,39 +95,31 @@ component writeBackStage port (
 end component;
 
 signal fetchedInstruction: std_logic_vector(15 downto 0);
-signal fetchedInstructionBuffer: std_logic_vector(15 downto 0) := X"0000";
 
 signal doWriteBack : std_logic;
-signal doWriteBackBuffer : std_logic;
 signal useALU : std_logic := '0';
-signal useALUBuffer : std_logic := '0';
 signal useIO : std_logic := '0';
-signal useIOBuffer : std_logic := '0';
 signal modeALU : std_logic_vector(2 downto 0) := "000";
-signal modeALUBuffer :  std_logic_vector(2 downto 0) := "000";
 signal modeIO : std_logic := '0';
-signal modeIOBuffer : std_logic := '0';
 signal operand1, operand2 : std_logic_vector(15 downto 0);
-signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
-signal operand2Buffer : std_logic_vector(15 downto 0) := X"0000";
 signal writeBackReg : std_logic_vector(2 downto 0);
-signal writeBackRegBuffer : std_logic_vector(2 downto 0) := "000";
 signal regWriteEnable : std_logic;
 signal regWriteAddress : std_logic_vector(2 downto 0);
 signal writeBackValue : std_logic_vector(15 downto 0);
 
 signal execWriteBackReg : std_logic_vector(2 downto 0);
-signal execWriteBackRegBuffer : std_logic_vector(2 downto 0);
 signal execDoWriteBack : std_logic;
-signal execDoWriteBackBuffer : std_logic;
 signal result : std_logic_vector(15 downto 0);
-signal resultBuffer : std_logic_vector(15 downto 0) := X"0000";
+
+signal fetchInputOut : std_logic_vector(15 downto 0);
 
 begin
 
 u0 : fetchStage port map(
     clk=>clk,
-    instruction=>fetchedInstruction
+    instruction=>fetchedInstruction,
+    inputIn=>input,
+    inputOut=>fetchInputOut
 );
 
 u1 : decodeStage port map(
@@ -141,7 +135,8 @@ u1 : decodeStage port map(
     doWriteBack=>doWriteBack,
     regWriteEnable=>regWriteEnable,
     regWriteAddress=>regWriteAddress,
-    writeBackValue=>writeBackValue
+    writeBackValue=>writeBackValue,
+    inputIn=>fetchInputOut
 );
 
 u2 : executeStage port map(
@@ -152,10 +147,9 @@ u2 : executeStage port map(
     modeIO=>modeIO,
     operand1=>operand1, 
     operand2=>operand2,
-    inputCPU => input,
-    destRegIn => writeBackRegBuffer,
+    destRegIn => writeBackReg,
     destRegOut => execWriteBackReg,
-    doWriteBackIn=>doWriteBackBuffer,
+    doWriteBackIn=>doWriteBack,
     doWriteBackOut=>execDoWriteBack,
     result=>result,
     outputCPU=>output
@@ -164,8 +158,8 @@ u2 : executeStage port map(
 
 u3 : writeBackStage port map( 
     clk=>clk,
-    inDoWriteBack =>execDoWriteBackBuffer,
-    inDestRegister =>execWriteBackRegBuffer,
+    inDoWriteBack =>execDoWriteBack,
+    inDestRegister =>execWriteBackReg,
     inWriteBackValue =>result,
     outDoWriteBack=>regWriteEnable,
     outDestRegister=>regWriteAddress,
@@ -176,19 +170,7 @@ process(clk)
 begin
 
     if rising_edge(clk) then
-        fetchedInstructionBuffer <= fetchedInstruction;
-        
-        doWriteBackBuffer<=doWriteBack;
-        useALUBuffer <= useALU;
-        useIOBuffer <= useIO;
-        modeALUBuffer <= modeALU;
-        modeIOBuffer <= modeIO;
-        operand1Buffer <= operand1;
-        operand2Buffer <= operand2;
-        writeBackRegBuffer <= writeBackReg;
-        
-        execWriteBackRegBuffer <= execWriteBackReg;
-        execDoWriteBackBuffer <= execDoWriteBack;
+
     end if;
 
 end process;

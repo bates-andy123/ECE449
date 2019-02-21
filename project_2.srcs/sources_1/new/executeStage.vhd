@@ -38,7 +38,6 @@ entity executeStage is Port(
     modeALU : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
-    inputCPU : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn : in std_logic;
@@ -64,6 +63,7 @@ end component;
 
 signal rstALU : std_logic := '0';
 signal resultALU : std_logic_vector(15 downto 0);
+signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
 
 constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
 
@@ -80,11 +80,11 @@ u1:alu port map(
     z=>z
 );
 
-destRegOut <= destRegIn;
-doWriteBackOut <= doWriteBackIn;
+
 
 process(clk) begin
-    if rising_edge(clk) then
+    if falling_edge(clk) then
+        
         if useALU = '1' then 
             rstALU <= '0';
             if (modeALU = "011") then --multiply
@@ -92,13 +92,18 @@ process(clk) begin
             end if;
         elsif useIO = '1' then
             if modeIO = '1' then  -- Input, write the operand rand to memory
-                result <= inputCPU;
+                result <= operand1;
             else
                 outputCPU <= operand1;
             end if;
         else
 
         end if;
+        destRegOut <= destRegIn;
+        doWriteBackOut <= doWriteBackIn;
+        operand1Buffer <= operand1;
+    elsif rising_edge(clk) then 
+        
     end if;
 end process;
 

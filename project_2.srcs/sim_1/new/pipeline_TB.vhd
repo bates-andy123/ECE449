@@ -55,6 +55,18 @@ u0 : pipeline port map(
 );
 
 process begin
+    input<=X"00A0";
+    wait until falling_edge(clk);
+    input<=X"00B0";
+    wait until falling_edge(clk);
+    input<=X"00C0";
+    wait until falling_edge(clk);
+    input<=X"00D0";
+    wait;
+
+end process;
+
+process begin
     clk<='0';
     wait for 5us;
     clk<='1';

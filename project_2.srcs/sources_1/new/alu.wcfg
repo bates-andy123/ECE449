@@ -12,37 +12,29 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="201000000001fs"></ZoomEndTime>
-      <Cursor1Time time="45000000000fs"></Cursor1Time>
+      <ZoomEndTime time="101000000001fs"></ZoomEndTime>
+      <Cursor1Time time="50364611000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="117"></NameColumnWidth>
-      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+      <NameColumnWidth column_width="138"></NameColumnWidth>
+      <ValueColumnWidth column_width="91"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="12" />
+   <WVObjectSize size="24" />
    <wvobject fp_name="/pipeline_TB/u0/useIO" type="logic">
       <obj_property name="ElementShortName">useIO</obj_property>
       <obj_property name="ObjectShortName">useIO</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/useIOBuffer" type="logic">
-      <obj_property name="ElementShortName">useIOBuffer</obj_property>
-      <obj_property name="ObjectShortName">useIOBuffer</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/inputCPU" type="array">
-      <obj_property name="ElementShortName">inputCPU[15:0]</obj_property>
-      <obj_property name="ObjectShortName">inputCPU[15:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB/u0/u2/result" type="array">
       <obj_property name="ElementShortName">result[15:0]</obj_property>
       <obj_property name="ObjectShortName">result[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u0/instruction" type="array">
-      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB/u0/u0/inputIn" type="array">
+      <obj_property name="ElementShortName">inputIn[15:0]</obj_property>
+      <obj_property name="ObjectShortName">inputIn[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
+   <wvobject fp_name="/pipeline_TB/u0/u0/inputOut" type="array">
+      <obj_property name="ElementShortName">inputOut[15:0]</obj_property>
+      <obj_property name="ObjectShortName">inputOut[15:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB/u0/u1/u0/reg_file[2]" type="array">
       <obj_property name="ElementShortName">[2][15:0]</obj_property>
@@ -64,8 +56,64 @@
       <obj_property name="ElementShortName">operand2[15:0]</obj_property>
       <obj_property name="ObjectShortName">operand2[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u1/instruction" type="array">
-      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB/u0/u0/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u0/addrROM" type="array">
+      <obj_property name="ElementShortName">addrROM[7:0]</obj_property>
+      <obj_property name="ObjectShortName">addrROM[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u0/PC_next" type="array">
+      <obj_property name="ElementShortName">PC_next[7:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_next[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u0/doutROM" type="array">
+      <obj_property name="ElementShortName">doutROM[15:0]</obj_property>
+      <obj_property name="ObjectShortName">doutROM[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u2/destRegOut" type="array">
+      <obj_property name="ElementShortName">destRegOut[2:0]</obj_property>
+      <obj_property name="ObjectShortName">destRegOut[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u2/operand1" type="array">
+      <obj_property name="ElementShortName">operand1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">operand1[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u2/destRegIn" type="array">
+      <obj_property name="ElementShortName">destRegIn[2:0]</obj_property>
+      <obj_property name="ObjectShortName">destRegIn[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u2/operand1Buffer" type="array">
+      <obj_property name="ElementShortName">operand1Buffer[15:0]</obj_property>
+      <obj_property name="ObjectShortName">operand1Buffer[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u3/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u3/inDoWriteBack" type="logic">
+      <obj_property name="ElementShortName">inDoWriteBack</obj_property>
+      <obj_property name="ObjectShortName">inDoWriteBack</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u3/inDestRegister" type="array">
+      <obj_property name="ElementShortName">inDestRegister[2:0]</obj_property>
+      <obj_property name="ObjectShortName">inDestRegister[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u3/inWriteBackValue" type="array">
+      <obj_property name="ElementShortName">inWriteBackValue[15:0]</obj_property>
+      <obj_property name="ObjectShortName">inWriteBackValue[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u3/outDoWriteBack" type="logic">
+      <obj_property name="ElementShortName">outDoWriteBack</obj_property>
+      <obj_property name="ObjectShortName">outDoWriteBack</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u3/outDestRegister" type="array">
+      <obj_property name="ElementShortName">outDestRegister[2:0]</obj_property>
+      <obj_property name="ObjectShortName">outDestRegister[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/u0/u3/outWriteBackValue" type="array">
+      <obj_property name="ElementShortName">outWriteBackValue[15:0]</obj_property>
+      <obj_property name="ObjectShortName">outWriteBackValue[15:0]</obj_property>
    </wvobject>
 </wave_config>

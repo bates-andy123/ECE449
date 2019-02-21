@@ -44,13 +44,22 @@ end writeBackStage;
 
 architecture Behavioral of writeBackStage is
 
+signal inDoWriteBackBuffer : std_logic;
+signal inDestRegisterBuffer : std_logic_vector(2 downto 0);
+signal inWriteBackValueBuffer : std_logic_vector(15 downto 0);
+    
+
 begin
 
 process(clk) begin
     if rising_edge(clk) then
-       outDoWriteBack<=inDoWriteBack;
-       outDestRegister<=inDestRegister;
-       outWriteBackValue<=inWriteBackValue;
+       inDoWriteBackBuffer<=inDoWriteBack;
+       inDestRegisterBuffer<=inDestRegister;
+       inWriteBackValueBuffer<=inWriteBackValue;
+    elsif falling_edge(clk) then
+        outDoWriteBack<=inDoWriteBackBuffer;
+        outDestRegister<=inDestRegisterBuffer;
+        outWriteBackValue<=inWriteBackValueBuffer;
     end if;
 end process;
 
