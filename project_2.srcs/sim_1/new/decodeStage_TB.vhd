@@ -18,7 +18,6 @@
 -- 
 ----------------------------------------------------------------------------------
 
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -43,8 +42,7 @@ component decodeStage port(
     modeALU : out std_logic_vector(2 downto 0);
     modeIO : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
-    outputReg : out std_logic_vector(2 downto 0)
-);
+    outputReg : out std_logic_vector(2 downto 0));
 end component;
 
 signal clk : std_logic := '0';
@@ -67,8 +65,7 @@ u0 : decodeStage port map(
     modeIO => modeIO,
     operand1 => operand1,
     operand2 => operand2,
-    outputReg => outputReg
-);
+    outputReg => outputReg);
 
 process begin
     clk <= '0';

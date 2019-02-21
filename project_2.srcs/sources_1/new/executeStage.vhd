@@ -31,20 +31,20 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity executeStage is Port(
-    clk : in std_logic;
-    useALU : in std_logic;
-    useIO : in std_logic;
-    modeALU : in std_logic_vector(2 downto 0);
-    modeIO : in std_logic;
-    operand1, operand2 : in std_logic_vector(15 downto 0);
-    inputCPU : in std_logic_vector(15 downto 0);
-    outputRegIn : in std_logic_vector(2 downto 0);
-    outputRegOut : out std_logic_vector(2 downto 0);
-    result : out std_logic_vector(15 downto 0);
-    outputCPU : out std_logic_vector(15 downto 0);
-    execFreezePipe : out std_logic
-);
+entity executeStage is
+    Port(
+        clk : in std_logic;
+        useALU : in std_logic;
+        useIO : in std_logic;
+        modeALU : in std_logic_vector(2 downto 0);
+        modeIO : in std_logic;
+        operand1, operand2 : in std_logic_vector(15 downto 0);
+        inputCPU : in std_logic_vector(15 downto 0);
+        outputRegIn : in std_logic_vector(2 downto 0);
+        outputRegOut : out std_logic_vector(2 downto 0);
+        result : out std_logic_vector(15 downto 0);
+        outputCPU : out std_logic_vector(15 downto 0);
+        execFreezePipe : out std_logic);
 end executeStage;
 
 architecture Behavioral of executeStage is
@@ -54,8 +54,7 @@ component alu port(
     mode: in std_logic_vector(2 downto 0);
     clk, rst: in std_logic;
     result: out std_logic_vector(15 downto 0);
-    z, n: out std_logic
-);
+    z, n: out std_logic);
 end component;
 
 signal rstALU : std_logic := '0';
@@ -69,7 +68,7 @@ u1:alu port map(
     mode=>modeALU , 
     clk=>clk, 
     rst=>rstALU,
-    result=>resultALU,
+    result=>resultALU
 --    n=>n, 
 --    z=>z
 );

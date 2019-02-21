@@ -31,16 +31,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity decodeStage is Port (
-    clk : in std_logic;
-    instruction : in std_logic_vector(15 downto 0);
-    useALU : out std_logic;
-    useIO : out std_logic;
-    modeALU : out std_logic_vector(2 downto 0);
-    modeIO : out std_logic;
-    operand1, operand2 : out std_logic_vector(15 downto 0);
-    outputReg : out std_logic_vector(2 downto 0)
-);
+entity decodeStage is
+    Port (
+        clk : in std_logic;
+        instruction : in std_logic_vector(15 downto 0);
+        useALU : out std_logic;
+        useIO : out std_logic;
+        modeALU : out std_logic_vector(2 downto 0);
+        modeIO : out std_logic;
+        operand1, operand2 : out std_logic_vector(15 downto 0);
+        outputReg : out std_logic_vector(2 downto 0));
 end decodeStage;
 
 architecture Behavioral of decodeStage is
@@ -52,8 +52,7 @@ component register_file port(
     rd_data1, rd_data2: out std_logic_vector(15 downto 0); 
     wr_index: in std_logic_vector(2 downto 0); 
     wr_data: in std_logic_vector(15 downto 0); 
-    wr_enable: in std_logic
-);
+    wr_enable: in std_logic);
 end component; 
 
 signal rd_index1, rd_index2 : std_logic_vector(2 downto 0) := "000";
@@ -87,14 +86,11 @@ u0 : register_file port map(
     --write signals
     wr_index=>"000", 
     wr_data=>X"0000", 
-    wr_enable=>'0'
-);
+    wr_enable=>'0');
 
 process(clk)
 begin
-
     if rising_edge(clk) then
-        
         case instruction(15 downto 9) is
             when nop_op | add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op =>
                 useALU <= '1';
@@ -133,7 +129,6 @@ begin
             when others => 
         end case;
     end if;
-
 end process;
 
 end Behavioral;

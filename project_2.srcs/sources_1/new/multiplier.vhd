@@ -80,23 +80,25 @@ begin
             
             -- On clock cycle and iteration is less than the 16th time
             if (clk = '0' and clk'event and counter < 15) then
-                -- Initial assignment
+                -- When multiplier bit position is 1
                 if (multiplier(counter) = '1') then
                     productTemp <= (productTemp + (X"0000" & multiplicandTemp));    -- Add multiplicand to product
-                    multiplicandTemp(15 downto 1) <= multiplicandTemp(14 downto 0); -- Shift multiplicand left by 1
-                    multiplicandTemp(0) <= '0';                                     -- Assign 0 to unshifted bit 
                 end if;
+                
+                -- Always shift multiplicand after
+                multiplicandTemp(15 downto 1) <= multiplicandTemp(14 downto 0); -- Shift multiplicand left by 1
+                multiplicandTemp(0) <= '0';                                     -- Assign 0 to unshifted bit
                 
                 -- If not the final iteration
                 if (counter < 15) then
                     counter := counter + 1;
                 end if;
-                
-                -- Output the intermediate (or final) result
-                product <= productTemp(15 downto 0);
             end if;
         when others => null; -- Case never executes but is required or errors occur
     end case;
+                    
+    -- Output the intermediate (or final) result
+    product <= productTemp(15 downto 0);
 end process;
     
 end Behavioral;

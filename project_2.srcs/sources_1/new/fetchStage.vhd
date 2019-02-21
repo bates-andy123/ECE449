@@ -48,9 +48,9 @@ component ROMController port(
 );
 end component;
 
+-- Internal signals
 signal addrROM : std_logic_vector (7 downto 0) := X"00";
 signal doutROM : std_logic_vector (15 downto 0);
-
 signal PC : std_logic_vector(7 downto 0) := X"00";
 
 begin
@@ -69,14 +69,12 @@ u0 : ROMController port map(
 
 process(clk)
 begin
-
     if rising_edge(clk) then
         instruction <= doutROM;
         PC <= std_logic_vector(unsigned(PC) + 1);
     elsif falling_edge(clk) then 
         addrROM <= PC;
     end if;
-
 end process;
 
 end Behavioral;

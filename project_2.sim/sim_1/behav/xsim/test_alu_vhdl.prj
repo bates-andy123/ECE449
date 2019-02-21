@@ -2,8 +2,10 @@
 vhdl xil_defaultlib  \
 "../../../../project_2.srcs/sources_1/new/alu.vhd" \
 "../../../../project_2.srcs/sources_1/new/mux.vhd" \
-"../../../../project_2.srcs/sources_1/new/barallelShiftLeft.vhd" \
-"../../../../project_2.srcs/sources_1/new/barrallel_shift_right.vhd" \
+"../../../../project_2.srcs/sources_1/new/barrelShiftLeft.vhd" \
+"../../../../project_2.srcs/sources_1/new/barrelShiftRight.vhd" \
+"../../../../project_2.srcs/sources_1/new/multiplier.vhd" \
+"../../../../project_2.srcs/sources_1/new/unary.vhd" \
 "../../../../project_2.srcs/sim_1/imports/new/RF8_16TB.vhd" \
 
 # Do not sort compile order
