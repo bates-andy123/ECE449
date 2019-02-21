@@ -35,7 +35,6 @@ entity alu is
     Port(
         in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
         mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
-        mulFlag : out std_logic; -- Flag to check if multiplication is ongoing  
         clk, rst : in std_logic; -- Clk and reset flags
         result : out std_logic_vector(15 downto 0); -- Result of ALU operation
         z, n : out std_logic); -- zero and negative flag from addition/subtraction operation
@@ -71,9 +70,8 @@ component multiplier port(
     multiplicand : in std_logic_vector(15 downto 0);
     multiplier : in std_logic_vector(15 downto 0);
     clk : in std_logic;
-    start : in std_logic;
-    product : out std_logic_vector(15 downto 0);
-    done : out std_logic_vector(1 downto 0));
+    overflow : out std_logic;
+    product : out std_logic_vector(15 downto 0));
 end component;
 
 -- Internal signals
@@ -81,41 +79,26 @@ signal barrelShiftRightOutput : std_logic_vector(15 downto 0); -- Signal for the
 signal barrelShiftLeftOutput  : std_logic_vector(15 downto 0); -- Signal for the output from the left shift operation
 signal unaryOutput : std_logic_vector(15 downto 0); -- Signal for the output from the add/subtract operation
 signal multiplierOutput : std_logic_vector(15 downto 0); -- Signal for the output from the multiply operation
-signal overflow : std_logic; -- Overflow flag for add/subtract operation, 0 = no overflow, 1 = overflow
-signal mulStart : std_logic := '0'; -- Flag to latch current values of in1 and in2 for multiplication, 0 = don't multiply, 1 = multiply
-signal mulStatus : std_logic_vector(1 downto 0); -- Status flag for multiplication, 00 = no pending multiplication, 01 = multiplying, 10 = done multiplication
+signal unaryOverflow : std_logic; -- Overflow flag for add/subtract operation, 0 = no overflow, 1 = overflow
+signal multiplierOverflow : std_logic; -- Overflow flag for multiplier operation
 
 begin
 
 -- Component instantiations
 u0 : barrelShiftRight port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftRightOutput);
 u1 : barrelShiftLeft port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftLeftOutput);
-u2 : unary port map(in1 => in1, in2 => in2, operation => mode, output => unaryOutput, overflow => overflow);
-u3 : multiplier port map(multiplicand => in1, multiplier => in2, clk => clk, start => mulStart, product => multiplierOutput, done => mulStatus);
+u2 : unary port map(in1 => in1, in2 => in2, operation => mode, output => unaryOutput, overflow => unaryOverflow);
+u3 : multiplier port map(multiplicand => in1, multiplier => in2, clk => clk, overflow => multiplierOverflow, product => multiplierOutput);
 
 process(clk)
 begin
-    if(rising_edge(clk)) then
+    if rising_edge(clk) then
         -- Determine ALU mode and perform appropriate action
-        mulFlag <= '0';
         case mode(2 downto 0) is
             when "000" => null; -- NOP operation
             when "001" => result <= unaryOutput; -- ADD operation
             when "010" => result <= unaryOutput; -- SUB operation
-            when "011" => -- MUL operation
-                -- Set multiplication start flag
-                mulStart <= '1';
-                
-                -- If multiplication is currently ongoing, latch intermediate result to result
-                if (mulStatus = "01") then
-                    result <= multiplierOutput;
-                -- If multiplication is finished, reset multiplication start flag
-                elsif (mulStatus = "10") then
-                    mulStart <= '0';
-                    mulFlag <= '1';
-                else
-                    
-                end if;
+            when "011" => result <= multiplieroutput;-- MUL operation
             when "100" => result <= (in1 nand in2); -- NAND operation
             when "101" => result <= barrelShiftLeftOutput; -- SHL operation
             when "110" => result <= barrelShiftRightOutput; -- SHR operation

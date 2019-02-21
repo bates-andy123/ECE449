@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="48224100000fs"></ZoomStartTime>
-      <ZoomEndTime time="200624100001fs"></ZoomEndTime>
+      <ZoomStartTime time="93603030302fs"></ZoomStartTime>
+      <ZoomEndTime time="270479393940fs"></ZoomEndTime>
       <Cursor1Time time="241000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="138"></NameColumnWidth>
-      <ValueColumnWidth column_width="75"></ValueColumnWidth>
+      <ValueColumnWidth column_width="71"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="19" />
    <wvobject fp_name="/pipeline_TB/u0/u1/u0/rd_index1" type="array">
       <obj_property name="ElementShortName">rd_index1[2:0]</obj_property>
       <obj_property name="ObjectShortName">rd_index1[2:0]</obj_property>
@@ -91,5 +91,9 @@
    <wvobject fp_name="/pipeline_TB/u0/u2/operand2" type="array">
       <obj_property name="ElementShortName">operand2[15:0]</obj_property>
       <obj_property name="ObjectShortName">operand2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB/output" type="array">
+      <obj_property name="ElementShortName">output[15:0]</obj_property>
+      <obj_property name="ObjectShortName">output[15:0]</obj_property>
    </wvobject>
 </wave_config>

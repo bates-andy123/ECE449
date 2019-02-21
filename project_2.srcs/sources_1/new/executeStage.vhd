@@ -43,7 +43,7 @@ entity executeStage is Port(
     doWriteBackIn : in std_logic;
     doWriteBackOut : out std_logic;
     result : out std_logic_vector(15 downto 0) := X"0000";
-    outputCPU : out std_logic_vector(15 downto 0);
+    outputCPU : out std_logic_vector(15 downto 0) := X"0000";
     z, n: out std_logic;
     execFreezePipe : out std_logic
 );
@@ -52,12 +52,11 @@ end executeStage;
 architecture Behavioral of executeStage is
 
 component alu port(
-    in1, in2: in std_logic_vector(15 downto 0);
-    mode: in std_logic_vector(2 downto 0);
-    mulFlag : out std_logic; -- Flag to check if multiplication is ongoing
-    clk, rst: in std_logic;
-    result: out std_logic_vector(15 downto 0);
-    z, n: out std_logic
+    in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
+    mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
+    clk, rst : in std_logic; -- Clk and reset flags
+    result : out std_logic_vector(15 downto 0); -- Result of ALU operation
+    z, n : out std_logic
 );
 end component;
 
