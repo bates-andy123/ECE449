@@ -34,7 +34,9 @@ use ieee.numeric_std.all;
 
 entity fetchStage is Port (
     clk : in std_logic;
-    instruction: out std_logic_vector(15 downto 0)
+    instruction: out std_logic_vector(15 downto 0) := X"0000";
+    inputIn : in std_logic_vector(15 downto 0);
+    inputOut : out std_logic_vector(15 downto 0) := X"0000"
 );
 end fetchStage;
 
@@ -51,7 +53,7 @@ end component;
 signal addrROM : std_logic_vector (7 downto 0) := X"00";
 signal doutROM : std_logic_vector (15 downto 0);
 
-signal PC : std_logic_vector(7 downto 0) := X"00";
+signal PC_next : std_logic_vector(7 downto 0) := X"01";
 
 begin
 
@@ -71,10 +73,13 @@ process(clk)
 begin
 
     if rising_edge(clk) then
-        instruction <= doutROM;
-        PC <= std_logic_vector(unsigned(PC) + 1);
+        
+        
+        addrROM <= PC_next;
     elsif falling_edge(clk) then 
-        addrROM <= PC;
+        instruction <= doutROM;
+        PC_next <= std_logic_vector(unsigned(PC_next) + 1);
+        inputOut <= inputIn;
     end if;
 
 end process;

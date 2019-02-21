@@ -43,10 +43,11 @@ component executeStage port(
     modeIO : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     inputCPU : in std_logic_vector(15 downto 0);
-    outputRegIn : in std_logic_vector(2 downto 0);
-    outputRegOut : out std_logic_vector(2 downto 0);
+    destRegIn : in std_logic_vector(2 downto 0);
+    destRegOut : out std_logic_vector(2 downto 0);
     result : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
+    z, n: out std_logic;
     execFreezePipe : out std_logic
 );
 end component;
@@ -75,8 +76,8 @@ u2 : executeStage port map(
     operand1=>operand1, 
     operand2=>operand2,
     inputCPU => inputCPU,
-    outputRegIn => outputRegIn,
-    outputRegOut => outputRegOut,
+    destRegIn => outputRegIn,
+    destRegOut => outputRegOut,
     result=>result,
     outputCPU=>outputCPU,
     execFreezePipe=>execFreezePipe

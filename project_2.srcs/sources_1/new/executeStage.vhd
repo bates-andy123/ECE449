@@ -38,11 +38,13 @@ entity executeStage is Port(
     modeALU : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
-    inputCPU : in std_logic_vector(15 downto 0);
-    outputRegIn : in std_logic_vector(2 downto 0);
-    outputRegOut : out std_logic_vector(2 downto 0);
-    result : out std_logic_vector(15 downto 0);
-    outputCPU : out std_logic_vector(15 downto 0);
+    destRegIn : in std_logic_vector(2 downto 0);
+    destRegOut : out std_logic_vector(2 downto 0);
+    doWriteBackIn : in std_logic;
+    doWriteBackOut : out std_logic;
+    result : out std_logic_vector(15 downto 0) := X"0000";
+    outputCPU : out std_logic_vector(15 downto 0) := X"0000";
+    z, n: out std_logic;
     execFreezePipe : out std_logic
 );
 end executeStage;
@@ -50,16 +52,19 @@ end executeStage;
 architecture Behavioral of executeStage is
 
 component alu port(
-    in1, in2: in std_logic_vector(15 downto 0);
-    mode: in std_logic_vector(2 downto 0);
-    clk, rst: in std_logic;
-    result: out std_logic_vector(15 downto 0);
-    z, n: out std_logic
+    in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
+    mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
+    clk, rst : in std_logic; -- Clk and reset flags
+    result : out std_logic_vector(15 downto 0); -- Result of ALU operation
+    z, n : out std_logic
 );
 end component;
 
 signal rstALU : std_logic := '0';
 signal resultALU : std_logic_vector(15 downto 0);
+signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
+
+constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
 
 begin
 
@@ -70,16 +75,18 @@ u1:alu port map(
     clk=>clk, 
     rst=>rstALU,
     result=>resultALU,
---    n=>n, 
---    z=>z
+    n=>n, 
+    z=>z
 );
 
-outputRegOut <= outputRegIn;
+
 
 process(clk) begin
-    if rising_edge(clk) then
+    if falling_edge(clk) then
+        
         if useALU = '1' then 
-            rstALU <= '0';
+            result <= resultALU;
+            
         elsif useIO = '1' then
             if modeIO = '1' then  -- Input, write the operand rand to memory
                 result <= operand1;
@@ -87,8 +94,13 @@ process(clk) begin
                 outputCPU <= operand1;
             end if;
         else
-            rstALU <= '1';
+
         end if;
+        destRegOut <= destRegIn;
+        doWriteBackOut <= doWriteBackIn;
+        operand1Buffer <= operand1;
+    elsif rising_edge(clk) then 
+        
     end if;
 end process;
 

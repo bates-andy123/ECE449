@@ -43,20 +43,34 @@ component pipeline Port (
 end component;
 
 signal clk : std_logic;
-
+signal output : std_logic_vector(15 downto 0);
+signal input : std_logic_vector(15 downto 0) := X"C0A0";
 
 begin
 
 u0 : pipeline port map(
     clk => clk,
-    input=>X"0000"
+    input=>input,
+    output => output
 );
 
 process begin
+    input<=X"00A0";
+    wait until falling_edge(clk);
+    input<=X"00B0";
+    wait until falling_edge(clk);
+    input<=X"00C0";
+    wait until falling_edge(clk);
+    input<=X"00D0";
+    wait;
+
+end process;
+
+process begin
     clk<='0';
-    wait for 10us;
+    wait for 5us;
     clk<='1';
-    wait for 10us;
+    wait for 5us;
 end process;
 
 end Behavioral;
