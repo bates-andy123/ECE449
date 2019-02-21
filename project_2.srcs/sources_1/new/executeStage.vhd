@@ -86,10 +86,8 @@ process(clk) begin
     if falling_edge(clk) then
         
         if useALU = '1' then 
-            rstALU <= '0';
-            if (modeALU = "011") then --multiply
-                execFreezePipe <= '1';
-            end if;
+            result <= resultALU;
+            
         elsif useIO = '1' then
             if modeIO = '1' then  -- Input, write the operand rand to memory
                 result <= operand1;

@@ -4,34 +4,4 @@ Running: C:/Xilinx/Vivado/2017.4/bin/unwrapped/win64.o/xelab.exe -wto e88acb7d2b
 Using 2 slave threads.
 Starting static elaboration
 Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling package std.standard
-Compiling package std.textio
-Compiling package ieee.std_logic_1164
-Compiling package ieee.numeric_std
-Compiling package xpm.vcomponents
-Compiling package ieee.std_logic_arith
-Compiling package ieee.std_logic_unsigned
-Compiling package vl.vl_types
-Compiling module xpm.xpm_memory_base(MEMORY_TYPE=3,ME...
-Compiling module xpm.xpm_memory_sprom(MEMORY_SIZE=102...
-Compiling architecture behavioral of entity xil_defaultlib.ROMController [romcontroller_default]
-Compiling architecture behavioral of entity xil_defaultlib.fetchStage [fetchstage_default]
-Compiling architecture behavioural of entity xil_defaultlib.register_file [register_file_default]
-Compiling architecture behavioral of entity xil_defaultlib.decodeStage [decodestage_default]
-Compiling architecture behavioral of entity xil_defaultlib.mux2_8 [mux2_8_default]
-Compiling architecture behavioral of entity xil_defaultlib.mux2_4 [mux2_4_default]
-Compiling architecture behavioral of entity xil_defaultlib.mux2_2 [mux2_2_default]
-Compiling architecture behavioral of entity xil_defaultlib.mux2_1 [mux2_1_default]
-Compiling architecture behavioral of entity xil_defaultlib.barrelShiftRight [barrelshiftright_default]
-Compiling architecture behavioral of entity xil_defaultlib.barrelShiftLeft [barrelshiftleft_default]
-Compiling architecture behavioral of entity xil_defaultlib.unary [unary_default]
-Compiling architecture behavioral of entity xil_defaultlib.multiplier [multiplier_default]
-Compiling architecture behavioral of entity xil_defaultlib.alu [alu_default]
-Compiling architecture behavioral of entity xil_defaultlib.executeStage [executestage_default]
-Compiling architecture behavioral of entity xil_defaultlib.writeBackStage [writebackstage_default]
-Compiling architecture behavioral of entity xil_defaultlib.pipeline [pipeline_default]
-Compiling architecture behavioral of entity xil_defaultlib.pipeline_tb
-Built simulation snapshot pipeline_TB_behav
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel

@@ -95,7 +95,7 @@ u3 : multiplier port map(multiplicand => in1, multiplier => in2, clk => clk, sta
 
 process(clk)
 begin
-    if(clk = '0' and clk'event) then
+    if(rising_edge(clk)) then
         -- Determine ALU mode and perform appropriate action
         mulFlag <= '0';
         case mode(2 downto 0) is

@@ -137,12 +137,12 @@ u0 : register_file port map(
     with instruction(15 downto 9) select
         operand2 <=
             rd_data2 when add_op | sub_op | mul_op | nand_op ,
-            (X"0000" & instruction(3 downto 0)) when shl_op | shr_op ,
+            X"000" & instruction(3 downto 0) when shl_op | shr_op ,
             X"0000" when others;   
             
     with instruction(15 downto 9) select
         operand1 <=
-            rd_data2 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op,
+            rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op,
             inputIn when in_op ,
             X"0000" when others;   
          
