@@ -52,7 +52,7 @@ component decodeStage port(
     useALU : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
     operand1, operand2 : out std_logic_vector(15 downto 0);
-    outputReg : out std_logic_vector(2 downto 0)
+    destReg : out std_logic_vector(2 downto 0)
 );
 end component;
 
@@ -73,18 +73,26 @@ component executeStage port(
 end component;
 
 signal fetchedInstruction: std_logic_vector(15 downto 0);
-signal fetchedInstructionBuffer: std_logic_vector(15 downto 0);
+signal fetchedInstructionBuffer: std_logic_vector(15 downto 0) := X"0000";
 
 signal useALU : std_logic;
-signal useALUBuffer : std_logic;
+signal useALUBuffer : std_logic := '0';
+signal useIO : std_logic;
+signal useIOBuffer : std_logic := '0';
 signal modeALU : std_logic_vector(2 downto 0);
-signal modeALUBuffer :  std_logic_vector(2 downto 0);
+signal modeALUBuffer :  std_logic_vector(2 downto 0) := "000";
+signal modeIO : std_logic;
+signal modeIOBuffer : std_logic := '0';
 signal operand1, operand2 : std_logic_vector(15 downto 0);
-signal operand1Buffer : std_logic_vector(15 downto 0);
-signal operand2Buffer : std_logic_vector(15 downto 0);
-signal outputReg : std_logic_vector(2 downto 0);
-signal outputRegBuffer : std_logic_vector(2 downto 0);
+signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
+signal operand2Buffer : std_logic_vector(15 downto 0) := X"0000";
+signal decodeWriteBackReg : std_logic_vector(2 downto 0);
+signal decodeWriteBackRegBuffer : std_logic_vector(2 downto 0) := "000";
+signal result : std_logic_vector(15 downto 0);
+signal resultBuffer : std_logic_vector(15 downto 0) := X"0000";
 
+signal execWriteBackReg : std_logic_vector(2 downto 0);
+signal execWriteBackRegBuffer : std_logic_vector(2 downto 0) := "000";
 
 begin
 
@@ -100,23 +108,23 @@ u1 : decodeStage port map(
     modeALU => modeALU,
     operand1 => operand1,
     operand2 => operand2,
-    outputReg => outputReg
+    destReg => decodeWriteBackReg
 );
 
 u2 : executeStage port map(
-    clk ,
-    useALU ,
-    useIO ,
-    modeALU,
-    modeIO ,
-    operand1, 
-    operand2,
-    inputCPU,
-    outputRegIn,
-    outputRegOut,
-    result,
-    outputCPU,
-    execFreezePipe
+    clk=>clk,
+    useALU=>useALUBuffer,
+    useIO=>useIOBuffer,
+    modeALU=>modeALUBuffer,
+    modeIO=>modeIOBuffer,
+    operand1=>operand1Buffer, 
+    operand2=>operand2Buffer,
+    inputCPU => input,
+    outputRegIn => decodeWriteBackRegBuffer,
+    outputRegOut => execWriteBackReg,
+    result=>result,
+    outputCPU=>output
+    --execFreezePipe
 );
 
 process(clk)
@@ -124,6 +132,18 @@ begin
 
     if rising_edge(clk) then
         fetchedInstructionBuffer <= fetchedInstruction;
+        
+        resultBuffer<=result;
+        
+        useALUBuffer <= useALU;
+        useIOBuffer <= useIO;
+        modeALUBuffer <= modeALU;
+        modeIO <= modeIO;
+        operand1Buffer <= operand1;
+        operand2Buffer <= operand2;
+        decodeWriteBackRegBuffer <= decodeWriteBackReg;
+        
+        execWriteBackRegBuffer <= execWriteBackReg;
     end if;
 
 end process;

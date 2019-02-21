@@ -43,7 +43,7 @@ component decodeStage port(
     modeALU : out std_logic_vector(2 downto 0);
     modeIO : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
-    outputReg : out std_logic_vector(2 downto 0)
+    destReg : out std_logic_vector(2 downto 0)
 );
 end component;
 
@@ -54,7 +54,7 @@ signal useIO : std_logic;
 signal modeALU : std_logic_vector(2 downto 0);
 signal modeIO : std_logic;
 signal operand1, operand2 : std_logic_vector(15 downto 0);
-signal outputReg : std_logic_vector(2 downto 0);
+signal destReg : std_logic_vector(2 downto 0);
 
 begin
 
@@ -67,7 +67,7 @@ u0 : decodeStage port map(
     modeIO => modeIO,
     operand1 => operand1,
     operand2 => operand2,
-    outputReg => outputReg
+    destReg => destReg
 );
 
 process begin

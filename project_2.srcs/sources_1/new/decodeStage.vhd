@@ -39,7 +39,7 @@ entity decodeStage is Port (
     modeALU : out std_logic_vector(2 downto 0);
     modeIO : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
-    outputReg : out std_logic_vector(2 downto 0)
+    destReg : out std_logic_vector(2 downto 0)
 );
 end decodeStage;
 
@@ -106,10 +106,10 @@ begin
                         rd_index2 <= instruction(5 downto 3);
                         operand1 <= rd_data1;
                         operand2 <= rd_data2;
-                        outputReg <= instruction(8 downto 6);
+                        destReg <= instruction(8 downto 6);
                     when shl_op | shr_op =>
                         rd_index1 <= instruction(8 downto 6);
-                        outputReg <= instruction(8 downto 6);
+                        destReg <= instruction(8 downto 6);
                         operand2(3 downto 0) <= instruction(3 downto 0);
                         operand1 <= rd_data1;
                     when test_op =>
@@ -123,7 +123,7 @@ begin
                 case instruction(15 downto 9) is
                     when in_op =>
                         modeIO <= '1';
-                        outputReg <= instruction(8 downto 6);
+                        destReg <= instruction(8 downto 6);
                     when out_op =>
                         modeIO <= '0';
                         rd_index1 <= instruction(8 downto 6);
