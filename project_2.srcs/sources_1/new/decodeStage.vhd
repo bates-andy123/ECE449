@@ -34,12 +34,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity decodeStage is Port (
     clk : in std_logic;
     instruction : in std_logic_vector(15 downto 0);
-    useALU : out std_logic;
-    useIO : out std_logic;
-    modeALU : out std_logic_vector(2 downto 0);
-    modeIO : out std_logic;
-    operand1, operand2 : out std_logic_vector(15 downto 0);
-    destReg : out std_logic_vector(2 downto 0)
+    useALU : out std_logic := '0';
+    useIO : out std_logic := '0';
+    modeALU : out std_logic_vector(2 downto 0) := "000";
+    modeIO : out std_logic := '0';
+    operand1, operand2 : out std_logic_vector(15 downto 0) := X"0000";
+    destReg : out std_logic_vector(2 downto 0);
+    doWriteBack : out std_logic;
+    regWriteEnable : in std_logic;
+    regWriteAddress : in std_logic_vector(2 downto 0);
+    writeBackValue : in std_logic_vector(15 downto 0)
 );
 end decodeStage;
 
@@ -85,16 +89,16 @@ u0 : register_file port map(
     rd_data1=>rd_data1, 
     rd_data2=>rd_data2,
     --write signals
-    wr_index=>"000", 
-    wr_data=>X"0000", 
-    wr_enable=>'0'
+    wr_index=>regWriteAddress, 
+    wr_data=>writeBackValue, 
+    wr_enable=>regWriteEnable
 );
 
 process(clk)
 begin
 
     if rising_edge(clk) then
-        
+        doWriteBack <= '0';
         case instruction(15 downto 9) is
             when nop_op | add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op =>
                 useALU <= '1';
@@ -102,16 +106,18 @@ begin
                 modeALU <= instruction(11 downto 9);
                 case instruction(15 downto 9) is
                     when add_op | sub_op | mul_op | nand_op =>
-                        rd_index1 <= instruction(2 downto 0);
-                        rd_index2 <= instruction(5 downto 3);
+                        rd_index1 <= instruction(5 downto 3);
+                        rd_index2 <= instruction(2 downto 0);
                         operand1 <= rd_data1;
                         operand2 <= rd_data2;
                         destReg <= instruction(8 downto 6);
+                        doWriteBack <= '1';
                     when shl_op | shr_op =>
                         rd_index1 <= instruction(8 downto 6);
                         destReg <= instruction(8 downto 6);
                         operand2(3 downto 0) <= instruction(3 downto 0);
                         operand1 <= rd_data1;
+                        doWriteBack <= '1';
                     when test_op =>
                         rd_index1 <= instruction(8 downto 6);
                         operand1 <= rd_data1;
@@ -124,6 +130,7 @@ begin
                     when in_op =>
                         modeIO <= '1';
                         destReg <= instruction(8 downto 6);
+                        doWriteBack <= '1';
                     when out_op =>
                         modeIO <= '0';
                         rd_index1 <= instruction(8 downto 6);

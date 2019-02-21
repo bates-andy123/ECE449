@@ -34,7 +34,7 @@ use ieee.numeric_std.all;
 
 entity fetchStage is Port (
     clk : in std_logic;
-    instruction: out std_logic_vector(15 downto 0)
+    instruction: out std_logic_vector(15 downto 0) := X"0000"
 );
 end fetchStage;
 

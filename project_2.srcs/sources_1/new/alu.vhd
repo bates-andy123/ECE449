@@ -35,7 +35,7 @@ entity alu is
     Port(
         in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
         mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
-        mulFlag : out std_logic_vector(1 downto 0); -- Flag to check if multiplication is ongoing  
+        mulFlag : out std_logic; -- Flag to check if multiplication is ongoing  
         clk, rst : in std_logic; -- Clk and reset flags
         result : out std_logic_vector(15 downto 0); -- Result of ALU operation
         z, n : out std_logic); -- zero and negative flag from addition/subtraction operation
@@ -97,6 +97,7 @@ process(clk)
 begin
     if(clk = '0' and clk'event) then
         -- Determine ALU mode and perform appropriate action
+        mulFlag <= '0';
         case mode(2 downto 0) is
             when "000" => null; -- NOP operation
             when "001" => result <= unaryOutput; -- ADD operation
@@ -104,14 +105,17 @@ begin
             when "011" => -- MUL operation
                 -- Set multiplication start flag
                 mulStart <= '1';
+                
                 -- If multiplication is currently ongoing, latch intermediate result to result
                 if (mulStatus = "01") then
                     result <= multiplierOutput;
                 -- If multiplication is finished, reset multiplication start flag
                 elsif (mulStatus = "10") then
                     mulStart <= '0';
+                    mulFlag <= '1';
+                else
+                    
                 end if;
-                mulFlag <= mulStatus;
             when "100" => result <= (in1 nand in2); -- NAND operation
             when "101" => result <= barrelShiftLeftOutput; -- SHL operation
             when "110" => result <= barrelShiftRightOutput; -- SHR operation
