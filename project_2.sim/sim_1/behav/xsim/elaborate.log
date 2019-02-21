@@ -20,6 +20,7 @@ Compiling architecture behavioral of entity xil_defaultlib.mux2_1 [mux2_1_defaul
 Compiling architecture behavioral of entity xil_defaultlib.barrelShiftRight [barrelshiftright_default]
 Compiling architecture behavioral of entity xil_defaultlib.barrelShiftLeft [barrelshiftleft_default]
 Compiling architecture behavioral of entity xil_defaultlib.unary [unary_default]
+Compiling architecture behavioral of entity xil_defaultlib.mux2_16 [mux2_16_default]
 Compiling architecture behavioral of entity xil_defaultlib.multiplier [multiplier_default]
 Compiling architecture behavioral of entity xil_defaultlib.alu [alu_default]
 Compiling architecture behavioural of entity xil_defaultlib.test_alu

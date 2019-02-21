@@ -61,11 +61,10 @@ process  begin
 
 -- multiplier test
         wait until (clk='1' and clk'event);
-            in1 <= X"0022";
+            in1 <= X"0024";
             in2 <= X"00FF";
             mode <= "011";
         wait until (clk='0' and clk'event);
-        wait until mulStatus = "10";
 
 -- shift test
     wait until (clk='1' and clk'event);

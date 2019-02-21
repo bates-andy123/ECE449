@@ -2,13 +2,13 @@
 2017.4
 Dec 15 2017
 21:07:18
-C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/imports/new/RF8_16TB.vhd,1550714328,vhdl,,,,test_alu,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/imports/new/RF8_16TB.vhd,1550781034,vhdl,,,,test_alu,,,,,,,,
 C:/Users/kjjarvis/ECE449/project_2.srcs/sim_1/new/decodeStage_TB.vhd,1550707906,vhdl,,,,decodestage_tb,,,,,,,,
 C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/RF8_16.vhd,1550707906,vhdl,,,,register_file,,,,,,,,
-C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/alu.vhd,1550707906,vhdl,,,,alu,,,,,,,,
-C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrelShiftLeft.vhd,1550707906,vhdl,,,,barrelshiftleft,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/alu.vhd,1550780827,vhdl,,,,alu,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrelShiftLeft.vhd,1550707906,vhdl,C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/multiplier.vhd,,,barrelshiftleft,,,,,,,,
 C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrelShiftRight.vhd,1550707906,vhdl,,,,barrelshiftright,,,,,,,,
 C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/decodeStage.vhd,1550707906,vhdl,,,,decodestage,,,,,,,,
-C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/multiplier.vhd,1550714806,vhdl,,,,multiplier,,,,,,,,
-C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/mux.vhd,1550707906,vhdl,C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrelShiftLeft.vhd;C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrelShiftRight.vhd,,,mux2_1;mux2_2;mux2_4;mux2_8,,,,,,,,
-C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/unary.vhd,1550707906,vhdl,,,,unary,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/multiplier.vhd,1550780229,vhdl,,,,multiplier,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/mux.vhd,1550780594,vhdl,C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/barrelShiftLeft.vhd;C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/multiplier.vhd,,,mux2_1;mux2_16;mux2_2;mux2_4;mux2_8,,,,,,,,
+C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/unary.vhd,1550721693,vhdl,C:/Users/kjjarvis/ECE449/project_2.srcs/sources_1/new/multiplier.vhd,,,unary,,,,,,,,
