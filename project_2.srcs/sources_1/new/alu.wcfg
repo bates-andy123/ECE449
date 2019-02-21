@@ -11,12 +11,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="211000000001fs"></ZoomEndTime>
-      <Cursor1Time time="211000000000fs"></Cursor1Time>
+      <ZoomEndTime time="106000000001fs"></ZoomEndTime>
+      <Cursor1Time time="106000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="128"></NameColumnWidth>
-      <ValueColumnWidth column_width="59"></ValueColumnWidth>
+      <NameColumnWidth column_width="125"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="14" />
    <wvobject fp_name="/test_alu/rst" type="logic">
@@ -51,10 +51,6 @@
       <obj_property name="ElementShortName">result[15:0]</obj_property>
       <obj_property name="ObjectShortName">result[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test_alu/u1/u3/productTemp" type="array">
-      <obj_property name="ElementShortName">productTemp[31:0]</obj_property>
-      <obj_property name="ObjectShortName">productTemp[31:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/test_alu/u1/u3/multiplicand" type="array">
       <obj_property name="ElementShortName">multiplicand[15:0]</obj_property>
       <obj_property name="ObjectShortName">multiplicand[15:0]</obj_property>
@@ -67,12 +63,16 @@
       <obj_property name="ElementShortName">product[15:0]</obj_property>
       <obj_property name="ObjectShortName">product[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test_alu/u1/mulStatus" type="logic">
-      <obj_property name="ElementShortName">mulStatus</obj_property>
-      <obj_property name="ObjectShortName">mulStatus</obj_property>
+   <wvobject fp_name="/test_alu/u1/u2/temp1" type="array">
+      <obj_property name="ElementShortName">temp1[16:0]</obj_property>
+      <obj_property name="ObjectShortName">temp1[16:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test_alu/u1/mulStart" type="logic">
-      <obj_property name="ElementShortName">mulStart</obj_property>
-      <obj_property name="ObjectShortName">mulStart</obj_property>
+   <wvobject fp_name="/test_alu/u1/u2/temp2" type="array">
+      <obj_property name="ElementShortName">temp2[16:0]</obj_property>
+      <obj_property name="ObjectShortName">temp2[16:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_alu/u1/u2/overflow" type="logic">
+      <obj_property name="ElementShortName">overflow</obj_property>
+      <obj_property name="ObjectShortName">overflow</obj_property>
    </wvobject>
 </wave_config>

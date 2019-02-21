@@ -49,8 +49,8 @@ process  begin
 
 -- unary test
     wait until (clk='1' and clk'event);
-        in1 <= X"FFFF";
-        in2 <= X"EEEE";
+        in1 <= X"7FFF";
+        in2 <= X"7FFF";
         mode <= "001";
     wait until (clk='0' and clk'event);
     wait until (clk='1' and clk'event);

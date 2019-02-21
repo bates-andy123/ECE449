@@ -37,6 +37,7 @@ entity multiplier is
         multiplicand : in std_logic_vector(15 downto 0);
         multiplier : in std_logic_vector(15 downto 0);
         clk : in std_logic;
+        overflow : out std_logic;
         product : out std_logic_vector(15 downto 0));
 end multiplier;
 
@@ -56,6 +57,10 @@ signal inter11, inter12, inter13, inter14 : std_logic_vector(15 downto 0); -- Se
 signal inter21, inter22 : std_logic_vector(15 downto 0); -- Third 2 sums
 
 -- Individual overflow signals for each addition operation
+signal of01, of02, of03, of04, of05, of06, of07, of08: std_logic;
+signal of11, of12, of13, of14 : std_logic;
+signal of21, of22 : std_logic;
+signal ofFinal: std_logic;
 
 begin
     -- Obtain 15 left shifts of multiplicand
@@ -95,25 +100,26 @@ begin
     
     -- Addition of all the gated results to obtain the overall product
     -- Initial sum of all 16 shifted versions of the multiplicand
-    sum01 : entity work.unary port map(in1 => multi0Gated, in2 => multi1Gated, operation => "001", output => inter01);
-    sum02 : entity work.unary port map(in1 => multi2Gated, in2 => multi3Gated, operation => "001", output => inter02);
-    sum03 : entity work.unary port map(in1 => multi4Gated, in2 => multi5Gated, operation => "001", output => inter03);
-    sum04 : entity work.unary port map(in1 => multi6Gated, in2 => multi7Gated, operation => "001", output => inter04);
-    sum05 : entity work.unary port map(in1 => multi8Gated, in2 => multi9Gated, operation => "001", output => inter05);
-    sum06 : entity work.unary port map(in1 => multi10Gated, in2 => multi11Gated, operation => "001", output => inter06);
-    sum07 : entity work.unary port map(in1 => multi12Gated, in2 => multi13Gated, operation => "001", output => inter07);
-    sum08 : entity work.unary port map(in1 => multi14Gated, in2 => multi15Gated, operation => "001", output => inter08);
+    sum01 : entity work.unsignedAddition port map(in1 => multi0Gated, in2 => multi1Gated, output => inter01, overflow => of01);
+    sum02 : entity work.unsignedAddition port map(in1 => multi2Gated, in2 => multi3Gated, output => inter02, overflow => of02);
+    sum03 : entity work.unsignedAddition port map(in1 => multi4Gated, in2 => multi5Gated, output => inter03, overflow => of03);
+    sum04 : entity work.unsignedAddition port map(in1 => multi6Gated, in2 => multi7Gated, output => inter04, overflow => of04);
+    sum05 : entity work.unsignedAddition port map(in1 => multi8Gated, in2 => multi9Gated, output => inter05, overflow => of05);
+    sum06 : entity work.unsignedAddition port map(in1 => multi10Gated, in2 => multi11Gated, output => inter06, overflow => of06);
+    sum07 : entity work.unsignedAddition port map(in1 => multi12Gated, in2 => multi13Gated, output => inter07, overflow => of07);
+    sum08 : entity work.unsignedAddition port map(in1 => multi14Gated, in2 => multi15Gated, output => inter08, overflow => of08);
     
     -- Sum of all the 8 temporary sums above
-    sum11 : entity work.unary port map(in1 => inter01, in2 => inter02, operation => "001", output => inter11);
-    sum12 : entity work.unary port map(in1 => inter03, in2 => inter04, operation => "001", output => inter12);
-    sum13 : entity work.unary port map(in1 => inter05, in2 => inter06, operation => "001", output => inter13);
-    sum14 : entity work.unary port map(in1 => inter07, in2 => inter08, operation => "001", output => inter14);
+    sum11 : entity work.unsignedAddition port map(in1 => inter01, in2 => inter02, output => inter11, overflow => of11);
+    sum12 : entity work.unsignedAddition port map(in1 => inter03, in2 => inter04, output => inter12, overflow => of12);
+    sum13 : entity work.unsignedAddition port map(in1 => inter05, in2 => inter06, output => inter13, overflow => of13);
+    sum14 : entity work.unsignedAddition port map(in1 => inter07, in2 => inter08, output => inter14, overflow => of14);
     
     -- Sum of all the 4 temporary sums above
-    sum21 : entity work.unary port map(in1 => inter11, in2 => inter12, operation => "001", output => inter21);
-    sum22 : entity work.unary port map(in1 => inter13, in2 => inter14, operation => "001", output => inter22);
+    sum21 : entity work.unsignedAddition port map(in1 => inter11, in2 => inter12, output => inter21, overflow => of21);
+    sum22 : entity work.unsignedAddition port map(in1 => inter13, in2 => inter14, output => inter22, overflow => of22);
     
-    -- Final result
-    finalProduct : entity work.unary port map(in1 => inter21, in2 => inter22, operation => "001", output => product);
+    -- Final result    
+    finalProduct : entity work.unsignedAddition port map(in1 => inter21, in2 => inter22, output => product, overflow => ofFinal);
+    overflow <= of01 or of02 or of03 or of04 or of05 or of06 or of07 or of08 or of11 or of12 or of13 or of14 or of21 or of22 or ofFinal;
 end Behavioral;
