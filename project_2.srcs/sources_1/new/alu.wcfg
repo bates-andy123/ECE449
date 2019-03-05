@@ -3,97 +3,59 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="pipeline_TB_behav.wdb" id="1">
+      <db_ref path="dataHazardPredictor_TB_behav.wdb" id="1">
          <top_modules>
-            <top_module name="pipeline_TB" />
-            <top_module name="vcomponents" />
+            <top_module name="dataHazardPredictor_TB" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="93603030302fs"></ZoomStartTime>
-      <ZoomEndTime time="270479393940fs"></ZoomEndTime>
-      <Cursor1Time time="241000000000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="81000000001fs"></ZoomEndTime>
+      <Cursor1Time time="53305913000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="138"></NameColumnWidth>
-      <ValueColumnWidth column_width="71"></ValueColumnWidth>
+      <ValueColumnWidth column_width="59"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="19" />
-   <wvobject fp_name="/pipeline_TB/u0/u1/u0/rd_index1" type="array">
-      <obj_property name="ElementShortName">rd_index1[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_index1[2:0]</obj_property>
+   <WVObjectSize size="9" />
+   <wvobject fp_name="/dataHazardPredictor_TB/halt" type="logic">
+      <obj_property name="ElementShortName">halt</obj_property>
+      <obj_property name="ObjectShortName">halt</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u1/u0/rd_index2" type="array">
-      <obj_property name="ElementShortName">rd_index2[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_index2[2:0]</obj_property>
+   <wvobject fp_name="/dataHazardPredictor_TB/writeReg" type="array">
+      <obj_property name="ElementShortName">writeReg[2:0]</obj_property>
+      <obj_property name="ObjectShortName">writeReg[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/result" type="array">
-      <obj_property name="ElementShortName">result[15:0]</obj_property>
-      <obj_property name="ObjectShortName">result[15:0]</obj_property>
+   <wvobject fp_name="/dataHazardPredictor_TB/readReg1" type="array">
+      <obj_property name="ElementShortName">readReg1[2:0]</obj_property>
+      <obj_property name="ObjectShortName">readReg1[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u1/u0/reg_file[2]" type="array">
-      <obj_property name="ElementShortName">[2][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[2][15:0]</obj_property>
+   <wvobject fp_name="/dataHazardPredictor_TB/readReg2" type="array">
+      <obj_property name="ElementShortName">readReg2[2:0]</obj_property>
+      <obj_property name="ObjectShortName">readReg2[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u1/u0/reg_file[3]" type="array">
-      <obj_property name="ElementShortName">[3][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[3][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/resultALU" type="array">
-      <obj_property name="ElementShortName">resultALU[15:0]</obj_property>
-      <obj_property name="ObjectShortName">resultALU[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u3/inDoWriteBack" type="logic">
-      <obj_property name="ElementShortName">inDoWriteBack</obj_property>
-      <obj_property name="ObjectShortName">inDoWriteBack</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u3/inDestRegister" type="array">
-      <obj_property name="ElementShortName">inDestRegister[2:0]</obj_property>
-      <obj_property name="ObjectShortName">inDestRegister[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u3/inWriteBackValue" type="array">
-      <obj_property name="ElementShortName">inWriteBackValue[15:0]</obj_property>
-      <obj_property name="ObjectShortName">inWriteBackValue[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/useALU" type="logic">
-      <obj_property name="ElementShortName">useALU</obj_property>
-      <obj_property name="ObjectShortName">useALU</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/useIO" type="logic">
-      <obj_property name="ElementShortName">useIO</obj_property>
-      <obj_property name="ObjectShortName">useIO</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/clk" type="logic">
+   <wvobject fp_name="/dataHazardPredictor_TB/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/useIO" type="logic">
-      <obj_property name="ElementShortName">useIO</obj_property>
-      <obj_property name="ObjectShortName">useIO</obj_property>
+   <wvobject fp_name="/dataHazardPredictor_TB/isWriteInstruction" type="logic">
+      <obj_property name="ElementShortName">isWriteInstruction</obj_property>
+      <obj_property name="ObjectShortName">isWriteInstruction</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u1/u0/reg_file[0]" type="array">
-      <obj_property name="ElementShortName">[0][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[0][15:0]</obj_property>
+   <wvobject fp_name="/dataHazardPredictor_TB/u0/writeRegInExecute" type="array">
+      <obj_property name="ElementShortName">writeRegInExecute[3:0]</obj_property>
+      <obj_property name="ObjectShortName">writeRegInExecute[3:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u1/u0/rd_index1" type="array">
-      <obj_property name="ElementShortName">rd_index1[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_index1[2:0]</obj_property>
+   <wvobject fp_name="/dataHazardPredictor_TB/u0/writeRegInMemory" type="array">
+      <obj_property name="ElementShortName">writeRegInMemory[3:0]</obj_property>
+      <obj_property name="ObjectShortName">writeRegInMemory[3:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u1/u0/rd_index2" type="array">
-      <obj_property name="ElementShortName">rd_index2[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_index2[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/operand1" type="array">
-      <obj_property name="ElementShortName">operand1[15:0]</obj_property>
-      <obj_property name="ObjectShortName">operand1[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/u0/u2/operand2" type="array">
-      <obj_property name="ElementShortName">operand2[15:0]</obj_property>
-      <obj_property name="ObjectShortName">operand2[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB/output" type="array">
-      <obj_property name="ElementShortName">output[15:0]</obj_property>
-      <obj_property name="ObjectShortName">output[15:0]</obj_property>
+   <wvobject fp_name="/dataHazardPredictor_TB/u0/writeRegInWriteBack" type="array">
+      <obj_property name="ElementShortName">writeRegInWriteBack[3:0]</obj_property>
+      <obj_property name="ObjectShortName">writeRegInWriteBack[3:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
 </wave_config>

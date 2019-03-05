@@ -73,8 +73,6 @@ process(clk)
 begin
 
     if rising_edge(clk) then
-        
-        
         addrROM <= PC_next;
     elsif falling_edge(clk) then 
         instruction <= doutROM;
