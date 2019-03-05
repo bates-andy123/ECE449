@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 02/19/2019 05:10:59 PM
 -- Design Name: 
--- Module Name: unary - Behavioral
+-- Module Name: addSub - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -32,16 +32,16 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity unary is
+entity addSub is
     Port (
         in1 : in std_logic_vector(15 downto 0);
         in2 : in std_logic_vector(15 downto 0);
         operation : in std_logic_vector(2 downto 0);
         output : out std_logic_vector(15 downto 0);
         overflow : out std_logic);
-end unary;
+end addSub;
 
-architecture Behavioral of unary is
+architecture Behavioral of addSub is
 
 -- Signal declarations
 signal resultTemp : std_logic_vector(15 downto 0); -- Temporary signal storage for decision making

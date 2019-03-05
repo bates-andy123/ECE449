@@ -56,8 +56,8 @@ component barrelShiftLeft port(
     output : out std_logic_vector(15 downto 0));
 end component;
 
--- Component declaration for unary operator
-component unary port(
+-- Component declaration for addSub operator
+component addSub port(
     in1 : in std_logic_vector(15 downto 0);
     in2 : in std_logic_vector(15 downto 0);
     operation : in std_logic_vector(2 downto 0);
@@ -77,9 +77,9 @@ end component;
 -- Internal signals
 signal barrelShiftRightOutput : std_logic_vector(15 downto 0); -- Signal for the output from the right shift operation
 signal barrelShiftLeftOutput  : std_logic_vector(15 downto 0); -- Signal for the output from the left shift operation
-signal unaryOutput : std_logic_vector(15 downto 0); -- Signal for the output from the add/subtract operation
+signal addSubOutput : std_logic_vector(15 downto 0); -- Signal for the output from the add/subtract operation
 signal multiplierOutput : std_logic_vector(15 downto 0); -- Signal for the output from the multiply operation
-signal unaryOverflow : std_logic; -- Overflow flag for add/subtract operation, 0 = no overflow, 1 = overflow
+signal addSubOverflow : std_logic; -- Overflow flag for add/subtract operation, 0 = no overflow, 1 = overflow
 signal multiplierOverflow : std_logic; -- Overflow flag for multiplier operation
 
 begin
@@ -87,7 +87,7 @@ begin
 -- Component instantiations
 u0 : barrelShiftRight port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftRightOutput);
 u1 : barrelShiftLeft port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftLeftOutput);
-u2 : unary port map(in1 => in1, in2 => in2, operation => mode, output => unaryOutput, overflow => unaryOverflow);
+u2 : addSub port map(in1 => in1, in2 => in2, operation => mode, output => addSubOutput, overflow => addSubOverflow);
 u3 : multiplier port map(multiplicand => in1, multiplier => in2, clk => clk, overflow => multiplierOverflow, product => multiplierOutput);
 
 process(clk)
@@ -96,9 +96,9 @@ begin
         -- Determine ALU mode and perform appropriate action
         case mode(2 downto 0) is
             when "000" => null; -- NOP operation
-            when "001" => result <= unaryOutput; -- ADD operation
-            when "010" => result <= unaryOutput; -- SUB operation
-            when "011" => result <= multiplieroutput;-- MUL operation
+            when "001" => result <= addSubOutput; -- ADD operation
+            when "010" => result <= addSubOutput; -- SUB operation
+            when "011" => result <= multiplierOutput;-- MUL operation
             when "100" => result <= (in1 nand in2); -- NAND operation
             when "101" => result <= barrelShiftLeftOutput; -- SHL operation
             when "110" => result <= barrelShiftRightOutput; -- SHR operation
