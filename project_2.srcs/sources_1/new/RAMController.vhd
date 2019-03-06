@@ -5,10 +5,10 @@ entity RAMController is
     port(
         douta : out std_logic_vector (15 downto 0);
         doutb : out std_logic_vector (15 downto 0);
-        addra, addrb : in std_logic_vector (7 downto 0); -- The address for port A read/write operations, and port B read operations
+        addra, addrb : in std_logic_vector (15 downto 0); -- The address for port A read/write operations, and port B read operations
         dina : in std_logic_vector (15 downto 0); -- Data in for port A
         wea : in std_logic_vector (0 downto 0); -- Write enable for port A input data port dina
-        clka, clkb, ena, enb, regcea, regceb, rsta, rstb : in std_logic
+        clka, ena, enb, regcea, regceb, rsta, rstb : in std_logic
 );
 end RAMController;
 
@@ -18,8 +18,8 @@ begin
 -- Xilinx Parameterized Macro, version 2018.3
 xpm_memory_dpdistram_inst : xpm_memory_dpdistram
     generic map (
-        ADDR_WIDTH_A => 8, -- DECIMAL
-        ADDR_WIDTH_B => 8, -- DECIMAL
+        ADDR_WIDTH_A => 16, -- DECIMAL
+        ADDR_WIDTH_B => 16, -- DECIMAL
         BYTE_WRITE_WIDTH_A => 16, -- DECIMAL
         CLOCKING_MODE => "common_clock", -- String
         MEMORY_INIT_FILE => "init.mem", -- String
@@ -47,7 +47,7 @@ xpm_memory_dpdistram_inst : xpm_memory_dpdistram
         addrb => addrb, -- ADDR_WIDTH_B-bit input: Address for port B write and read operations.
         clka => clka, -- 1-bit input: Clock signal for port A. Also clocks port B when parameter
         -- CLOCKING_MODE is "common_clock".
-        clkb => clkb, -- 1-bit input: Clock signal for port B when parameter CLOCKING_MODE is
+        clkb => clka, -- 1-bit input: Clock signal for port B when parameter CLOCKING_MODE is
         -- "independent_clock". Unused when parameter CLOCKING_MODE is "common_clock".
         dina => dina, -- WRITE_DATA_WIDTH_A-bit input: Data input for port A write operations.
         ena => ena, -- 1-bit input: Memory enable signal for port A. Must be high on clock cycles when read

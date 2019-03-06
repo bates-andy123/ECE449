@@ -33,8 +33,11 @@ use IEEE.STD_LOGIC_1164.ALL, xpm.vcomponents.all;
 
 entity ROMController is
     Port (
-        clka, ena, injectdbiterra, injectsbiterra, regcea, rsta, sleep : in std_logic;
-        addra : in std_logic_vector (7 downto 0);
+        clka, ena, rsta, sleep : in std_logic;
+        regcea : in std_logic := '1';
+        injectdbiterra : in std_logic := '0';
+        injectsbiterra : in std_logic := '0';
+        addra : in std_logic_vector (15 downto 0);
         douta : out std_logic_vector (15 downto 0);
         dbiterra, sbiterra : out std_logic);
 end ROMController;
@@ -47,7 +50,7 @@ begin
 -- Xilinx Parameterized Macro, version 2018.3
 xpm_memory_sprom_inst : xpm_memory_sprom
     generic map (
-        ADDR_WIDTH_A => 8, -- DECIMAL
+        ADDR_WIDTH_A => 16, -- DECIMAL
         AUTO_SLEEP_TIME => 0, -- DECIMAL
         ECC_MODE => "no_ecc", -- String
         MEMORY_INIT_FILE => "ROM.mem", -- String

@@ -1,7 +1,29 @@
 # compile vhdl design source files
 vhdl xil_defaultlib  \
+"../../../../project_2.srcs/sources_1/new/addSub.vhd" \
+"../../../../project_2.srcs/sources_1/new/mux.vhd" \
+"../../../../project_2.srcs/sources_1/new/barrelShiftLeft.vhd" \
+"../../../../project_2.srcs/sources_1/new/barrelShiftRight.vhd" \
+"../../../../project_2.srcs/sources_1/new/multiplier.vhd" \
+"../../../../project_2.srcs/sources_1/new/alu.vhd" \
+"../../../../project_2.srcs/sources_1/new/RF8_16.vhd" \
+"../../../../project_2.srcs/sources_1/new/fetchStage.vhd" \
+"../../../../project_2.srcs/sources_1/new/ROMController.vhd" \
+"../../../../project_2.srcs/sources_1/new/pipeline.vhd" \
+"../../../../project_2.srcs/sources_1/new/decodeStage.vhd" \
+"../../../../project_2.srcs/sources_1/new/executeStage.vhd" \
+"../../../../project_2.srcs/sources_1/new/writeBackStage.vhd" \
+"../../../../project_2.srcs/sources_1/new/memoryController.vhd" \
 "../../../../project_2.srcs/sources_1/new/RAMController.vhd" \
 "../../../../project_2.srcs/sources_1/new/RAMTestBench.vhd" \
+"../../../../project_2.srcs/sim_1/new/pipeline_TB.vhd" \
+"../../../../project_2.srcs/sim_1/imports/new/RF8_16TB.vhd" \
+"../../../../project_2.srcs/sim_1/new/decodeStage_TB.vhd" \
+"../../../../project_2.srcs/sim_1/new/fetchStage_TB.vhd" \
+"../../../../project_2.srcs/sim_1/new/ROMController_TB.vhd" \
+"../../../../project_2.srcs/sim_1/new/barrelShiftRight_TB.vhd" \
+"../../../../project_2.srcs/sim_1/new/barrelShiftLeft_TB.vhd" \
+"../../../../project_2.srcs/sim_1/new/executeStage_TB.vhd" \
 
 # Do not sort compile order
 nosort

@@ -62,30 +62,19 @@ begin
 end Behavioral;
 
 
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity unsignedAddition is
     Port (
-        in1 : in std_logic_vector(15 downto 0);
-        in2 : in std_logic_vector(15 downto 0);
-        output : out std_logic_vector(15 downto 0);
-        overflow : out std_logic);
+        in1 : in std_logic_vector(31 downto 0);
+        in2 : in std_logic_vector(31 downto 0);
+        output : out std_logic_vector(31 downto 0));
 end unsignedAddition;
 
 architecture Behavioral of unsignedAddition is
 
--- Signal declarations
-signal resultTemp : std_logic_vector(16 downto 0); -- Temporary signal storage for decision making
-
 begin
-    -- Store results in temporary signal
-    resultTemp <= ('0' & in1) + ('0' & in2);
-
-    -- Check for overflow
-    overflow <= resultTemp(16);
-
-    output <= resultTemp(15 downto 0); -- Output the result
+    output <= in1 + in2;
 end Behavioral;
