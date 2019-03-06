@@ -33,6 +33,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity decodeStage is Port (
     clk, rst : in std_logic;
+    halt : out std_logic := '0';
     instruction : in std_logic_vector(15 downto 0);
     useALU : out std_logic := '0';
     useIO : out std_logic := '0';
@@ -62,6 +63,13 @@ component register_file port(
 );
 end component; 
 
+component dataHazardPredictor Port(
+    halt : out std_logic;
+    writeReg, readReg1, readReg2 : in std_logic_vector(2 downto 0);
+    clk, rst, isWriteInstruction : in std_logic
+);
+end component;
+
 signal rd_index1, rd_index2 : std_logic_vector(2 downto 0) := "000";
 signal rd_data1, rd_data2 : std_logic_vector(15 downto 0) := X"0000";
 
@@ -80,9 +88,14 @@ constant test_op : std_logic_vector(6 downto 0) := "0000111";
 constant out_op : std_logic_vector(6 downto 0)  := "0100000";
 constant in_op : std_logic_vector(6 downto 0)   := "0100001";
 
+signal destRegBuffer : std_logic_vector(2 downto 0);
+signal doWriteBackBuffer : std_logic := '0';
+signal instructionBuffer : std_logic_vector(15 downto 0);
+signal haltBuffer : std_logic := '0';
+
 begin
 
-u0 : register_file port map(
+registers : register_file port map(
     clk=>clk,
     rst=>rst,
     --read signals
@@ -96,6 +109,15 @@ u0 : register_file port map(
     wr_enable=>regWriteEnable
 );
 
+dataHazard : dataHazardPredictor Port map(
+    clk=>clk, 
+    rst=>rst, 
+    halt=>haltBuffer,
+    writeReg=>destRegBuffer, 
+    readReg1=>rd_index1, 
+    readReg2=>rd_index2,
+    isWriteInstruction=>doWriteBackBuffer
+);
 
     with instruction(15 downto 9) select
         rd_index1 <= 
@@ -108,27 +130,31 @@ u0 : register_file port map(
             instruction(2 downto 0) when add_op | sub_op | mul_op | nand_op,
             "UUU" when others;
             
-     with instruction(15 downto 9) select
+     with instructionBuffer(15 downto 9) select
         useALU <= 
             '1' when nop_op | add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op,
             '0' when others;
     
-    with instruction(15 downto 9) select
+    with instructionBuffer(15 downto 9) select
         useIO <=
             '1' when in_op | out_op,
             '0' when others;
             
      with instruction(15 downto 9) select
-        destReg <=
+        destRegBuffer <=
             instruction(8 downto 6) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op ,
             "UUU" when others;
             
-    with instruction(15 downto 9) select
-        doWriteBack <=
+    destReg <= destRegBuffer;
+            
+    with instructionBuffer(15 downto 9) select
+        doWriteBackBuffer <=
             '1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op ,
             '0' when others;
          
-    with instruction(15 downto 9) select
+    doWriteBack <= doWriteBackBuffer;
+         
+    with instructionBuffer(15 downto 9) select
         modeIO <=
             '1' when in_op ,
             '0' when out_op,
@@ -146,8 +172,32 @@ u0 : register_file port map(
             inputIn when in_op ,
             X"0000" when others;   
          
-    modeALU <= instruction(11 downto 9);
+    modeALU <= instructionBuffer(11 downto 9);
+    halt<=haltBuffer;
     
     
+    
+process(instruction, haltBuffer)
+begin
+    if(haltBuffer = '0') then
+        instructionBuffer <= instruction;
+    else
+        instructionBuffer <= X"0000";
+    end if;
+end process;
+    
+--process(clk)
+
+--begin
+--    if falling_edge(clk) then
+        
+--        if haltBuffer = '0' then
+--            instructionBuffer <= instruction;
+--        else
+--            instructionBuffer <= X"0000";
+--        end if;
+--    end if;
+
+--end process;    
 
 end Behavioral;

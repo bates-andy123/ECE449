@@ -50,18 +50,23 @@ begin
     process(clk) 
         variable isHalted : boolean := false;
         begin
-        if (rst = '0') then 
-            if falling_edge(clk) then 
-                if(
-                    (writeRegInExecute = ("0" & readReg1)) or (writeRegInExecute = ("0" & readReg2)) or
-                    (writeRegInMemory = ("0" & readReg1)) or (writeRegInMemory = ("0" & readReg2)) or 
-                    (writeRegInWriteBack = ("0" & readReg1)) or (writeRegInWriteBack = ("0" & readReg2))
-                ) then 
-                    isHalted := true;
-                else
-                    isHalted := false;
-                end if;
-                
+        if (rst = '0') then  
+            if(
+                (writeRegInExecute = ("0" & readReg1)) or (writeRegInExecute = ("0" & readReg2)) or
+                (writeRegInMemory = ("0" & readReg1)) or (writeRegInMemory = ("0" & readReg2)) or 
+                (writeRegInWriteBack = ("0" & readReg1)) or (writeRegInWriteBack = ("0" & readReg2))
+            ) then 
+                isHalted := true;
+            else
+                isHalted := false;
+            end if;
+            if(isHalted) then 
+                halt<='1';
+            else
+                halt<='0';
+            end if;
+            
+            if clk ='1' then
                 writeRegInWriteBack <= writeRegInMemory;
                 writeRegInMemory <= writeRegInExecute;
                 if (isWriteInstruction = '1' and isHalted = false) then 
@@ -69,15 +74,13 @@ begin
                 else
                     writeRegInExecute <= "1000"; -- The leading one indicates that it is not used
                 end if;
-                if(isHalted) then 
-                    halt<='1';
-                else
-                    halt<='0';
-                end if;
+                
             end if;
          else --rst is active 
             isHalted := false;
-            writeRegInExecute, writeRegInMemory, writeRegInWriteBack <= "1000";
+            writeRegInExecute <= "1000";
+            writeRegInMemory <= "1000"; 
+            writeRegInWriteBack <= "1000";
             halt <= '0';
          end if;        
     end process;

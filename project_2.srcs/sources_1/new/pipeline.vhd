@@ -61,7 +61,8 @@ component decodeStage port(
     regWriteEnable : in std_logic;
     regWriteAddress : in std_logic_vector(2 downto 0);
     writeBackValue : in std_logic_vector(15 downto 0);
-    inputIn : in std_logic_vector(15 downto 0)
+    inputIn : in std_logic_vector(15 downto 0);
+    halt : out std_logic
 );
 end component;
 
@@ -122,6 +123,7 @@ signal regWriteAddress : std_logic_vector(2 downto 0);
 signal writeBackValue : std_logic_vector(15 downto 0);
 signal doWriteBackOutputDecodeStage : std_logic := '0';
 signal writeBackRegOutputDecodeStage : std_logic_vector(2 downto 0) := "000";
+signal haltSig : std_logic := '0';
 
 signal doWriteBackOutputExecuteStage : std_logic;
 signal writeBackRegOutputExecuteStage : std_logic_vector(2 downto 0);
@@ -135,7 +137,7 @@ begin
 
 fetch : fetchStage port map(
     clk=>clk,
-    halt=>'0',
+    halt=>haltSig,
     rst=>rst,
     instruction=>fetchedInstruction,
     inputIn=>input,
@@ -145,6 +147,7 @@ fetch : fetchStage port map(
 decode : decodeStage port map(
     clk => clk,
     rst => rst,
+    halt=>haltSig,
     instruction => fetchedInstruction,
     useALU => useALU,
     useIO=>useIO,
