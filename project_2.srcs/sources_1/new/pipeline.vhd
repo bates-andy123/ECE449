@@ -42,16 +42,19 @@ architecture Behavioral of pipeline is
 
 component fetchStage port(
     clk, rst, halt : in std_logic;
-    instruction: out std_logic_vector(15 downto 0);
+    instruction, PC: out std_logic_vector(15 downto 0);
     inputIn: in std_logic_vector(15 downto 0);
-    InputOut: out std_logic_vector(15 downto 0)
+    InputOut: out std_logic_vector(15 downto 0);
+    PC_offset : in std_logic_vector(15 downto 0);
+    PC_set : in std_logic_vector(15 downto 0);
+    PC_mode : in std_logic
 );
 end component;
 
 component decodeStage port(
     clk, rst : in std_logic;
-    instruction : in std_logic_vector(15 downto 0);
-    useALU : out std_logic;
+    instruction, PC : in std_logic_vector(15 downto 0);
+    useALU, useBranch : out std_logic;
     useIO : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
     modeIO : out std_logic;
@@ -68,7 +71,7 @@ end component;
 
 component executeStage port(
     clk, rst : in std_logic;
-    useALU : in std_logic;
+    useALU, useBranch : in std_logic;
     useIO : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
@@ -79,7 +82,8 @@ component executeStage port(
     doWriteBackOut : out std_logic;
     result : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
-    z, n: out std_logic
+    PC_in : in std_logic_vector(15 downto 0);
+    PC_out : out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -111,9 +115,10 @@ end component;
 
 signal fetchedInstruction: std_logic_vector(15 downto 0);
 signal inputOutputFetchStage : std_logic_vector(15 downto 0);
+signal PC : std_logic_vector(15 downto 0);
 
 signal doWriteBack : std_logic;
-signal useALU : std_logic := '0';
+signal useALU, useBranch : std_logic := '0';
 signal useIO : std_logic := '0';
 signal modeALU : std_logic_vector(2 downto 0) := "000";
 signal modeIO : std_logic := '0';
@@ -137,19 +142,25 @@ begin
 
 fetch : fetchStage port map(
     clk=>clk,
+    PC=>PC,
     halt=>haltSig,
     rst=>rst,
     instruction=>fetchedInstruction,
     inputIn=>input,
-    inputOut=>inputOutputFetchStage
+    inputOut=>inputOutputFetchStage,
+    PC_offset => X"0000",
+    PC_set => X"0000",
+    PC_mode => '0'
 );
 
 decode : decodeStage port map(
     clk => clk,
     rst => rst,
     halt=>haltSig,
+    PC=>PC,
     instruction => fetchedInstruction,
     useALU => useALU,
+    useBranch=>useBranch,
     useIO=>useIO,
     modeALU => modeALU,
     modeIO=>modeIO,
@@ -167,6 +178,7 @@ execute : executeStage port map(
     clk=>clk,
     rst=>rst,
     useALU=>useALU,
+    useBranch=>useBranch,
     useIO=>useIO,
     modeALU=>modeALU,
     modeIO=>modeIO,
@@ -177,7 +189,8 @@ execute : executeStage port map(
     doWriteBackIn=>doWriteBackOutputDecodeStage,
     doWriteBackOut=>doWriteBackOutputExecuteStage,
     result=>resultExecuteStage,
-    outputCPU=>output
+    outputCPU=>output,
+    PC_in => X"0000"
 );
 
 memory : memoryStage Port map(

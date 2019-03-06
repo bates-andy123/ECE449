@@ -34,8 +34,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity decodeStage is Port (
     clk, rst : in std_logic;
     halt : out std_logic := '0';
-    instruction : in std_logic_vector(15 downto 0);
-    useALU : out std_logic := '0';
+    instruction, PC : in std_logic_vector(15 downto 0);
+    useALU, useBranch : out std_logic := '0';
     useIO : out std_logic := '0';
     modeALU : out std_logic_vector(2 downto 0) := "000";
     modeIO : out std_logic := '0';
@@ -88,6 +88,15 @@ constant test_op : std_logic_vector(6 downto 0) := "0000111";
 constant out_op : std_logic_vector(6 downto 0)  := "0100000";
 constant in_op : std_logic_vector(6 downto 0)   := "0100001";
 
+constant brr : std_logic_vector(6 downto 0) 			:= "1000000";
+constant brr_neg : std_logic_vector(6 downto 0) 	:= "1000001";
+constant brr_zero : std_logic_vector(6 downto 0) 	:= "1000010";
+constant br : std_logic_vector(6 downto 0) 			:= "1000011"; --uses ra
+constant br_neg : std_logic_vector(6 downto 0) 		:= "1000100"; --uses ra
+constant br_zero : std_logic_vector(6 downto 0) 	:= "1000101"; --uses ra
+constant br_sub : std_logic_vector(6 downto 0) 		:= "1000110"; --uses ra
+constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
+
 signal destRegBuffer : std_logic_vector(2 downto 0);
 signal doWriteBackBuffer : std_logic := '0';
 signal instructionBuffer : std_logic_vector(15 downto 0);
@@ -128,6 +137,7 @@ dataHazard : dataHazardPredictor Port map(
     with instruction(15 downto 9) select
         rd_index2 <= 
             instruction(2 downto 0) when add_op | sub_op | mul_op | nand_op,
+            instruction(8 downto 6) when br | br_neg | br_zero | br_sub,
             "UUU" when others;
             
      with instructionBuffer(15 downto 9) select
@@ -162,17 +172,31 @@ dataHazard : dataHazardPredictor Port map(
        
     with instruction(15 downto 9) select
         operand2 <=
-            rd_data2 when add_op | sub_op | mul_op | nand_op ,
+            rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub,
             X"000" & instruction(3 downto 0) when shl_op | shr_op ,
+            PC when brr | brr_neg | brr_zero,
             X"0000" when others;   
             
     with instruction(15 downto 9) select
         operand1 <=
             rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op,
             inputIn when in_op ,
+            (X"0" & "000" & instruction(8 downto 0)) when brr | brr_neg | brr_zero,
+            (X"00" & "00" & instruction(5 downto 0)) when br | br_neg | br_zero | br_sub,
             X"0000" when others;   
-         
+            
+    with instruction(15 downto 9) select
+        useBranch <=
+            '1' when  brr | brr_neg | brr_zero | br | br_neg | br_zero | br_sub | rtn,
+            '0' when others;       
+             
+--    with instructionBuffer(15 downto 9) select
+--        modeALU <=
+--            instructionBuffer(11 downto 9) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op,
+--            "011" when brr | brr_neg | brr_zero | br | br_neg | br_zero | br_sub,
+--            "000" when others;
     modeALU <= instructionBuffer(11 downto 9);
+    
     halt<=haltBuffer;
     
     

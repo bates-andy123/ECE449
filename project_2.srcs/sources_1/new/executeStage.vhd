@@ -33,7 +33,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity executeStage is Port(
     clk, rst : in std_logic;
-    useALU : in std_logic;
+    useALU, useBranch : in std_logic;
     useIO : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
@@ -42,9 +42,11 @@ entity executeStage is Port(
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn : in std_logic;
     doWriteBackOut : out std_logic := '0';
+    doPCWriteBack : out std_logic := '0';
     result : out std_logic_vector(15 downto 0) := X"0000";
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
-    z, n: out std_logic
+    PC_in : in std_logic_vector(15 downto 0);
+    PC_out : out std_logic_vector(15 downto 0) := X"0000"
 );
 end executeStage;
 
@@ -61,6 +63,7 @@ end component;
 
 signal resultALU : std_logic_vector(15 downto 0);
 signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
+signal z, n :  std_logic := '0';
 
 constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
 
@@ -82,7 +85,26 @@ u1:alu port map(
 process(clk) begin
     if rst='0' then
         if falling_edge(clk) then
-            
+            if useBranch = '1' then
+                case modeALU(2 downto 0) is
+                    when "000" | "011" => doPCWriteBack <= '1'; -- NOP operation
+                    when "001" | "100" => 
+                        if(n='1') then
+                            doPCWriteBack <= '1';
+                        else
+                            doPCWriteBack <= '0';
+                        end if;
+                    when "010" | "101" => 
+                        if(z='1') then
+                            doPCWriteBack <= '1';
+                        else
+                            doPCWriteBack <= '0';
+                        end if;
+                    when others => doPCWriteBack <= '0'; -- Temporary until all cases are completed 
+                end case;
+            else 
+                doPCWriteBack <= '0';
+            end if;
             if useALU = '1' then 
                 result <= resultALU;
                 
@@ -92,8 +114,8 @@ process(clk) begin
                 else
                     outputCPU <= operand1;
                 end if;
-            else
-    
+            else -- useBranch
+                
             end if;
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
