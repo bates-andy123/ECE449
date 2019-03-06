@@ -36,13 +36,13 @@ entity pipeline_TB is end pipeline_TB;
 architecture Behavioral of pipeline_TB is
 
 component pipeline Port (
-    clk : in  STD_LOGIC;
+    clk, rst : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
     output : out std_logic_vector(15 downto 0) 
 );
 end component;
 
-signal clk : std_logic;
+signal clk, rst : std_logic := '0';
 signal output : std_logic_vector(15 downto 0);
 signal input : std_logic_vector(15 downto 0) := X"C0A0";
 
@@ -50,6 +50,7 @@ begin
 
 u0 : pipeline port map(
     clk => clk,
+    rst => rst,
     input=>input,
     output => output
 );
@@ -65,6 +66,22 @@ process begin
     wait;
 
 end process;
+
+process(clk) 
+variable count : integer range 0 to 30 := 0;
+begin
+    if falling_edge(clk) then
+        count := count + 1;
+        if count > 34 then 
+            count := 0;
+            rst <= '0';
+        elsif count > 29 then 
+            rst <= '1';
+        else
+        end if;
+    end if;
+end process;
+
 
 process begin
     clk<='0';

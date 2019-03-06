@@ -33,7 +33,7 @@ use ieee.numeric_std.all;
 --use UNISIM.VComponents.all;
 
 entity fetchStage is Port (
-    clk : in std_logic;
+    clk, rst, halt : in std_logic;
     instruction: out std_logic_vector(15 downto 0) := X"0000";
     inputIn : in std_logic_vector(15 downto 0);
     inputOut : out std_logic_vector(15 downto 0) := X"0000"
@@ -63,7 +63,7 @@ u0 : ROMController port map(
     injectdbiterra=>'0', 
     injectsbiterra=>'0', 
     regcea=>'1', 
-    rsta=>'0', 
+    rsta=>rst, 
     sleep=>'0',
     addra=>addrROM,
     douta=>doutROM
@@ -71,15 +71,20 @@ u0 : ROMController port map(
 
 process(clk)
 begin
-
-    if rising_edge(clk) then
-        
-        
-        addrROM <= PC_next;
-    elsif falling_edge(clk) then 
-        instruction <= doutROM;
-        PC_next <= std_logic_vector(unsigned(PC_next) + 1);
-        inputOut <= inputIn;
+    if(rst = '0') then 
+        if falling_edge(clk) then
+            if(halt = '0') then
+                addrROM <= PC_next; 
+                instruction <= doutROM;
+                PC_next <= std_logic_vector(unsigned(PC_next) + 1);
+                inputOut <= inputIn;
+            end if;
+        end if;
+    else 
+        PC_next <= X"01";
+        inputOut <= X"0000";
+        instruction <= X"0000";
+        addrROM <= X"00";
     end if;
 
 end process;
