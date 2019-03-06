@@ -9,6 +9,7 @@ vhdl xil_defaultlib  \
 "../../../../project_2.srcs/sources_1/new/decodeStage.vhd" \
 "../../../../project_2.srcs/sources_1/new/executeStage.vhd" \
 "../../../../project_2.srcs/sources_1/new/fetchStage.vhd" \
+"../../../../project_2.srcs/sources_1/new/memoryStage.vhd" \
 "../../../../project_2.srcs/sources_1/new/unary.vhd" \
 "../../../../project_2.srcs/sources_1/new/multiplier.vhd" \
 "../../../../project_2.srcs/sources_1/new/pipeline.vhd" \

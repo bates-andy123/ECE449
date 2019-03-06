@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity pipeline is Port (
-    clk : in  STD_LOGIC;
+    clk, rst : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
     output : out std_logic_vector(15 downto 0) 
 );
@@ -41,7 +41,7 @@ end pipeline;
 architecture Behavioral of pipeline is
 
 component fetchStage port(
-    clk : in std_logic;
+    clk, rst, halt : in std_logic;
     instruction: out std_logic_vector(15 downto 0);
     inputIn: in std_logic_vector(15 downto 0);
     InputOut: out std_logic_vector(15 downto 0)
@@ -49,7 +49,7 @@ component fetchStage port(
 end component;
 
 component decodeStage port(
-    clk : in std_logic;
+    clk, rst : in std_logic;
     instruction : in std_logic_vector(15 downto 0);
     useALU : out std_logic;
     useIO : out std_logic;
@@ -66,7 +66,7 @@ component decodeStage port(
 end component;
 
 component executeStage port(
-    clk : in std_logic;
+    clk, rst : in std_logic;
     useALU : in std_logic;
     useIO : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
@@ -78,8 +78,22 @@ component executeStage port(
     doWriteBackOut : out std_logic;
     result : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
-    z, n: out std_logic;
-    execFreezePipe : out std_logic
+    z, n: out std_logic
+);
+end component;
+
+component memoryStage Port (
+    clk, rst : in std_logic;
+    destRegIn : in std_logic_vector(2 downto 0);
+    destRegOut : out std_logic_vector(2 downto 0);
+    doWriteBackIn : in std_logic;
+    doWriteBackOut : out std_logic;
+    modeMemory : in std_logic_vector(1 downto 0);
+    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+    memoryRW : out std_logic;
+    memoryReadValue : in std_logic_vector(15 downto 0);
+    input : in std_logic_vector(15 downto 0);
+    output : out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -95,6 +109,7 @@ component writeBackStage port (
 end component;
 
 signal fetchedInstruction: std_logic_vector(15 downto 0);
+signal inputOutputFetchStage : std_logic_vector(15 downto 0);
 
 signal doWriteBack : std_logic;
 signal useALU : std_logic := '0';
@@ -102,28 +117,34 @@ signal useIO : std_logic := '0';
 signal modeALU : std_logic_vector(2 downto 0) := "000";
 signal modeIO : std_logic := '0';
 signal operand1, operand2 : std_logic_vector(15 downto 0);
-signal writeBackReg : std_logic_vector(2 downto 0);
 signal regWriteEnable : std_logic;
 signal regWriteAddress : std_logic_vector(2 downto 0);
 signal writeBackValue : std_logic_vector(15 downto 0);
+signal doWriteBackOutputDecodeStage : std_logic := '0';
+signal writeBackRegOutputDecodeStage : std_logic_vector(2 downto 0) := "000";
 
-signal execWriteBackReg : std_logic_vector(2 downto 0);
-signal execDoWriteBack : std_logic;
-signal result : std_logic_vector(15 downto 0);
+signal doWriteBackOutputExecuteStage : std_logic;
+signal writeBackRegOutputExecuteStage : std_logic_vector(2 downto 0);
+signal resultExecuteStage : std_logic_vector(15 downto 0);
 
-signal fetchInputOut : std_logic_vector(15 downto 0);
+signal doWriteBackOutputMemoryStage : std_logic := '0';
+signal writeBackRegOutputMemoryStage : std_logic_vector(2 downto 0);
+signal resultMemoryStage : std_logic_vector(15 downto 0);
 
 begin
 
-u0 : fetchStage port map(
+fetch : fetchStage port map(
     clk=>clk,
+    halt=>'0',
+    rst=>rst,
     instruction=>fetchedInstruction,
     inputIn=>input,
-    inputOut=>fetchInputOut
+    inputOut=>inputOutputFetchStage
 );
 
-u1 : decodeStage port map(
+decode : decodeStage port map(
     clk => clk,
+    rst => rst,
     instruction => fetchedInstruction,
     useALU => useALU,
     useIO=>useIO,
@@ -131,36 +152,52 @@ u1 : decodeStage port map(
     modeIO=>modeIO,
     operand1 => operand1,
     operand2 => operand2,
-    destReg => writeBackReg,
-    doWriteBack=>doWriteBack,
+    destReg => writeBackRegOutputDecodeStage,
+    doWriteBack=>doWriteBackOutputDecodeStage,
     regWriteEnable=>regWriteEnable,
     regWriteAddress=>regWriteAddress,
     writeBackValue=>writeBackValue,
-    inputIn=>fetchInputOut
+    inputIn=>inputOutputFetchStage
 );
 
-u2 : executeStage port map(
+execute : executeStage port map(
     clk=>clk,
+    rst=>rst,
     useALU=>useALU,
     useIO=>useIO,
     modeALU=>modeALU,
     modeIO=>modeIO,
     operand1=>operand1, 
     operand2=>operand2,
-    destRegIn => writeBackReg,
-    destRegOut => execWriteBackReg,
-    doWriteBackIn=>doWriteBack,
-    doWriteBackOut=>execDoWriteBack,
-    result=>result,
+    destRegIn => writeBackRegOutputDecodeStage,
+    destRegOut => writeBackRegOutputExecuteStage,
+    doWriteBackIn=>doWriteBackOutputDecodeStage,
+    doWriteBackOut=>doWriteBackOutputExecuteStage,
+    result=>resultExecuteStage,
     outputCPU=>output
-    --execFreezePipe
 );
 
-u3 : writeBackStage port map( 
+memory : memoryStage Port map(
+    clk=>clk, 
+    rst=>rst,
+    destRegIn=>writeBackRegOutputExecuteStage,
+    destRegOut=>writeBackRegOutputMemoryStage,
+    doWriteBackIn=>doWriteBackOutputExecuteStage,
+    doWriteBackOut=>doWriteBackOutputMemoryStage,
+    modeMemory=>"00",
+    --memoryAddress, 
+    --memoryWriteValue ,
+    --memoryRW ,
+    memoryReadValue=>X"0000",
+    input=>resultExecuteStage,
+    output=>resultMemoryStage
+);
+
+writeback : writeBackStage port map( 
     clk=>clk,
-    inDoWriteBack =>execDoWriteBack,
-    inDestRegister =>execWriteBackReg,
-    inWriteBackValue =>result,
+    inDoWriteBack =>doWriteBackOutputMemoryStage,
+    inDestRegister =>writeBackRegOutputMemoryStage,
+    inWriteBackValue =>resultMemoryStage,
     outDoWriteBack=>regWriteEnable,
     outDestRegister=>regWriteAddress,
     outWriteBackValue=>writeBackValue

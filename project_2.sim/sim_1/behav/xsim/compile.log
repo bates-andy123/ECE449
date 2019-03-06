@@ -1,2 +1,4 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/abates/ECE449/project_2.srcs/sources_1/new/dataHazardPredictor.vhd" into library xil_defaultlib
-INFO: [VRFC 10-307] analyzing entity dataHazardPredictor
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/abates/ECE449/project_2.srcs/sources_1/new/decodeStage.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity decodeStage
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/abates/ECE449/project_2.srcs/sources_1/new/pipeline.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity pipeline

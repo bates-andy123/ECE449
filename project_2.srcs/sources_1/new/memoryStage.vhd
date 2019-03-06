@@ -31,13 +31,40 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity memoryStage is
---  Port ( );
+entity memoryStage is Port (
+    clk, rst : in std_logic;
+    destRegIn : in std_logic_vector(2 downto 0);
+    destRegOut : out std_logic_vector(2 downto 0) := "000";
+    doWriteBackIn : in std_logic;
+    doWriteBackOut : out std_logic := '0';
+    modeMemory : in std_logic_vector(1 downto 0);
+    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+    memoryRW : out std_logic;
+    memoryReadValue : in std_logic_vector(15 downto 0);
+    input : in std_logic_vector(15 downto 0);
+    output : out std_logic_vector(15 downto 0)
+);
 end memoryStage;
 
 architecture Behavioral of memoryStage is
 
 begin
 
+process(clk) begin
+    if(rst = '0') then
+        if falling_edge(clk) then
+            output <= input;
+            destRegOut <= destRegIn;
+            doWriteBackOut <= doWriteBackIn;
+        end if;
+    else -- rst is currently active
+        output <= X"0000";
+        doWriteBackOut <= '0';
+        destRegOut <= "000";
+        memoryAddress <= X"0000"; 
+        memoryWriteValue <= X"0000";
+        memoryRW <= '0';
+    end if;
+end process;
 
 end Behavioral;

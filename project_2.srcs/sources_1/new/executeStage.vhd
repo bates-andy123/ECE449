@@ -32,20 +32,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity executeStage is Port(
-    clk : in std_logic;
+    clk, rst : in std_logic;
     useALU : in std_logic;
     useIO : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
-    destRegOut : out std_logic_vector(2 downto 0);
+    destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn : in std_logic;
-    doWriteBackOut : out std_logic;
+    doWriteBackOut : out std_logic := '0';
     result : out std_logic_vector(15 downto 0) := X"0000";
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
-    z, n: out std_logic;
-    execFreezePipe : out std_logic
+    z, n: out std_logic
 );
 end executeStage;
 
@@ -60,7 +59,6 @@ component alu port(
 );
 end component;
 
-signal rstALU : std_logic := '0';
 signal resultALU : std_logic_vector(15 downto 0);
 signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
 
@@ -73,7 +71,7 @@ u1:alu port map(
     in2=>operand2, 
     mode=>modeALU , 
     clk=>clk, 
-    rst=>rstALU,
+    rst=>rst,
     result=>resultALU,
     n=>n, 
     z=>z
@@ -82,25 +80,30 @@ u1:alu port map(
 
 
 process(clk) begin
-    if falling_edge(clk) then
-        
-        if useALU = '1' then 
-            result <= resultALU;
+    if rst='0' then
+        if falling_edge(clk) then
             
-        elsif useIO = '1' then
-            if modeIO = '1' then  -- Input, write the operand rand to memory
-                result <= operand1;
+            if useALU = '1' then 
+                result <= resultALU;
+                
+            elsif useIO = '1' then
+                if modeIO = '1' then  -- Input, write the operand rand to memory
+                    result <= operand1;
+                else
+                    outputCPU <= operand1;
+                end if;
             else
-                outputCPU <= operand1;
+    
             end if;
-        else
-
+            destRegOut <= destRegIn;
+            doWriteBackOut <= doWriteBackIn;
+            operand1Buffer <= operand1;
         end if;
-        destRegOut <= destRegIn;
-        doWriteBackOut <= doWriteBackIn;
-        operand1Buffer <= operand1;
-    elsif rising_edge(clk) then 
-        
+    else 
+        destRegOut <= "000";
+        doWriteBackOut <= '0';
+        result <= X"0000";
+        outputCPU <= X"0000";
     end if;
 end process;
 

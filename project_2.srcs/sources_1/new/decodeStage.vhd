@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity decodeStage is Port (
-    clk : in std_logic;
+    clk, rst : in std_logic;
     instruction : in std_logic_vector(15 downto 0);
     useALU : out std_logic := '0';
     useIO : out std_logic := '0';
@@ -84,7 +84,7 @@ begin
 
 u0 : register_file port map(
     clk=>clk,
-    rst=>'0',
+    rst=>rst,
     --read signals
     rd_index1=>rd_index1, 
     rd_index2=>rd_index2, 
