@@ -42,7 +42,7 @@ architecture Behavioral of pipeline is
 
 component fetchStage port(
     clk, rst, halt : in std_logic;
-    instruction, PC: out std_logic_vector(15 downto 0);
+    instruction, PC_out: out std_logic_vector(15 downto 0);
     inputIn: in std_logic_vector(15 downto 0);
     InputOut: out std_logic_vector(15 downto 0);
     PC_offset : in std_logic_vector(15 downto 0);
@@ -53,7 +53,7 @@ end component;
 
 component decodeStage port(
     clk, rst : in std_logic;
-    instruction, PC : in std_logic_vector(15 downto 0);
+    instruction, PC_in : in std_logic_vector(15 downto 0);
     useALU, useBranch : out std_logic;
     useIO : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
@@ -65,7 +65,8 @@ component decodeStage port(
     regWriteAddress : in std_logic_vector(2 downto 0);
     writeBackValue : in std_logic_vector(15 downto 0);
     inputIn : in std_logic_vector(15 downto 0);
-    halt : out std_logic
+    halt : out std_logic;
+    PC_out : out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -115,7 +116,7 @@ end component;
 
 signal fetchedInstruction: std_logic_vector(15 downto 0);
 signal inputOutputFetchStage : std_logic_vector(15 downto 0);
-signal PC : std_logic_vector(15 downto 0);
+signal PC_outFetchStage : std_logic_vector(15 downto 0);
 
 signal doWriteBack : std_logic;
 signal useALU, useBranch : std_logic := '0';
@@ -129,20 +130,23 @@ signal writeBackValue : std_logic_vector(15 downto 0);
 signal doWriteBackOutputDecodeStage : std_logic := '0';
 signal writeBackRegOutputDecodeStage : std_logic_vector(2 downto 0) := "000";
 signal haltSig : std_logic := '0';
+signal PC_outDecodeStage : std_logic_vector(15 downto 0);
 
 signal doWriteBackOutputExecuteStage : std_logic;
 signal writeBackRegOutputExecuteStage : std_logic_vector(2 downto 0);
 signal resultExecuteStage : std_logic_vector(15 downto 0);
+signal PC_outExecuteStage : std_logic_vector(15 downto 0);
 
 signal doWriteBackOutputMemoryStage : std_logic := '0';
 signal writeBackRegOutputMemoryStage : std_logic_vector(2 downto 0);
 signal resultMemoryStage : std_logic_vector(15 downto 0);
+signal PC_outMemoryStage : std_logic_vector(15 downto 0);
 
 begin
 
 fetch : fetchStage port map(
     clk=>clk,
-    PC=>PC,
+    PC_out=>PC_outFetchStage,
     halt=>haltSig,
     rst=>rst,
     instruction=>fetchedInstruction,
@@ -157,7 +161,8 @@ decode : decodeStage port map(
     clk => clk,
     rst => rst,
     halt=>haltSig,
-    PC=>PC,
+    PC_in=>PC_outFetchStage,
+    PC_out=>PC_outDecodeStage,
     instruction => fetchedInstruction,
     useALU => useALU,
     useBranch=>useBranch,
@@ -190,7 +195,8 @@ execute : executeStage port map(
     doWriteBackOut=>doWriteBackOutputExecuteStage,
     result=>resultExecuteStage,
     outputCPU=>output,
-    PC_in => X"0000"
+    PC_in => PC_outDecodeStage,
+    PC_out => PC_outExecuteStage
 );
 
 memory : memoryStage Port map(

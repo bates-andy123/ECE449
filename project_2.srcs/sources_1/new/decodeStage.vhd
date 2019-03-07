@@ -34,7 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity decodeStage is Port (
     clk, rst : in std_logic;
     halt : out std_logic := '0';
-    instruction, PC : in std_logic_vector(15 downto 0);
+    instruction, PC_in : in std_logic_vector(15 downto 0);
     useALU, useBranch : out std_logic := '0';
     useIO : out std_logic := '0';
     modeALU : out std_logic_vector(2 downto 0) := "000";
@@ -45,8 +45,8 @@ entity decodeStage is Port (
     regWriteEnable : in std_logic;
     regWriteAddress : in std_logic_vector(2 downto 0);
     writeBackValue : in std_logic_vector(15 downto 0);
-    inputIn : in std_logic_vector(15 downto 0)
-    --inputOut : out std_logic_vector(15 downto 0)
+    inputIn : in std_logic_vector(15 downto 0);
+    PC_out : out std_logic_vector(15 downto 0) := X"0000"
 );
 end decodeStage;
 
@@ -174,7 +174,7 @@ dataHazard : dataHazardPredictor Port map(
         operand2 <=
             rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub,
             X"000" & instruction(3 downto 0) when shl_op | shr_op ,
-            PC when brr | brr_neg | brr_zero,
+            PC_in when brr | brr_neg | brr_zero,
             X"0000" when others;   
             
     with instruction(15 downto 9) select
@@ -210,18 +210,13 @@ begin
     end if;
 end process;
     
---process(clk)
+process(clk)
 
---begin
---    if falling_edge(clk) then
-        
---        if haltBuffer = '0' then
---            instructionBuffer <= instruction;
---        else
---            instructionBuffer <= X"0000";
---        end if;
---    end if;
+begin
+    if falling_edge(clk) then
+        PC_out <= PC_in;
+    end if;
 
---end process;    
+end process;    
 
 end Behavioral;

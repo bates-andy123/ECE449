@@ -61,9 +61,18 @@ component alu port(
 );
 end component;
 
+component PC_calculator is Port (
+    disp, reg, PC_current: in std_logic_vector(15 downto 0);
+    modeBranch : in std_logic_vector(2 downto 0);
+    calcedPC : out std_logic_vector(15 downto 0)
+);
+end component;
+
 signal resultALU : std_logic_vector(15 downto 0);
 signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
 signal z, n :  std_logic := '0';
+
+signal resultCalcedPC : std_logic_vector(15 downto 0);
 
 constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
 
@@ -80,30 +89,43 @@ u1:alu port map(
     z=>z
 );
 
-
+u2 : PC_calculator Port map(
+    disp=>operand1, 
+    reg=>operand2, 
+    PC_current=>PC_in,
+    modeBranch=>modeALU,
+    calcedPC=>resultCalcedPC
+);
 
 process(clk) begin
     if rst='0' then
         if falling_edge(clk) then
             if useBranch = '1' then
                 case modeALU(2 downto 0) is
-                    when "000" | "011" => doPCWriteBack <= '1'; -- NOP operation
+                    when "000" | "011" | "110" | "111" => 
+                        doPCWriteBack <= '1'; -- NOP operation
+                        PC_out <= resultCalcedPC;
                     when "001" | "100" => 
                         if(n='1') then
                             doPCWriteBack <= '1';
+                            PC_out <= resultCalcedPC;
                         else
                             doPCWriteBack <= '0';
+                            PC_out <= PC_in;
                         end if;
                     when "010" | "101" => 
                         if(z='1') then
                             doPCWriteBack <= '1';
+                            PC_out <= resultCalcedPC;
                         else
                             doPCWriteBack <= '0';
+                            PC_out <= PC_in;
                         end if;
                     when others => doPCWriteBack <= '0'; -- Temporary until all cases are completed 
                 end case;
             else 
                 doPCWriteBack <= '0';
+                PC_out <= PC_in;
             end if;
             if useALU = '1' then 
                 result <= resultALU;

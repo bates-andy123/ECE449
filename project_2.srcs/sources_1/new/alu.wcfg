@@ -11,57 +11,53 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="201000000001fs"></ZoomEndTime>
-      <Cursor1Time time="90832215000fs"></Cursor1Time>
+      <ZoomStartTime time="14229797979fs"></ZoomStartTime>
+      <ZoomEndTime time="190354040405fs"></ZoomEndTime>
+      <Cursor1Time time="104243434000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="71"></ValueColumnWidth>
+      <NameColumnWidth column_width="195"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="11" />
+   <WVObjectSize size="10" />
+   <wvobject fp_name="/pipeline_TB3/u0/decode/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/decode/instruction" type="array">
       <obj_property name="ElementShortName">instruction[15:0]</obj_property>
       <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/useALU" type="logic">
+      <obj_property name="ElementShortName">useALU</obj_property>
+      <obj_property name="ObjectShortName">useALU</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/decode/useBranch" type="logic">
       <obj_property name="ElementShortName">useBranch</obj_property>
       <obj_property name="ObjectShortName">useBranch</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/useIO" type="logic">
+      <obj_property name="ElementShortName">useIO</obj_property>
+      <obj_property name="ObjectShortName">useIO</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/halt" type="logic">
-      <obj_property name="ElementShortName">halt</obj_property>
-      <obj_property name="ObjectShortName">halt</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/dataHazard/writeRegInExecute" type="array">
-      <obj_property name="ElementShortName">writeRegInExecute[3:0]</obj_property>
-      <obj_property name="ObjectShortName">writeRegInExecute[3:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/dataHazard/writeRegInMemory" type="array">
-      <obj_property name="ElementShortName">writeRegInMemory[3:0]</obj_property>
-      <obj_property name="ObjectShortName">writeRegInMemory[3:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/useBranch" type="logic">
+      <obj_property name="ElementShortName">useBranch</obj_property>
+      <obj_property name="ObjectShortName">useBranch</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/dataHazard/writeRegInWriteBack" type="array">
-      <obj_property name="ElementShortName">writeRegInWriteBack[3:0]</obj_property>
-      <obj_property name="ObjectShortName">writeRegInWriteBack[3:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/modeALU" type="array">
+      <obj_property name="ElementShortName">modeALU[2:0]</obj_property>
+      <obj_property name="ObjectShortName">modeALU[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/dataHazard/isWriteInstruction" type="logic">
-      <obj_property name="ElementShortName">isWriteInstruction</obj_property>
-      <obj_property name="ObjectShortName">isWriteInstruction</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/dataHazard/writeReg" type="array">
-      <obj_property name="ElementShortName">writeReg[2:0]</obj_property>
-      <obj_property name="ObjectShortName">writeReg[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/dataHazard/readReg1" type="array">
-      <obj_property name="ElementShortName">readReg1[2:0]</obj_property>
-      <obj_property name="ObjectShortName">readReg1[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/dataHazard/readReg2" type="array">
-      <obj_property name="ElementShortName">readReg2[2:0]</obj_property>
-      <obj_property name="ObjectShortName">readReg2[2:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
    </wvobject>
 </wave_config>

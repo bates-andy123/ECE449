@@ -34,7 +34,7 @@ use ieee.numeric_std.all;
 
 entity fetchStage is Port (
     clk, rst, halt : in std_logic;
-    instruction, PC: out std_logic_vector(15 downto 0) := X"0000";
+    instruction, PC_out: out std_logic_vector(15 downto 0) := X"0000";
     inputIn : in std_logic_vector(15 downto 0);
     inputOut : out std_logic_vector(15 downto 0) := X"0000";
     PC_offset: in std_logic_vector(15 downto 0);
@@ -84,7 +84,7 @@ begin
                 instruction <= doutROM;
                 if PC_mode = '0' then -- normal increment mode
                     PC_next <= std_logic_vector(unsigned(PC_next) + 1);
-                    PC <= PC_current;
+                    PC_out <= PC_current;
                     PC_current <= std_logic_vector(unsigned(PC_current) + 1);                
                 else
 --                    PC_next <= PC_set;
