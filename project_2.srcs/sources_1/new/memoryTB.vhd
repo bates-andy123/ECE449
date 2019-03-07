@@ -66,7 +66,7 @@ process
 begin
     clk <= '0';
     addressARAM <= X"0400";
-    writeContentRam <= X"0001";
+    writeContentRAM <= X"0001";
     wait for 100 us;
     
     clk <= '1';
