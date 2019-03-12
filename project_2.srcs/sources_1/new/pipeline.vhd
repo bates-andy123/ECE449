@@ -59,7 +59,7 @@ component decodeStage port(
     modeALU : out std_logic_vector(2 downto 0);
     modeIO : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
-    destReg : out std_logic_vector(2 downto 0);
+    destReg, readReg1, readReg2 : out std_logic_vector(2 downto 0);
     doWriteBack : out std_logic;
     regWriteEnable : in std_logic;
     regWriteAddress : in std_logic_vector(2 downto 0);
@@ -75,7 +75,8 @@ component executeStage port(
     useALU, useBranch : in std_logic;
     useIO : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
-    modeIO : in std_logic;
+    readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
+    modeIO, useMemoryDestValue, useWritebackDestValue : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
@@ -83,7 +84,7 @@ component executeStage port(
     doWriteBackOut : out std_logic;
     result : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
-    PC_in : in std_logic_vector(15 downto 0);
+    PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
     PC_out : out std_logic_vector(15 downto 0)
 );
 end component;
@@ -126,6 +127,7 @@ signal modeIO : std_logic := '0';
 signal operand1, operand2 : std_logic_vector(15 downto 0);
 signal regWriteEnable : std_logic;
 signal regWriteAddress : std_logic_vector(2 downto 0);
+signal readReg1DecodeStage, readReg2DecodeStage : std_logic_vector(2 downto 0);
 signal writeBackValue : std_logic_vector(15 downto 0);
 signal doWriteBackOutputDecodeStage : std_logic := '0';
 signal writeBackRegOutputDecodeStage : std_logic_vector(2 downto 0) := "000";
@@ -165,6 +167,8 @@ decode : decodeStage port map(
     PC_out=>PC_outDecodeStage,
     instruction => fetchedInstruction,
     useALU => useALU,
+    readReg1 => readReg1DecodeStage,
+    readReg2 => readReg2DecodeStage,
     useBranch=>useBranch,
     useIO=>useIO,
     modeALU => modeALU,
@@ -186,6 +190,8 @@ execute : executeStage port map(
     useBranch=>useBranch,
     useIO=>useIO,
     modeALU=>modeALU,
+    readReg1 => readReg1DecodeStage,
+    readReg2 => readReg2DecodeStage,
     modeIO=>modeIO,
     operand1=>operand1, 
     operand2=>operand2,
@@ -193,6 +199,12 @@ execute : executeStage port map(
     destRegOut => writeBackRegOutputExecuteStage,
     doWriteBackIn=>doWriteBackOutputDecodeStage,
     doWriteBackOut=>doWriteBackOutputExecuteStage,
+    memoryDestReg=>writeBackRegOutputExecuteStage,
+    writebackDestReg=>writeBackRegOutputMemoryStage,
+    memoryDestValue=>resultExecuteStage,
+    writebackDestValue=>resultMemoryStage,
+    useMemoryDestValue=>doWriteBackOutputExecuteStage, 
+    useWritebackDestValue=>doWriteBackOutputMemoryStage,
     result=>resultExecuteStage,
     outputCPU=>output,
     PC_in => PC_outDecodeStage,
