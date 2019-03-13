@@ -53,6 +53,14 @@ end executeStage;
 
 architecture Behavioral of executeStage is
 
+component dataForwarder Port (
+    doMemoryWriteback, doWritebackWriteback, operand1Passthrough, operand2Passthrough : in std_logic;
+    readReg1, readReg2, memoryWritebackDest, writebackWritebackDest : in std_logic_vector(2 downto 0);
+    operand1DecodeStage, operand2DecodeStage, memoryWritebackValue, writebackWritebackValue : in std_logic_vector(15 downto 0);
+    operand1, operand2 : out std_logic_vector(15 downto 0)
+);
+end component;
+
 component alu port(
     in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
     mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
@@ -70,7 +78,7 @@ component PC_calculator is Port (
 end component;
 
 signal resultALU : std_logic_vector(15 downto 0);
-signal operand1Buffer : std_logic_vector(15 downto 0) := X"0000";
+signal operand1Buffer, operand2Buffer : std_logic_vector(15 downto 0) := X"0000";
 signal z, n :  std_logic := '0';
 
 signal resultCalcedPC : std_logic_vector(15 downto 0);
@@ -80,8 +88,8 @@ constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
 begin
 
 u1:alu port map(
-    in1=>operand1, 
-    in2=>operand2, 
+    in1=>operand1Buffer, 
+    in2=>operand2Buffer, 
     mode=>modeALU , 
     clk=>clk, 
     rst=>rst,
@@ -96,6 +104,23 @@ u2 : PC_calculator Port map(
     PC_current=>PC_in,
     modeBranch=>modeALU,
     calcedPC=>resultCalcedPC
+);
+
+u3 : dataForwarder port map(
+    doMemoryWriteback=>useMemoryDestValue, 
+    doWritebackWriteback=>useWritebackDestValue, 
+    operand1Passthrough=>'0', 
+    operand2Passthrough=>'0',
+    readReg1=>readReg1, 
+    readReg2=>readReg2, 
+    memoryWritebackDest=>memoryDestReg, 
+    writebackWritebackDest=>writebackDestReg,
+    operand1DecodeStage=>operand1, 
+    operand2DecodeStage=>operand2, 
+    memoryWritebackValue=>memoryDestValue, 
+    writebackWritebackValue=>writebackDestValue,
+    operand1=>operand1Buffer, 
+    operand2=>operand2Buffer
 );
 
 process(clk) begin
@@ -142,7 +167,7 @@ process(clk) begin
             end if;
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
-            operand1Buffer <= operand1;
+            --operand1Buffer <= operand1;
         end if;
     else 
         destRegOut <= "000";

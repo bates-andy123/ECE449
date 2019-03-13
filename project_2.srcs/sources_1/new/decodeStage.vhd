@@ -178,15 +178,15 @@ registers : register_file port map(
 --            "000" when others;
     modeALU <= instruction(11 downto 9);
     
-   
+   PC_out <= PC_in;
+            readReg1 <= rd_index1;
+            readReg2 <= rd_index2;
     
 process(clk)
 
 begin
     if falling_edge(clk) then
-        PC_out <= PC_in;
-        readReg1 <= rd_index1;
-        readReg2 <= rd_index2;
+        
     end if;
 
 end process;    
