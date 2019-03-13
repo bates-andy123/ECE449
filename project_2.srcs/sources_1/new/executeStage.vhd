@@ -64,7 +64,7 @@ end component;
 component alu port(
     in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
     mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
-    clk, rst : in std_logic; -- Clk and reset flags
+    clk, rst, enable : in std_logic; -- Clk and reset flags
     result : out std_logic_vector(15 downto 0); -- Result of ALU operation
     z, n : out std_logic
 );
@@ -90,9 +90,10 @@ begin
 u1:alu port map(
     in1=>operand1Buffer, 
     in2=>operand2Buffer, 
-    mode=>modeALU , 
+    mode=>modeALU, 
     clk=>clk, 
     rst=>rst,
+    enable=>useALU,
     result=>resultALU,
     n=>n, 
     z=>z
@@ -178,22 +179,5 @@ process(clk) begin
         outputCPU <= X"0000";
     end if;
 end process;
-
---    clk, rst : in std_logic;
---    useALU, useBranch : in std_logic;
---    useIO : in std_logic;
---    modeALU : in std_logic_vector(2 downto 0);
---    readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
---    modeIO : in std_logic;
---    operand1, operand2 : in std_logic_vector(15 downto 0);
---    destRegIn : in std_logic_vector(2 downto 0);
---    destRegOut : out std_logic_vector(2 downto 0) := "000";
---    doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
---    doWriteBackOut : out std_logic := '0';
---    doPCWriteBack : out std_logic := '0';
---    result : out std_logic_vector(15 downto 0) := X"0000";
---    outputCPU : out std_logic_vector(15 downto 0) := X"0000";
---    PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
---    PC_out : out std_logic_vector(15 downto 0) := X"0000"
 
 end Behavioral;
