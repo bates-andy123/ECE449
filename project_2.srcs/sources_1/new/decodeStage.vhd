@@ -171,16 +171,11 @@ registers : register_file port map(
             '1' when  brr | brr_neg | brr_zero | br | br_neg | br_zero | br_sub | rtn,
             '0' when others;       
              
---    with instructionBuffer(15 downto 9) select
---        modeALU <=
---            instructionBuffer(11 downto 9) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op,
---            "011" when brr | brr_neg | brr_zero | br | br_neg | br_zero | br_sub,
---            "000" when others;
     modeALU <= instruction(11 downto 9);
     
-   PC_out <= PC_in;
-            readReg1 <= rd_index1;
-            readReg2 <= rd_index2;
+    PC_out <= PC_in;
+    readReg1 <= rd_index1;
+    readReg2 <= rd_index2;
     
 process(clk)
 

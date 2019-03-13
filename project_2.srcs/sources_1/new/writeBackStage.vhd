@@ -36,9 +36,9 @@ entity writeBackStage is Port (
     inDoWriteBack : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
     inWriteBackValue : in std_logic_vector(15 downto 0);
-    outDoWriteBack : out std_logic;
-    outDestRegister : out std_logic_vector(2 downto 0);
-    outWriteBackValue : out std_logic_vector(15 downto 0)
+    outDoWriteBack : out std_logic := '0';
+    outDestRegister : out std_logic_vector(2 downto 0) := "000";
+    outWriteBackValue : out std_logic_vector(15 downto 0) := X"0000"
 );
 end writeBackStage;
 
@@ -51,16 +51,19 @@ signal inWriteBackValueBuffer : std_logic_vector(15 downto 0);
 
 begin
 
-process(clk) begin
-    if rising_edge(clk) then
-       inDoWriteBackBuffer<=inDoWriteBack;
-       inDestRegisterBuffer<=inDestRegister;
-       inWriteBackValueBuffer<=inWriteBackValue;
-    elsif falling_edge(clk) then
-        outDoWriteBack<=inDoWriteBackBuffer;
-        outDestRegister<=inDestRegisterBuffer;
-        outWriteBackValue<=inWriteBackValueBuffer;
-    end if;
-end process;
+outDoWriteBack<=inDoWriteBack;
+outDestRegister<=inDestRegister;
+outWriteBackValue<=inWriteBackValue;
+--process(clk) begin
+--    if rising_edge(clk) then
+--       inDoWriteBackBuffer<=inDoWriteBack;
+--       inDestRegisterBuffer<=inDestRegister;
+--       inWriteBackValueBuffer<=inWriteBackValue;
+--    elsif falling_edge(clk) then
+--        outDoWriteBack<=inDoWriteBackBuffer;
+--        outDestRegister<=inDestRegisterBuffer;
+--        outWriteBackValue<=inWriteBackValueBuffer;
+--    end if;
+--end process;
 
 end Behavioral;

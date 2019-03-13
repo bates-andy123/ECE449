@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="16513500000fs"></ZoomStartTime>
-      <ZoomEndTime time="102195318183fs"></ZoomEndTime>
-      <Cursor1Time time="55718045000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="98404269974fs"></ZoomEndTime>
+      <Cursor1Time time="52317837000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="163"></NameColumnWidth>
+      <NameColumnWidth column_width="159"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="19" />
+   <WVObjectSize size="25" />
    <wvobject fp_name="/pipeline_TB2/u0/decode/registers/reg_file[0]" type="array">
       <obj_property name="ElementShortName">[0][15:0]</obj_property>
       <obj_property name="ObjectShortName">[0][15:0]</obj_property>
@@ -36,33 +36,21 @@
       <obj_property name="ElementShortName">[3][15:0]</obj_property>
       <obj_property name="ObjectShortName">[3][15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/execute/u3/memoryWritebackDest" type="array">
-      <obj_property name="ElementShortName">memoryWritebackDest[2:0]</obj_property>
-      <obj_property name="ObjectShortName">memoryWritebackDest[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/execute/useALU" type="logic">
-      <obj_property name="ElementShortName">useALU</obj_property>
-      <obj_property name="ObjectShortName">useALU</obj_property>
-   </wvobject>
    <wvobject fp_name="/pipeline_TB2/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/execute/u3/doMemoryWriteback" type="logic">
-      <obj_property name="ElementShortName">doMemoryWriteback</obj_property>
-      <obj_property name="ObjectShortName">doMemoryWriteback</obj_property>
+   <wvobject fp_name="/pipeline_TB2/u0/fetch/instruction" type="array">
+      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/execute/u3/doWritebackWriteback" type="logic">
-      <obj_property name="ElementShortName">doWritebackWriteback</obj_property>
-      <obj_property name="ObjectShortName">doWritebackWriteback</obj_property>
+   <wvobject fp_name="/pipeline_TB2/u0/fetch/PC_current" type="array">
+      <obj_property name="ElementShortName">PC_current[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_current[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/execute/u3/memoryWritebackDest" type="array">
-      <obj_property name="ElementShortName">memoryWritebackDest[2:0]</obj_property>
-      <obj_property name="ObjectShortName">memoryWritebackDest[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/execute/u3/writebackWritebackDest" type="array">
-      <obj_property name="ElementShortName">writebackWritebackDest[2:0]</obj_property>
-      <obj_property name="ObjectShortName">writebackWritebackDest[2:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/useALU" type="logic">
+      <obj_property name="ElementShortName">useALU</obj_property>
+      <obj_property name="ObjectShortName">useALU</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB2/u0/execute/readReg1" type="array">
       <obj_property name="ElementShortName">readReg1[2:0]</obj_property>
@@ -95,5 +83,41 @@
    <wvobject fp_name="/pipeline_TB2/u0/execute/operand2" type="array">
       <obj_property name="ElementShortName">operand2[15:0]</obj_property>
       <obj_property name="ObjectShortName">operand2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/writeback/outWriteBackValue" type="array">
+      <obj_property name="ElementShortName">outWriteBackValue[15:0]</obj_property>
+      <obj_property name="ObjectShortName">outWriteBackValue[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/result" type="array">
+      <obj_property name="ElementShortName">result[15:0]</obj_property>
+      <obj_property name="ObjectShortName">result[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/destRegIn" type="array">
+      <obj_property name="ElementShortName">destRegIn[2:0]</obj_property>
+      <obj_property name="ObjectShortName">destRegIn[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/destRegOut" type="array">
+      <obj_property name="ElementShortName">destRegOut[2:0]</obj_property>
+      <obj_property name="ObjectShortName">destRegOut[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/doWriteBackOut" type="logic">
+      <obj_property name="ElementShortName">doWriteBackOut</obj_property>
+      <obj_property name="ObjectShortName">doWriteBackOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/operand1Buffer" type="array">
+      <obj_property name="ElementShortName">operand1Buffer[15:0]</obj_property>
+      <obj_property name="ObjectShortName">operand1Buffer[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/operand2Buffer" type="array">
+      <obj_property name="ElementShortName">operand2Buffer[15:0]</obj_property>
+      <obj_property name="ObjectShortName">operand2Buffer[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/u3/operand1Selector" type="array">
+      <obj_property name="ElementShortName">operand1Selector[2:0]</obj_property>
+      <obj_property name="ObjectShortName">operand1Selector[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB2/u0/execute/u3/operand2Selector" type="array">
+      <obj_property name="ElementShortName">operand2Selector[2:0]</obj_property>
+      <obj_property name="ObjectShortName">operand2Selector[2:0]</obj_property>
    </wvobject>
 </wave_config>

@@ -59,7 +59,7 @@ operand1Selector <= operand1Passthrough & operand1UseMemoryWB & operand1UseWrite
 
 with operand1Selector select
     operand1 <=
-        operand1DecodeStage when "100" | "101" | "110" | "111",
+        operand1DecodeStage when "100" | "101" | "110" | "111" | "000",
         memoryWritebackValue when "010" | "011",
         writebackWritebackValue when "001",
         operand1DecodeStage when others;
@@ -72,10 +72,10 @@ operand2Selector <= operand2Passthrough & operand2UseMemoryWB & operand2UseWrite
 
 with operand2Selector select
     operand2 <=
-        operand2DecodeStage when "100" | "101" | "110" | "111",
+        operand2DecodeStage when "100" | "101" | "110" | "111" | "000",
         memoryWritebackValue when "010" | "011",
         writebackWritebackValue when "001",
-        operand1DecodeStage when others;
+        operand2DecodeStage when others;
 
 
 end Behavioral;
