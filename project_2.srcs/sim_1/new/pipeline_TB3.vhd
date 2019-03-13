@@ -64,7 +64,7 @@ process begin
     wait until falling_edge(clk);
     input<=X"0005";
     wait until falling_edge(clk);
-    input<=X"0000";
+    input<=X"0008";
     wait until falling_edge(clk);
     input<=X"0001";
     wait until falling_edge(clk);

@@ -90,8 +90,8 @@ constant br_zero : std_logic_vector(6 downto 0) 	:= "1000101"; --uses ra
 constant br_sub : std_logic_vector(6 downto 0) 		:= "1000110"; --uses ra
 constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
 
-signal destRegBuffer : std_logic_vector(2 downto 0);
-signal doWriteBackBuffer : std_logic := '0';
+signal signExtenderB1 : std_logic_vector(6 downto 0);
+signal signExtenderB2 : std_logic_vector(9 downto 0);
 
 begin
 
@@ -132,18 +132,14 @@ registers : register_file port map(
             '0' when others;
             
      with instruction(15 downto 9) select
-        destRegBuffer <=
+        destReg <=
             instruction(8 downto 6) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op ,
             "UUU" when others;
             
-    destReg <= destRegBuffer;
-            
     with instruction(15 downto 9) select
-        doWriteBackBuffer <=
+        doWriteBack <=
             '1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op ,
             '0' when others;
-         
-    doWriteBack <= doWriteBackBuffer;
          
     with instruction(15 downto 9) select
         modeIO <=
@@ -162,9 +158,21 @@ registers : register_file port map(
         operand1 <=
             rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op,
             inputIn when in_op ,
-            (X"0" & "000" & instruction(8 downto 0)) when brr | brr_neg | brr_zero,
-            (X"00" & "00" & instruction(5 downto 0)) when br | br_neg | br_zero | br_sub,
+            (signExtenderB1 & instruction(8 downto 0)) when brr | brr_neg | brr_zero,
+            (signExtenderB2 & instruction(5 downto 0)) when br | br_neg | br_zero | br_sub,
             X"0000" when others;   
+            
+    with instruction(8) select
+        signExtenderB1 <=
+            ("1111111") when '1',
+            ("0000000") when '0',
+            ("0000000") when others;
+            
+    with instruction(5) select
+        signExtenderB2 <=
+            ("1111111111") when '1',
+            ("0000000000") when '0',
+            ("0000000000") when others;
             
     with instruction(15 downto 9) select
         useBranch <=
