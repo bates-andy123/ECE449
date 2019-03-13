@@ -75,20 +75,20 @@ process begin
 
 end process;
 
-process(clk) 
-variable count : integer range 0 to 30 := 0;
-begin
-    if falling_edge(clk) then
-        count := count + 1;
-        if count > 34 then 
-            count := 0;
-            rst <= '0';
-        elsif count > 29 then 
-            rst <= '1';
-        else
-        end if;
-    end if;
-end process;
+--process(clk) 
+--variable count : integer range 0 to 30 := 0;
+--begin
+--    if falling_edge(clk) then
+--        count := count + 1;
+--        if count > 34 then 
+--            count := 0;
+--            rst <= '0';
+--        elsif count > 29 then 
+--            rst <= '1';
+--        else
+--        end if;
+--    end if;
+--end process;
 
 
 process begin

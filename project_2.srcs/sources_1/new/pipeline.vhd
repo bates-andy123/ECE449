@@ -45,9 +45,8 @@ component fetchStage port(
     instruction, PC_out: out std_logic_vector(15 downto 0);
     inputIn: in std_logic_vector(15 downto 0);
     InputOut: out std_logic_vector(15 downto 0);
-    PC_offset : in std_logic_vector(15 downto 0);
     PC_set : in std_logic_vector(15 downto 0);
-    PC_mode : in std_logic
+    PC_doJump : in std_logic
 );
 end component;
 
@@ -81,7 +80,7 @@ component executeStage port(
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn : in std_logic;
-    doWriteBackOut : out std_logic;
+    doWriteBackOut, doPCWriteBack : out std_logic;
     result : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
     PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
@@ -93,31 +92,32 @@ component memoryStage Port (
     clk, rst : in std_logic;
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
-    doWriteBackIn : in std_logic;
-    doWriteBackOut : out std_logic;
+    doWriteBackIn, doPCWriteBackIn : in std_logic;
+    doWriteBackOut, doPCWriteBackOut : out std_logic;
     modeMemory : in std_logic_vector(1 downto 0);
     memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
     memoryRW : out std_logic;
-    memoryReadValue : in std_logic_vector(15 downto 0);
+    memoryReadValue, PC_In : in std_logic_vector(15 downto 0);
     input : in std_logic_vector(15 downto 0);
-    output : out std_logic_vector(15 downto 0)
+    output, PC_out : out std_logic_vector(15 downto 0)
 );
 end component;
 
 component writeBackStage port ( 
-    clk : in std_logic;
-    inDoWriteBack : in std_logic;
+    clk, rst : in std_logic;
+    inDoWriteBack, doPCWriteBackIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
-    inWriteBackValue : in std_logic_vector(15 downto 0);
-    outDoWriteBack : out std_logic;
+    inWriteBackValue, PC_in : in std_logic_vector(15 downto 0);
+    outDoWriteBack, doPCWriteBackOut, requestReset : out std_logic;
     outDestRegister : out std_logic_vector(2 downto 0);
-    outWriteBackValue : out std_logic_vector(15 downto 0)
+    outWriteBackValue, PC_out : out std_logic_vector(15 downto 0)
 );
 end component;
 
 signal fetchedInstruction: std_logic_vector(15 downto 0);
 signal inputOutputFetchStage : std_logic_vector(15 downto 0);
 signal PC_outFetchStage : std_logic_vector(15 downto 0);
+signal resetFetchStage : std_logic;
 
 signal doWriteBack : std_logic;
 signal useALU, useBranch : std_logic := '0';
@@ -133,16 +133,26 @@ signal doWriteBackOutputDecodeStage : std_logic := '0';
 signal writeBackRegOutputDecodeStage : std_logic_vector(2 downto 0) := "000";
 signal haltSig : std_logic := '0';
 signal PC_outDecodeStage : std_logic_vector(15 downto 0);
+signal resetDecodeStage : std_logic;
 
 signal doWriteBackOutputExecuteStage : std_logic;
 signal writeBackRegOutputExecuteStage : std_logic_vector(2 downto 0);
 signal resultExecuteStage : std_logic_vector(15 downto 0);
 signal PC_outExecuteStage : std_logic_vector(15 downto 0);
+signal doPCWriteBackExecuteStage : std_logic;
+signal resetExecuteStage : std_logic;
 
 signal doWriteBackOutputMemoryStage : std_logic := '0';
 signal writeBackRegOutputMemoryStage : std_logic_vector(2 downto 0);
 signal resultMemoryStage : std_logic_vector(15 downto 0);
 signal PC_outMemoryStage : std_logic_vector(15 downto 0);
+signal doPCWriteBackMemoryStage : std_logic; 
+signal resetMemoryStage : std_logic;
+
+signal requestResetWritebackStage : std_logic;
+signal doPCWriteBackOutWritebackStage : std_logic;
+signal PC_outWritebackStage : std_logic_vector(15 downto 0);
+signal resetWritebackStage : std_logic;
 
 begin
 
@@ -154,10 +164,11 @@ fetch : fetchStage port map(
     instruction=>fetchedInstruction,
     inputIn=>input,
     inputOut=>inputOutputFetchStage,
-    PC_offset => X"0000",
-    PC_set => X"0000",
-    PC_mode => '0'
+    PC_set => PC_outWritebackStage,
+    PC_doJump => doPCWriteBackOutWritebackStage
 );
+
+--resetDecodeStage <= (rst or requestResetWritebackStage);
 
 decode : decodeStage port map(
     clk => clk,
@@ -183,9 +194,11 @@ decode : decodeStage port map(
     inputIn=>inputOutputFetchStage
 );
 
+resetExecuteStage <= (rst or requestResetWritebackStage);
+
 execute : executeStage port map(
     clk=>clk,
-    rst=>rst,
+    rst=>resetExecuteStage,
     useALU=>useALU,
     useBranch=>useBranch,
     useIO=>useIO,
@@ -207,17 +220,24 @@ execute : executeStage port map(
     useWritebackDestValue=>doWriteBackOutputMemoryStage,
     result=>resultExecuteStage,
     outputCPU=>output,
+    doPCWriteBack=>doPCWriteBackExecuteStage,
     PC_in => PC_outDecodeStage,
     PC_out => PC_outExecuteStage
 );
 
+resetMemoryStage <= (requestResetWritebackStage or rst);
+
 memory : memoryStage Port map(
     clk=>clk, 
-    rst=>rst,
+    rst=>resetMemoryStage,
     destRegIn=>writeBackRegOutputExecuteStage,
     destRegOut=>writeBackRegOutputMemoryStage,
     doWriteBackIn=>doWriteBackOutputExecuteStage,
     doWriteBackOut=>doWriteBackOutputMemoryStage,
+    doPCWriteBackIn=>doPCWriteBackExecuteStage,
+    doPCWriteBackOut=>doPCWriteBackMemoryStage,
+    PC_In=>PC_outExecuteStage,
+    PC_out=>PC_outMemoryStage,
     modeMemory=>"00",
     --memoryAddress, 
     --memoryWriteValue ,
@@ -227,21 +247,29 @@ memory : memoryStage Port map(
     output=>resultMemoryStage
 );
 
+resetWritebackStage <= (rst or requestResetWritebackStage);
+
 writeback : writeBackStage port map( 
     clk=>clk,
+    rst=>resetWritebackStage,
     inDoWriteBack =>doWriteBackOutputMemoryStage,
     inDestRegister =>writeBackRegOutputMemoryStage,
     inWriteBackValue =>resultMemoryStage,
     outDoWriteBack=>regWriteEnable,
     outDestRegister=>regWriteAddress,
-    outWriteBackValue=>writeBackValue
+    outWriteBackValue=>writeBackValue,
+    PC_in => PC_outMemoryStage,
+    PC_out => PC_outWritebackStage,
+    doPCWriteBackIn => doPCWriteBackMemoryStage,
+    doPCWriteBackOut => doPCWriteBackOutWritebackStage, 
+    requestReset => requestResetWritebackStage
 );
 
 process(clk)
 begin
 
     if rising_edge(clk) then
-
+        
     end if;
 
 end process;

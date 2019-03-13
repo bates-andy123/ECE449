@@ -37,9 +37,8 @@ entity fetchStage is Port (
     instruction, PC_out: out std_logic_vector(15 downto 0) := X"0000";
     inputIn : in std_logic_vector(15 downto 0);
     inputOut : out std_logic_vector(15 downto 0) := X"0000";
-    PC_offset: in std_logic_vector(15 downto 0);
     PC_set : in std_logic_vector(15 downto 0);
-    PC_mode : in std_logic
+    PC_doJump : in std_logic
 );
 end fetchStage;
 
@@ -82,13 +81,13 @@ begin
             if(halt = '0') then
                 addrROM <= PC_next(7 downto 0); 
                 instruction <= doutROM;
-                if PC_mode = '0' then -- normal increment mode
+                if PC_doJump = '0' then -- normal increment mode
+                    PC_current <= PC_next;
                     PC_next <= std_logic_vector(unsigned(PC_next) + 1);
                     PC_out <= PC_current;
-                    PC_current <= std_logic_vector(unsigned(PC_current) + 1);                
+                    --PC_current <= std_logic_vector(unsigned(PC_current) + 1);                
                 else
---                    PC_next <= PC_set;
---                    PC_current 
+                    PC_next <= PC_set;
                 end if;
                 inputOut <= inputIn;
             end if;

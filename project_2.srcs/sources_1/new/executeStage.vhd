@@ -172,9 +172,28 @@ process(clk) begin
     else 
         destRegOut <= "000";
         doWriteBackOut <= '0';
+        doPCWriteBack <= '0';
+        PC_out <= X"0000";
         result <= X"0000";
         outputCPU <= X"0000";
     end if;
 end process;
+
+--    clk, rst : in std_logic;
+--    useALU, useBranch : in std_logic;
+--    useIO : in std_logic;
+--    modeALU : in std_logic_vector(2 downto 0);
+--    readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
+--    modeIO : in std_logic;
+--    operand1, operand2 : in std_logic_vector(15 downto 0);
+--    destRegIn : in std_logic_vector(2 downto 0);
+--    destRegOut : out std_logic_vector(2 downto 0) := "000";
+--    doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
+--    doWriteBackOut : out std_logic := '0';
+--    doPCWriteBack : out std_logic := '0';
+--    result : out std_logic_vector(15 downto 0) := X"0000";
+--    outputCPU : out std_logic_vector(15 downto 0) := X"0000";
+--    PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
+--    PC_out : out std_logic_vector(15 downto 0) := X"0000"
 
 end Behavioral;

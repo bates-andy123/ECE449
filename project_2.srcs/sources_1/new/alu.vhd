@@ -37,7 +37,8 @@ entity alu is
         mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
         clk, rst : in std_logic; -- Clk and reset flags
         result : out std_logic_vector(15 downto 0); -- Result of ALU operation
-        z, n : out std_logic); -- zero and negative flag from addition/subtraction operation
+        z, n : out std_logic := '0'
+    ); -- zero and negative flag from addition/subtraction operation
 end alu;
 
 architecture Behavioral of alu is
