@@ -38,14 +38,14 @@ end dataForwarder_TB;
 architecture Behavioral of dataForwarder_TB is
 
 component dataForwarder Port (
-    clk, doMemoryWriteback, doWritebackWriteback : in std_logic;
+    doMemoryWriteback, doWritebackWriteback, operand1Passthrough, operand2Passthrough : in std_logic;
     readReg1, readReg2, memoryWritebackDest, writebackWritebackDest : in std_logic_vector(2 downto 0);
     operand1DecodeStage, operand2DecodeStage, memoryWritebackValue, writebackWritebackValue : in std_logic_vector(15 downto 0);
     operand1, operand2 : out std_logic_vector(15 downto 0)
 );
 end component;
 
-signal clk, doMemoryWriteback, doWritebackWriteback : std_logic;
+signal doMemoryWriteback, doWritebackWriteback, operand1Passthrough, operand2Passthrough : std_logic;
 signal readReg1, readReg2, memoryWritebackDest, writebackWritebackDest : std_logic_vector(2 downto 0);
 signal operand1DecodeStage, operand2DecodeStage, memoryWritebackValue, writebackWritebackValue : std_logic_vector(15 downto 0);
 signal operand1, operand2 : std_logic_vector(15 downto 0);
@@ -53,7 +53,8 @@ signal operand1, operand2 : std_logic_vector(15 downto 0);
 begin
 
 forwarder : dataForwarder port map(
-    clk=>clk,
+    operand1Passthrough=>operand1Passthrough,
+    operand2Passthrough=>operand2Passthrough,
     doMemoryWriteback=>doMemoryWriteback, 
     doWritebackWriteback=>doWritebackWriteback,
     readReg1=>readReg1, 
@@ -71,15 +72,26 @@ forwarder : dataForwarder port map(
 process begin
     doMemoryWriteback <= '1';
     doWritebackWriteback <= '1';
+    operand1DecodeStage <= X"A45B";
+    memoryWritebackValue <= X"BBBB";
+    writebackWritebackValue <= X"AAAA";
+    operand1Passthrough<='0';
+    readReg1<="010";
+    memoryWritebackDest<="010";
+    writebackWritebackDest<="010";
     
+    wait for 10us;
+    operand1DecodeStage <= X"5049";
+    doMemoryWriteback <= '0';
+    wait for 10us;
+    operand1DecodeStage <= X"C7A1";
+    doMemoryWriteback <= '0';
+    wait for 10us;
+    operand1DecodeStage <= X"9F48";
+    operand1Passthrough <= '0';
+    wait;
     
 end process;
 
-process begin
-    clk<='0';
-    wait for 10us;
-    clk<='1';
-    wait for 10us;
-end process;
 
 end Behavioral;
