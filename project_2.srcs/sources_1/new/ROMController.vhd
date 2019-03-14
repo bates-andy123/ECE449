@@ -37,6 +37,7 @@ Port (
   addra : in std_logic_vector (7 downto 0);
   douta : out std_logic_vector (15 downto 0)
 );
+
 end ROMController;
 
 architecture Behavioral of ROMController is
@@ -46,6 +47,7 @@ begin
 -- xpm_memory_sprom: Single Port ROM
 -- Xilinx Parameterized Macro, version 2018.3
 xpm_memory_sprom_inst : xpm_memory_sprom
+
 generic map (
  ADDR_WIDTH_A => 6, -- DECIMAL
  AUTO_SLEEP_TIME => 0, -- DECIMAL
@@ -79,6 +81,7 @@ port map (
  -- by parameter READ_RESET_VALUE_A.
  sleep => '0' -- 1-bit input: sleep signal to enable the dynamic power saving feature.
 );
+
 -- End of xpm_memory_sprom_inst instantiation
 
 end Behavioral;

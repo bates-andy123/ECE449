@@ -32,33 +32,71 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity memoryController is
-Port(
 
+Port (
+    -- Clock flag
+    clk : in std_logic; -- Clk flag
+    
+    -- Port information shared between RAM and ROM
+    readOnlyAddress : in std_logic_vector(15 downto 0); -- Address to either read from RAM port B or ROM
+    outputOnReadOnlyChannel : out std_logic_vector(15 downto 0) := X"0000";
+    
+    -- Port information relating to RAM controller
+    addressARAM : in std_logic_vector(15 downto 0); -- Address to read/write from in RAM port A
+    writeContentRAM : in std_logic_vector(15 downto 0); -- Content to write to RAM port A
+    outaContentRAM : out std_logic_vector(15 downto 0); -- Content read from port A of RAM
+    weaRAM : in std_logic_vector(0 downto 0); -- Write enable vector for port A in RAM
+    rstaRAM : in std_logic; -- Reset signal for port A in RAM
+    rstbRAM : in std_logic; -- Reset signal for port B in RAM
+    regceaRAM : in std_logic; -- Clock enable for last register stage on output data path
+    
+    -- Port information relating to ROM controller
+    rstaROM : in std_logic; -- Reset signal for ROM
+    sleepROM : in std_logic -- Sleep signal to enable dynamic power saving
 );
 end memoryController;
 
 architecture Behavioral of memoryController is
 
-component ROMController port(
-    clka, ena, injectdbiterra, injectsbiterra, regcea, rsta, sleep : in std_logic;
-    addra : in std_logic_vector (7 downto 0);
-    douta : out std_logic_vector (15 downto 0);
-    dbiterra, sbiterra : out std_logic
-);
+
+-- Component declaration for RAM module
+component RAMController port(
+    addra, addrb : in std_logic_vector (15 downto 0); -- The address for port A read/write operations, and port B read operations
+    dina : in std_logic_vector (15 downto 0); -- Data in for port A
+    wea : in std_logic_vector (0 downto 0); -- Write enable for port A input data port dina
+    douta : out std_logic_vector (15 downto 0); -- Data out from port A
+    doutb : out std_logic_vector (15 downto 0); -- Data out from port B
+    regceb : in std_logic; -- Leave always at '1'
+    clka, ena, enb, regcea, rsta, rstb : in std_logic);
+    
 end component;
+
+-- Component declaration for ROM module
+component ROMController Port (
+    addra : in std_logic_vector (15 downto 0);
+    douta : out std_logic_vector (15 downto 0);
+    clka, ena, rsta, sleep : in std_logic);
+end component;
+
+-- Signal declarations
+signal outbContentRAM, outContentROM : std_logic_vector(15 downto 0);
 
 begin
 
-u0 : ROMController port map(
-    clka=>clk,
-    ena=>'1', 
-    injectdbiterra=>'0', 
-    injectsbiterra=>'0', 
-    regcea=>'1', 
-    rsta=>'0', 
-    sleep=>'0',
-    addra=>addrROM,
-    douta=>doutROM
-);
+u0 : RAMController port map(douta => outaContentRAM, doutb => outbContentRAM, addra => addressARAM, addrb => readOnlyAddress, dina => writeContentRAM,
+                    wea => weaRAM, clka => clk, ena => '1', enb => '1', regcea => regceaRAM, regceb => '1', rsta => rstaRAM, rstb => rstbRAM);
+u1 : ROMController port map(douta => outContentROM, addra => readOnlyAddress, clka => clk, ena => '1', rsta => rstaROM, sleep => '0');
+
+process(clk)
+begin
+    if rising_edge(clk) then
+        if (readOnlyAddress(10) = '1') then 
+            outputOnReadOnlyChannel <= outbContentRAM;
+        else
+            outputOnReadOnlyChannel <= outContentROM;
+        end if;    
+    end if;
+end process;
 
 end Behavioral;
+

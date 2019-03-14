@@ -10,7 +10,6 @@ architecture behavioural of test_alu is
 component alu port(
     in1, in2: in std_logic_vector(15 downto 0);
     mode: in std_logic_vector(2 downto 0);
-    mulFlag : out std_logic;
     clk, rst: in std_logic;
     result: out std_logic_vector(15 downto 0);
     z, n: out std_logic);
@@ -20,11 +19,10 @@ end component;
 signal rst, clk, n, z : std_logic;
 signal  mode : std_logic_vector(2 downto 0); 
 signal in1, in2, result : std_logic_vector(15 downto 0);
-signal mulStatus : std_logic;
 
 begin
 
-u1: alu port map(in1 => in1, in2 => in2, mode => mode, clk => clk, rst => rst, result => result, n => n, z => z, mulFlag => mulStatus);
+u1: alu port map(in1 => in1, in2 => in2, mode => mode, clk => clk, rst => rst, result => result, n => n, z => z);
 
 process begin
     clk <= '0'; wait for 10 us;
@@ -49,7 +47,7 @@ process  begin
         mode <= "100";
     wait until (clk='0' and clk'event);
 
--- unary test
+--  add/sub test
     wait until (clk='1' and clk'event);
         in1 <= X"FFFF";
         in2 <= X"EEEE";
@@ -61,11 +59,10 @@ process  begin
 
 -- multiplier test
         wait until (clk='1' and clk'event);
-            in1 <= X"0002";
+            in1 <= X"FFF0";
             in2 <= X"0003";
             mode <= "011";
         wait until (clk='0' and clk'event);
-        wait until mulStatus = '1';
 
 -- shift test
     wait until (clk='1' and clk'event);

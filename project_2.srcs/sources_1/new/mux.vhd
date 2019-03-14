@@ -30,27 +30,51 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
--- 2 8 bit channels
-entity mux2_16 is
+-- 2 32 bit channels
+entity mux2_32 is
     Port (
-        ch0, ch1 : in std_logic_vector(15 downto 0);
+        ch0, ch1 : in std_logic_vector(31 downto 0);
         sel : in std_logic;
-        output : out std_logic_vector(15 downto 0));
-end mux2_16;
+        output : out std_logic_vector(31 downto 0));
+end mux2_32;
 
-architecture Behavioral of mux2_16 is
+architecture Behavioral of mux2_32 is
     
 begin
     with sel select
         output <=
             ch0 when '0',
             ch1 when '1',
-            X"0000" when others; 
+            X"00000000" when others; 
 end Behavioral;
+
+
+--library IEEE;
+--use IEEE.STD_LOGIC_1164.ALL;
+
+---- 2 16 bit channels
+--entity mux2_16 is
+--    Port (
+--        ch0, ch1 : in std_logic_vector(15 downto 0);
+--        sel : in std_logic;
+--        output : out std_logic_vector(15 downto 0));
+--end mux2_16;
+
+--architecture Behavioral of mux2_16 is
+    
+--begin
+--    with sel select
+--        output <=
+--            ch0 when '0',
+--            ch1 when '1',
+--            X"0000" when others; 
+--end Behavioral;
+
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- 2 8 bit channels
 entity mux2_8 is
     Port (
         ch0, ch1 : in std_logic_vector(7 downto 0);
