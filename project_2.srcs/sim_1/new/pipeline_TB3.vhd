@@ -31,37 +31,40 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity pipeline_TB2 is end pipeline_TB2;
+entity pipeline_TB3 is end pipeline_TB3;
 
-architecture Behavioral of pipeline_TB2 is
+architecture Behavioral of pipeline_TB3 is
 
 component pipeline Port (
     clk, rst : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
-    output : out std_logic_vector(15 downto 0);
-    out1, out2, out3, out4 : out std_logic_vector(15 downto 0)
+    output : out std_logic_vector(15 downto 0) 
 );
 end component;
 
-signal clk : std_logic := '0';
+signal clk, rst : std_logic := '0';
 signal output : std_logic_vector(15 downto 0);
 signal input : std_logic_vector(15 downto 0) := X"C0A0";
-
-
 
 begin
 
 u0 : pipeline port map(
     clk => clk,
-    rst => '0',
+    rst => rst,
     input=>input,
     output => output
 );
 
 process begin
-    input<=X"0002";
+    input<=X"0001";
     wait until falling_edge(clk);
     input<=X"0003";
+    wait until falling_edge(clk);
+    input<=X"0001";
+    wait until falling_edge(clk);
+    input<=X"0005";
+    wait until falling_edge(clk);
+    input<=X"0008";
     wait until falling_edge(clk);
     input<=X"0001";
     wait until falling_edge(clk);

@@ -35,9 +35,10 @@ entity alu is
     Port(
         in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
         mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
-        clk, rst : in std_logic; -- Clk and reset flags
+        clk, enable : in std_logic; -- Clk and reset flags
         result : out std_logic_vector(15 downto 0); -- Result of ALU operation
-        z, n : out std_logic); -- zero and negative flag from addition/subtraction operation
+        z, n : out std_logic := '0'
+    ); -- zero and negative flag from addition/subtraction operation
 end alu;
 
 architecture Behavioral of alu is
@@ -69,7 +70,6 @@ end component;
 component multiplier port(
     multiplicand : in std_logic_vector(15 downto 0);
     multiplier : in std_logic_vector(15 downto 0);
-    clk : in std_logic;
     overflow : out std_logic;
     product : out std_logic_vector(15 downto 0));
 end component;
@@ -88,33 +88,35 @@ begin
 u0 : barrelShiftRight port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftRightOutput);
 u1 : barrelShiftLeft port map(input => in1, shiftBy => in2(3 downto 0), output => barrelShiftLeftOutput);
 u2 : unary port map(in1 => in1, in2 => in2, operation => mode, output => unaryOutput, overflow => unaryOverflow);
-u3 : multiplier port map(multiplicand => in1, multiplier => in2, clk => clk, overflow => multiplierOverflow, product => multiplierOutput);
+u3 : multiplier port map(multiplicand => in1, multiplier => in2, overflow => multiplierOverflow, product => multiplierOutput);
 
 process(clk)
 begin
     if rising_edge(clk) then
         -- Determine ALU mode and perform appropriate action
-        case mode(2 downto 0) is
-            when "000" => null; -- NOP operation
-            when "001" => result <= unaryOutput; -- ADD operation
-            when "010" => result <= unaryOutput; -- SUB operation
-            when "011" => result <= multiplieroutput;-- MUL operation
-            when "100" => result <= (in1 nand in2); -- NAND operation
-            when "101" => result <= barrelShiftLeftOutput; -- SHL operation
-            when "110" => result <= barrelShiftRightOutput; -- SHR operation
-            when "111" => -- Test operation, test if result is negative or zero
-                if (in1 = X"0000") then
-                    n <= '0'; -- Not negative
-                    z <= '1'; -- Is zero
-                elsif (in1(15) = '1') then
-                    n <= '1'; -- Is ngative
-                    z <= '0'; -- Not zero
-                else
-                    n <= '0'; -- Not negative
-                    z <= '0'; -- Not zero
-                end if;
-            when others => result <= X"0101"; -- Temporary until all cases are completed 
-        end case;
+        if enable = '1' then
+            case mode(2 downto 0) is
+                when "000" => null; -- NOP operation
+                when "001" => result <= unaryOutput; -- ADD operation
+                when "010" => result <= unaryOutput; -- SUB operation
+                when "011" => result <= multiplieroutput;-- MUL operation
+                when "100" => result <= (in1 nand in2); -- NAND operation
+                when "101" => result <= barrelShiftLeftOutput; -- SHL operation
+                when "110" => result <= barrelShiftRightOutput; -- SHR operation
+                when "111" => -- Test operation, test if result is negative or zero
+                    if (in1 = X"0000") then
+                        n <= '0'; -- Not negative
+                        z <= '1'; -- Is zero
+                    elsif (in1(15) = '1') then
+                        n <= '1'; -- Is ngative
+                        z <= '0'; -- Not zero
+                    else
+                        n <= '0'; -- Not negative
+                        z <= '0'; -- Not zero
+                    end if;
+                when others => result <= X"0101"; -- Temporary until all cases are completed 
+            end case;
+        end if;
     end if;
 end process;
 

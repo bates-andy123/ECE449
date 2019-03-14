@@ -35,9 +35,13 @@ entity fetchStage_TB is end fetchStage_TB;
 
 architecture Behavioral of fetchStage_TB is
 
-component fetchStage port(
-    clk : in std_logic;
-    instruction: out std_logic_vector(15 downto 0)
+component fetchStage Port (
+    clk, rst, halt : in std_logic;
+    instruction, PC_out: out std_logic_vector(15 downto 0) := X"0000";
+    inputIn : in std_logic_vector(15 downto 0);
+    inputOut : out std_logic_vector(15 downto 0) := X"0000";
+    PC_set : in std_logic_vector(15 downto 0);
+    PC_doJump : in std_logic
 );
 end component;
 
@@ -46,16 +50,21 @@ signal instruction: std_logic_vector(15 downto 0);
 
 begin
 
-u0 : fetchStage port map(
+fetch : fetchStage port map(
     clk=>clk,
-    instruction=>instruction
+    rst=>'0',
+    halt=>'0',
+    instruction=>instruction,
+    inputIn=>X"0000",
+    PC_set=>X"0000",
+    PC_doJump=>'0'
 );
 
 process begin
     clk <= '0';
-    wait for 10 us;
+    wait for 5 us;
     clk <= '1';
-    wait for 10us;
+    wait for 5 us;
 end process;
 
 end Behavioral;

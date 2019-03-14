@@ -33,10 +33,9 @@ use IEEE.STD_LOGIC_1164.ALL, xpm.vcomponents.all;
 
 entity ROMController is
 Port (
-  clka, ena, injectdbiterra, injectsbiterra, regcea, rsta, sleep : in std_logic;
+  clka, ena, regcea, rsta : in std_logic;
   addra : in std_logic_vector (7 downto 0);
-  douta : out std_logic_vector (15 downto 0);
-  dbiterra, sbiterra : out std_logic
+  douta : out std_logic_vector (15 downto 0)
 );
 end ROMController;
 
@@ -48,10 +47,10 @@ begin
 -- Xilinx Parameterized Macro, version 2018.3
 xpm_memory_sprom_inst : xpm_memory_sprom
 generic map (
- ADDR_WIDTH_A => 8, -- DECIMAL
+ ADDR_WIDTH_A => 6, -- DECIMAL
  AUTO_SLEEP_TIME => 0, -- DECIMAL
  ECC_MODE => "no_ecc", -- String
- MEMORY_INIT_FILE => "ROM2.mem", -- String
+ MEMORY_INIT_FILE => "ROM3.mem", -- String
  MEMORY_INIT_PARAM => "0", -- String
  MEMORY_OPTIMIZATION => "true", -- String
  MEMORY_PRIMITIVE => "auto", -- String
@@ -65,20 +64,20 @@ generic map (
  WAKEUP_TIME => "disable_sleep" -- String
 )
 port map (
- dbiterra => dbiterra, -- 1-bit output: Leave open.
+ dbiterra => open, -- 1-bit output: Leave open.
  douta => douta, -- READ_DATA_WIDTH_A-bit output: Data output for port A read operations.
- sbiterra => sbiterra, -- 1-bit output: Leave open.
- addra => addra, -- ADDR_WIDTH_A-bit input: Address for port A read operations.
+ sbiterra => open, -- 1-bit output: Leave open.
+ addra => addra(5 downto 0), -- ADDR_WIDTH_A-bit input: Address for port A read operations.
  clka => clka, -- 1-bit input: Clock signal for port A.
  ena => ena, -- 1-bit input: Memory enable signal for port A. Must be high on clock
  -- cycles when read operations are initiated. Pipelined internally.
- injectdbiterra => injectdbiterra, -- 1-bit input: Do not change from the provided value.
- injectsbiterra => injectsbiterra, -- 1-bit input: Do not change from the provided value.
+ injectdbiterra => '0', -- 1-bit input: Do not change from the provided value.
+ injectsbiterra => '0', -- 1-bit input: Do not change from the provided value.
  regcea => regcea, -- 1-bit input: Do not change from the provided value.
  rsta => rsta, -- 1-bit input: Reset signal for the final port A output register
  -- stage. Synchronously resets output port douta to the value specified
  -- by parameter READ_RESET_VALUE_A.
- sleep => sleep -- 1-bit input: sleep signal to enable the dynamic power saving feature.
+ sleep => '0' -- 1-bit input: sleep signal to enable the dynamic power saving feature.
 );
 -- End of xpm_memory_sprom_inst instantiation
 

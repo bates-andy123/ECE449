@@ -36,7 +36,6 @@ entity multiplier is
     Port (
         multiplicand : in std_logic_vector(15 downto 0);
         multiplier : in std_logic_vector(15 downto 0);
-        clk : in std_logic;
         overflow : out std_logic;
         product : out std_logic_vector(15 downto 0));
 end multiplier;

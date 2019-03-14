@@ -35,14 +35,15 @@ entity memoryStage is Port (
     clk, rst : in std_logic;
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
-    doWriteBackIn : in std_logic;
-    doWriteBackOut : out std_logic := '0';
-    modeMemory : in std_logic_vector(1 downto 0);
-    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
-    memoryRW : out std_logic;
-    memoryReadValue : in std_logic_vector(15 downto 0);
+    doWriteBackIn, doPCWriteBackIn : in std_logic;
+    doWriteBackOut, doPCWriteBackOut : out std_logic := '0';
+--    modeMemory : in std_logic_vector(1 downto 0);
+--    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+--    memoryRW : out std_logic;
+--    memoryReadValue, 
+    PC_In : in std_logic_vector(15 downto 0);
     input : in std_logic_vector(15 downto 0);
-    output : out std_logic_vector(15 downto 0)
+    output, PC_out : out std_logic_vector(15 downto 0)
 );
 end memoryStage;
 
@@ -52,18 +53,22 @@ begin
 
 process(clk) begin
     if(rst = '0') then
-        if falling_edge(clk) then
+        if (clk='0') then
             output <= input;
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
+            PC_out <= PC_in;
+            doPCWriteBackOut <= doPCWriteBackIn;
         end if;
     else -- rst is currently active
         output <= X"0000";
         doWriteBackOut <= '0';
         destRegOut <= "000";
-        memoryAddress <= X"0000"; 
-        memoryWriteValue <= X"0000";
-        memoryRW <= '0';
+--        memoryAddress <= X"0000"; 
+--        memoryWriteValue <= X"0000";
+        PC_out <= X"0000";
+--        memoryRW <= '0';
+        doPCWriteBackOut <= '0';
     end if;
 end process;
 
