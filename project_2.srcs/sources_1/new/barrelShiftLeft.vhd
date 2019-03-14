@@ -161,7 +161,7 @@ begin
     s40D : entity work.mux2_1 port map(ch0 => stage36(1), ch1 => stage36(0), sel => shiftBy(0), output => output(13));
     s40E : entity work.mux2_1 port map(ch0 => stage37(0), ch1 => stage36(1), sel => shiftBy(0), output => output(14));
     s40F : entity work.mux2_1 port map(ch0 => stage37(1), ch1 => stage37(0), sel => shiftBy(0), output => output(15));
-    s410 : entity work.mux2_1 port map(ch0 => stage38(0), ch1 => stage37(0), sel => shiftBy(0), output => output(16));
+    s410 : entity work.mux2_1 port map(ch0 => stage38(0), ch1 => stage37(1), sel => shiftBy(0), output => output(16));
     s411 : entity work.mux2_1 port map(ch0 => stage38(1), ch1 => stage38(0), sel => shiftBy(0), output => output(17));
     s412 : entity work.mux2_1 port map(ch0 => stage39(0), ch1 => stage38(1), sel => shiftBy(0), output => output(18));
     s413 : entity work.mux2_1 port map(ch0 => stage39(1), ch1 => stage39(0), sel => shiftBy(0), output => output(19));
