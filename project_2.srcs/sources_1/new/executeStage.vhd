@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -73,7 +74,8 @@ end component;
 component PC_calculator is Port (
     disp, reg, PC_current: in std_logic_vector(15 downto 0);
     modeBranch : in std_logic_vector(2 downto 0);
-    calcedPC : out std_logic_vector(15 downto 0)
+    calcedPC : out std_logic_vector(15 downto 0);
+    clk : in std_logic
 );
 end component;
 
@@ -100,6 +102,7 @@ u1:alu port map(
 );
 
 u2 : PC_calculator Port map(
+    clk=>clk,
     disp=>operand1, 
     reg=>operand2, 
     PC_current=>PC_in,
@@ -129,7 +132,7 @@ process(clk) begin
         if falling_edge(clk) then
             if useBranch = '1' then
                 case modeALU(2 downto 0) is
-                    when "000" | "011" | "110" | "111" => 
+                    when "000" | "011" => 
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= resultCalcedPC;
                     when "001" | "100" => 
@@ -148,6 +151,15 @@ process(clk) begin
                             doPCWriteBack <= '0';
                             PC_out <= PC_in;
                         end if;
+                    when "110" =>
+                        doPCWriteBack <= '1'; -- NOP operation
+                        PC_out <= resultCalcedPC;
+                        destRegOut <= "111";
+                        doWriteBackOut <= '1';
+                        result <= std_logic_vector(unsigned(PC_in) + 1);
+                    when "111" =>
+                        doPCWriteBack <= '1'; -- NOP operation
+                        PC_out <= operand2;
                     when others => doPCWriteBack <= '0'; -- Temporary until all cases are completed 
                 end case;
             else 
@@ -156,8 +168,11 @@ process(clk) begin
             end if;
             if useALU = '1' then 
                 result <= resultALU;
-                
+                destRegOut <= destRegIn;
+                doWriteBackOut <= doWriteBackIn;    
             elsif useIO = '1' then
+                destRegOut <= destRegIn;
+                doWriteBackOut <= doWriteBackIn;
                 if modeIO = '1' then  -- Input, write the operand rand to memory
                     result <= operand1;
                 else
@@ -166,8 +181,7 @@ process(clk) begin
             else -- useBranch
                 
             end if;
-            destRegOut <= destRegIn;
-            doWriteBackOut <= doWriteBackIn;
+            
             --operand1Buffer <= operand1;
         end if;
     else 
