@@ -65,7 +65,7 @@ end component;
 component alu port(
     in1, in2 : in std_logic_vector(15 downto 0); -- Input signals
     mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
-    clk, rst, enable : in std_logic; -- Clk and reset flags
+    clk, enable : in std_logic; -- Clk and reset flags
     result : out std_logic_vector(15 downto 0); -- Result of ALU operation
     z, n : out std_logic
 );
@@ -74,8 +74,7 @@ end component;
 component PC_calculator is Port (
     disp, reg, PC_current: in std_logic_vector(15 downto 0);
     modeBranch : in std_logic_vector(2 downto 0);
-    calcedPC : out std_logic_vector(15 downto 0);
-    clk : in std_logic
+    calcedPC : out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -94,7 +93,6 @@ u1:alu port map(
     in2=>operand2Buffer, 
     mode=>modeALU, 
     clk=>clk, 
-    rst=>rst,
     enable=>useALU,
     result=>resultALU,
     n=>n, 
@@ -102,7 +100,6 @@ u1:alu port map(
 );
 
 u2 : PC_calculator Port map(
-    clk=>clk,
     disp=>operand1, 
     reg=>operand2, 
     PC_current=>PC_in,

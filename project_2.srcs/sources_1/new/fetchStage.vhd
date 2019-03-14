@@ -45,10 +45,9 @@ end fetchStage;
 architecture Behavioral of fetchStage is
 
 component ROMController port(
-    clka, ena, injectdbiterra, injectsbiterra, regcea, rsta, sleep : in std_logic;
+    clka, ena, regcea, rsta : in std_logic;
     addra : in std_logic_vector (7 downto 0);
-    douta : out std_logic_vector (15 downto 0);
-    dbiterra, sbiterra : out std_logic
+    douta : out std_logic_vector (15 downto 0)
 );
 end component;
 
@@ -62,14 +61,11 @@ signal PC_JustDidJump : std_logic := '0';
 
 begin
 
-u0 : ROMController port map(
+ROM : ROMController port map(
     clka=>clk,
-    ena=>'1', 
-    injectdbiterra=>'0', 
-    injectsbiterra=>'0', 
+    ena=>'1',  
     regcea=>'1', 
     rsta=>'0', 
-    sleep=>'0',
     addra=>addrROM,
     douta=>doutROM
 );

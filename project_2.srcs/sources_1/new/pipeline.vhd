@@ -34,7 +34,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity pipeline is Port (
     clk, rst : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
-    output : out std_logic_vector(15 downto 0) 
+    output : out std_logic_vector(15 downto 0);
+    out1, out2, out3, out4 : out std_logic_vector(15 downto 0)
 );
 end pipeline;
 
@@ -94,10 +95,11 @@ component memoryStage Port (
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn, doPCWriteBackIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut : out std_logic;
-    modeMemory : in std_logic_vector(1 downto 0);
-    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
-    memoryRW : out std_logic;
-    memoryReadValue, PC_In : in std_logic_vector(15 downto 0);
+--    modeMemory : in std_logic_vector(1 downto 0);
+--    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+--    memoryRW : out std_logic;
+--    memoryReadValue, 
+    PC_In : in std_logic_vector(15 downto 0);
     input : in std_logic_vector(15 downto 0);
     output, PC_out : out std_logic_vector(15 downto 0)
 );
@@ -162,11 +164,14 @@ fetch : fetchStage port map(
     halt=>haltSig,
     rst=>rst,
     instruction=>fetchedInstruction,
+    --instruction=>output, Was only for testing purposes
     inputIn=>input,
     inputOut=>inputOutputFetchStage,
     PC_set => PC_outWritebackStage,
     PC_doJump => doPCWriteBackOutWritebackStage
 );
+
+out1 <= inputOutputFetchStage;
 
 --resetDecodeStage <= (rst or requestResetWritebackStage);
 
@@ -219,11 +224,13 @@ execute : executeStage port map(
     useMemoryDestValue=>doWriteBackOutputExecuteStage, 
     useWritebackDestValue=>doWriteBackOutputMemoryStage,
     result=>resultExecuteStage,
-    outputCPU=>output,
+    --outputCPU=>output,
     doPCWriteBack=>doPCWriteBackExecuteStage,
     PC_in => PC_outDecodeStage,
     PC_out => PC_outExecuteStage
 );
+
+output <= operand1;
 
 resetMemoryStage <= (requestResetWritebackStage or rst);
 
@@ -238,11 +245,11 @@ memory : memoryStage Port map(
     doPCWriteBackOut=>doPCWriteBackMemoryStage,
     PC_In=>PC_outExecuteStage,
     PC_out=>PC_outMemoryStage,
-    modeMemory=>"00",
+--    modeMemory=>"00",
     --memoryAddress, 
     --memoryWriteValue ,
     --memoryRW ,
-    memoryReadValue=>X"0000",
+--    memoryReadValue=>X"0000",
     input=>resultExecuteStage,
     output=>resultMemoryStage
 );
@@ -264,14 +271,5 @@ writeback : writeBackStage port map(
     doPCWriteBackOut => doPCWriteBackOutWritebackStage, 
     requestReset => requestResetWritebackStage
 );
-
-process(clk)
-begin
-
-    if rising_edge(clk) then
-        
-    end if;
-
-end process;
 
 end Behavioral;

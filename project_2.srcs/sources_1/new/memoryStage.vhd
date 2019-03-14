@@ -37,10 +37,11 @@ entity memoryStage is Port (
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, doPCWriteBackIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut : out std_logic := '0';
-    modeMemory : in std_logic_vector(1 downto 0);
-    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
-    memoryRW : out std_logic;
-    memoryReadValue, PC_In : in std_logic_vector(15 downto 0);
+--    modeMemory : in std_logic_vector(1 downto 0);
+--    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+--    memoryRW : out std_logic;
+--    memoryReadValue, 
+    PC_In : in std_logic_vector(15 downto 0);
     input : in std_logic_vector(15 downto 0);
     output, PC_out : out std_logic_vector(15 downto 0)
 );
@@ -63,10 +64,10 @@ process(clk) begin
         output <= X"0000";
         doWriteBackOut <= '0';
         destRegOut <= "000";
-        memoryAddress <= X"0000"; 
-        memoryWriteValue <= X"0000";
+--        memoryAddress <= X"0000"; 
+--        memoryWriteValue <= X"0000";
         PC_out <= X"0000";
-        memoryRW <= '0';
+--        memoryRW <= '0';
         doPCWriteBackOut <= '0';
     end if;
 end process;

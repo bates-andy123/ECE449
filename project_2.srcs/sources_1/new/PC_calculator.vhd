@@ -35,8 +35,7 @@ use IEEE.STD_LOGIC_SIGNED.ALL;
 entity PC_calculator is Port (
     disp, reg, PC_current: in std_logic_vector(15 downto 0);
     modeBranch : in std_logic_vector(2 downto 0);
-    calcedPC : out std_logic_vector(15 downto 0);
-    clk : in std_logic
+    calcedPC : out std_logic_vector(15 downto 0)
 );
 end PC_calculator;
 
@@ -69,18 +68,6 @@ begin
             output => PC_CounterDispAdder
             --overflow => unaryOverflow
         );
-    
---    process(clk) begin
---        if rising_edge(clk) then
---            case modeBranch is
---                when "000" | "001" | "010" => calcedPC <= (PC_CounterDispAdder);
---                when "011" | "100" | "101" | "110" => calcedPC <= (regDispAdder);
---                when "111" => calcedPC <= reg;
---                when others => null;
---            end case;
---        end if;
-    
---    end process;
 
     with modeBranch select
         calcedPC <=    

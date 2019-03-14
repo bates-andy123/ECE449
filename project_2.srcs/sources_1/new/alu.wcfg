@@ -3,66 +3,29 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="pipeline_TB2_time_synth.wdb" id="1">
+      <db_ref path="fetchStage_TB_time_synth.wdb" id="1">
          <top_modules>
+            <top_module name="fetchStage_TB" />
             <top_module name="glbl" />
-            <top_module name="pipeline_TB2" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="110650850730fs"></ZoomEndTime>
-      <Cursor1Time time="71000000000fs"></Cursor1Time>
+      <ZoomEndTime time="159468941039fs"></ZoomEndTime>
+      <Cursor1Time time="100100000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="149"></NameColumnWidth>
-      <ValueColumnWidth column_width="71"></ValueColumnWidth>
+      <ValueColumnWidth column_width="59"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="11" />
-   <wvobject fp_name="/pipeline_TB2/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
+   <WVObjectSize size="2" />
+   <wvobject fp_name="/fetchStage_TB/instruction" type="array">
+      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/decode/fetchedInstruction" type="array">
-      <obj_property name="ElementShortName">fetchedInstruction[0:0]</obj_property>
-      <obj_property name="ObjectShortName">fetchedInstruction[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/PC_next_reg" type="array">
-      <obj_property name="ElementShortName">PC_next_reg[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_next_reg[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/addrROM" type="array">
-      <obj_property name="ElementShortName">addrROM[2:0]</obj_property>
-      <obj_property name="ObjectShortName">addrROM[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/fetchedInstruction" type="array">
-      <obj_property name="ElementShortName">fetchedInstruction[14:3]</obj_property>
-      <obj_property name="ObjectShortName">fetchedInstruction[14:3]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/douta" type="array">
-      <obj_property name="ElementShortName">douta[14:1]</obj_property>
-      <obj_property name="ObjectShortName">douta[14:1]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/u0/D" type="array">
-      <obj_property name="ElementShortName">D[2:0]</obj_property>
-      <obj_property name="ObjectShortName">D[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/u0/clk_IBUF_BUFG" type="logic">
-      <obj_property name="ElementShortName">clk_IBUF_BUFG</obj_property>
-      <obj_property name="ObjectShortName">clk_IBUF_BUFG</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/u0/douta" type="array">
-      <obj_property name="ElementShortName">douta[7:0]</obj_property>
-      <obj_property name="ObjectShortName">douta[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/u0/rst_IBUF" type="logic">
-      <obj_property name="ElementShortName">rst_IBUF</obj_property>
-      <obj_property name="ObjectShortName">rst_IBUF</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB2/u0/fetch/rst" type="array">
-      <obj_property name="ElementShortName">rst[0:0]</obj_property>
-      <obj_property name="ObjectShortName">rst[0:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+   <wvobject fp_name="/fetchStage_TB/fetch/instruction" type="array">
+      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
    </wvobject>
 </wave_config>

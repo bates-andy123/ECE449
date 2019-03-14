@@ -33,10 +33,9 @@ use IEEE.STD_LOGIC_1164.ALL, xpm.vcomponents.all;
 
 entity ROMController is
 Port (
-  clka, ena, injectdbiterra, injectsbiterra, regcea, rsta, sleep : in std_logic;
+  clka, ena, regcea, rsta : in std_logic;
   addra : in std_logic_vector (7 downto 0);
-  douta : out std_logic_vector (15 downto 0);
-  dbiterra, sbiterra : out std_logic
+  douta : out std_logic_vector (15 downto 0)
 );
 end ROMController;
 
@@ -51,7 +50,7 @@ generic map (
  ADDR_WIDTH_A => 6, -- DECIMAL
  AUTO_SLEEP_TIME => 0, -- DECIMAL
  ECC_MODE => "no_ecc", -- String
- MEMORY_INIT_FILE => "ROM2.mem", -- String
+ MEMORY_INIT_FILE => "ROM3.mem", -- String
  MEMORY_INIT_PARAM => "0", -- String
  MEMORY_OPTIMIZATION => "true", -- String
  MEMORY_PRIMITIVE => "auto", -- String
@@ -78,7 +77,7 @@ port map (
  rsta => rsta, -- 1-bit input: Reset signal for the final port A output register
  -- stage. Synchronously resets output port douta to the value specified
  -- by parameter READ_RESET_VALUE_A.
- sleep => sleep -- 1-bit input: sleep signal to enable the dynamic power saving feature.
+ sleep => '0' -- 1-bit input: sleep signal to enable the dynamic power saving feature.
 );
 -- End of xpm_memory_sprom_inst instantiation
 
