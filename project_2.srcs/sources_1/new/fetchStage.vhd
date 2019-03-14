@@ -68,7 +68,7 @@ u0 : ROMController port map(
     injectdbiterra=>'0', 
     injectsbiterra=>'0', 
     regcea=>'1', 
-    rsta=>rst, 
+    rsta=>'0', 
     sleep=>'0',
     addra=>addrROM,
     douta=>doutROM

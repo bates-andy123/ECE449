@@ -46,6 +46,8 @@ signal clk, rst : std_logic := '0';
 signal output : std_logic_vector(15 downto 0);
 signal input : std_logic_vector(15 downto 0) := X"C0A0";
 
+
+
 begin
 
 u0 : pipeline port map(
