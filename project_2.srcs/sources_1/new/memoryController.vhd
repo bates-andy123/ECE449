@@ -85,14 +85,14 @@ signal outbContentRAM, outContentROM : std_logic_vector(15 downto 0);
 
 begin
 
---readOnlyAddressShifted <= "0" & readOnlyAddress(15 downto 1);
---addressARAMShifted <= "0" & addressARAM(15 downto 1);
+readOnlyAddressShifted <= "0" & readOnlyAddress(15 downto 1);
+addressARAMShifted <= "0" & addressARAM(15 downto 1);
 
 u0 : RAMController port map(
     douta => outaContentRAM, 
     doutb => outbContentRAM, 
-    addra => addressARAM, 
-    addrb => readOnlyAddress, 
+    addra => addressARAMShifted, 
+    addrb => readOnlyAddressShifted, 
     dina => writeContentRAM,
     wea => weaRAM, 
     clka => clk, 
@@ -106,7 +106,7 @@ u0 : RAMController port map(
 
 u1 : ROMController port map(
     douta => outContentROM, 
-    addra => readOnlyAddress(7 downto 0), 
+    addra => readOnlyAddressShifted(7 downto 0), 
     clka => clk, ena => '1', 
     rsta => rstaROM
 );

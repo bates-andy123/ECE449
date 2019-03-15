@@ -44,30 +44,15 @@ end fetchStage;
 
 architecture Behavioral of fetchStage is
 
-component ROMController port(
-    clka, ena, rsta : in std_logic;
-    addra : in std_logic_vector (7 downto 0);
-    douta : out std_logic_vector (15 downto 0)
-);
-end component;
-
 signal addrROM : std_logic_vector (7 downto 0) := X"00";
 signal doutROM : std_logic_vector (15 downto 0);
 
-signal PC_next : std_logic_vector(15 downto 0) := X"0001";
+signal PC_next : std_logic_vector(15 downto 0) := X"0002";
 signal PC_current : std_logic_vector(15 downto 0) := X"0000";
 
 signal PC_JustDidJump : std_logic := '0';
 
 begin
-
-ROM : ROMController port map(
-    clka=>clk,
-    ena=>'1',  
-    rsta=>'0', 
-    addra=>addrROM,
-    douta=>doutROM
-);
 
 fetchAddress <= PC_current;
 
@@ -83,16 +68,16 @@ begin
             if(halt = '0') then
 
                 if (PC_doJump = '0' and PC_JustDidJump='0') then -- normal increment mode
-                    addrROM <= PC_next(7 downto 0);
+                    --addrROM <= PC_next(7 downto 0);
                     --instruction_out <= doutROM;
                     --instruction_out <= instruction_in;
                     PC_current <= PC_next;
-                    PC_next <= std_logic_vector(unsigned(PC_next) + 1);
+                    PC_next <= std_logic_vector(unsigned(PC_next) + 2);
                     PC_out <= PC_current;                
                 else
                     --instruction_out <= X"0000";
                     PC_current <= PC_set;
-                    PC_next <= std_logic_vector(unsigned(PC_set) + 1);
+                    PC_next <= std_logic_vector(unsigned(PC_set) + 2);
                     addrROM <= PC_set(7 downto 0);
                     PC_out <=  PC_set;
                 end if;

@@ -153,7 +153,7 @@ process(clk) begin
                         PC_out <= resultCalcedPC;
                         destRegOut <= "111";
                         doWriteBackOut <= '1';
-                        result <= std_logic_vector(unsigned(PC_in) + 1);
+                        result <= std_logic_vector(unsigned(PC_in) + 2);
                     when "111" =>
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= operand2;
