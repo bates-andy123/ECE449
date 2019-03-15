@@ -116,14 +116,15 @@ registers : register_file port map(
 
     with instruction(15 downto 9) select
         rd_index1 <= 
-            instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op | load | store | mov,
+            instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op | load | mov | store,
             instruction(8 downto 6) when shl_op | shr_op | test_op | out_op,
             "000" when others;
             
     with instruction(15 downto 9) select
         rd_index2 <= 
             instruction(2 downto 0) when add_op | sub_op | mul_op | nand_op,
-            instruction(8 downto 6) when br | br_neg | br_zero | br_sub,
+            --instruction(5 downto 3) when ,
+            instruction(8 downto 6) when br | br_neg | br_zero | br_sub | store,
             "111" when rtn | load_imm,
             "000" when others;
             
@@ -139,7 +140,7 @@ registers : register_file port map(
             
      with instruction(15 downto 9) select
         destReg <=
-            instruction(8 downto 6) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op | load | store | mov,
+            instruction(8 downto 6) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op | load | mov,
             "UUU" when others;
             
     with instruction(15 downto 9) select
@@ -155,7 +156,7 @@ registers : register_file port map(
        
     with instruction(15 downto 9) select
         operand2 <=
-            rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub | rtn | load_imm,
+            rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub | rtn | load_imm | store,
             X"000" & instruction(3 downto 0) when shl_op | shr_op ,
             PC_in when brr | brr_neg | brr_zero,
             X"0000" when others;   

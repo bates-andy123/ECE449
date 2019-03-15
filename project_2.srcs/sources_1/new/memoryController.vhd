@@ -45,7 +45,7 @@ Port (
     addressARAM : in std_logic_vector(15 downto 0); -- Address to read/write from in RAM port A
     writeContentRAM : in std_logic_vector(15 downto 0); -- Content to write to RAM port A
     outaContentRAM : out std_logic_vector(15 downto 0); -- Content read from port A of RAM
-    weaRAM : in std_logic_vector(0 downto 0); -- Write enable vector for port A in RAM
+    weaRAM : in std_logic; -- Write enable vector for port A in RAM
     rstaRAM : in std_logic; -- Reset signal for port A in RAM
     rstbRAM : in std_logic; -- Reset signal for port B in RAM
     regceaRAM : in std_logic; -- Clock enable for last register stage on output data path
@@ -82,11 +82,14 @@ signal readOnlyAddressShifted, addressARAMShifted : std_logic_vector(15 downto 0
 
 -- Signal declarations
 signal outbContentRAM, outContentROM : std_logic_vector(15 downto 0);
+signal weaRAMVector : std_logic_vector(0 downto 0);
 
 begin
 
 readOnlyAddressShifted <= "0" & readOnlyAddress(15 downto 1);
 addressARAMShifted <= "0" & addressARAM(15 downto 1);
+
+weaRAMVector <= ("" & weaRAM);
 
 u0 : RAMController port map(
     douta => outaContentRAM, 
@@ -94,7 +97,7 @@ u0 : RAMController port map(
     addra => addressARAMShifted, 
     addrb => readOnlyAddressShifted, 
     dina => writeContentRAM,
-    wea => weaRAM, 
+    wea => weaRAMVector, 
     clka => clk, 
     ena => '1', 
     enb => '1', 

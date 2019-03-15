@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="855207262927fs"></ZoomStartTime>
-      <ZoomEndTime time="909078547415fs"></ZoomEndTime>
-      <Cursor1Time time="875220696000fs"></Cursor1Time>
+      <ZoomStartTime time="40022983000fs"></ZoomStartTime>
+      <ZoomEndTime time="108295189716fs"></ZoomEndTime>
+      <Cursor1Time time="100100000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="180"></NameColumnWidth>
+      <NameColumnWidth column_width="172"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="34" />
+   <WVObjectSize size="14" />
    <wvobject fp_name="/pipeline_TB3/u0/fetch/instruction_out" type="array">
       <obj_property name="ElementShortName">instruction_out[15:0]</obj_property>
       <obj_property name="ObjectShortName">instruction_out[15:0]</obj_property>
@@ -56,46 +56,6 @@
       <obj_property name="ElementShortName">[7][15:0]</obj_property>
       <obj_property name="ObjectShortName">[7][15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/PC_out" type="array">
-      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/PC_next" type="array">
-      <obj_property name="ElementShortName">PC_next[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_next[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/PC_current" type="array">
-      <obj_property name="ElementShortName">PC_current[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_current[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/fetchAddress" type="array">
-      <obj_property name="ElementShortName">fetchAddress[15:0]</obj_property>
-      <obj_property name="ObjectShortName">fetchAddress[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/instruction_in" type="array">
-      <obj_property name="ElementShortName">instruction_in[15:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction_in[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/outputOnReadOnlyChannel" type="array">
-      <obj_property name="ElementShortName">outputOnReadOnlyChannel[15:0]</obj_property>
-      <obj_property name="ObjectShortName">outputOnReadOnlyChannel[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/u1/douta" type="array">
-      <obj_property name="ElementShortName">douta[15:0]</obj_property>
-      <obj_property name="ObjectShortName">douta[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/inputOut" type="array">
-      <obj_property name="ElementShortName">inputOut[15:0]</obj_property>
-      <obj_property name="ObjectShortName">inputOut[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/writeback/doBranchReset" type="logic">
-      <obj_property name="ElementShortName">doBranchReset</obj_property>
-      <obj_property name="ObjectShortName">doBranchReset</obj_property>
-   </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/execute/result" type="array">
       <obj_property name="ElementShortName">result[15:0]</obj_property>
       <obj_property name="ObjectShortName">result[15:0]</obj_property>
@@ -108,52 +68,12 @@
       <obj_property name="ElementShortName">doWriteBackOut</obj_property>
       <obj_property name="ObjectShortName">doWriteBackOut</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/writeback/doPCWriteBackOut" type="logic">
-      <obj_property name="ElementShortName">doPCWriteBackOut</obj_property>
-      <obj_property name="ObjectShortName">doPCWriteBackOut</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/modeMemory" type="array">
+      <obj_property name="ElementShortName">modeMemory[1:0]</obj_property>
+      <obj_property name="ObjectShortName">modeMemory[1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/writeback/PC_out" type="array">
-      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/resultCalcedPC" type="array">
-      <obj_property name="ElementShortName">resultCalcedPC[15:0]</obj_property>
-      <obj_property name="ObjectShortName">resultCalcedPC[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_out" type="array">
-      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/doPCWriteBack" type="logic">
-      <obj_property name="ElementShortName">doPCWriteBack</obj_property>
-      <obj_property name="ObjectShortName">doPCWriteBack</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/dispShifted" type="array">
-      <obj_property name="ElementShortName">dispShifted[15:0]</obj_property>
-      <obj_property name="ObjectShortName">dispShifted[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/disp" type="array">
-      <obj_property name="ElementShortName">disp[15:0]</obj_property>
-      <obj_property name="ObjectShortName">disp[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/reg" type="array">
-      <obj_property name="ElementShortName">reg[15:0]</obj_property>
-      <obj_property name="ObjectShortName">reg[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/PC_current" type="array">
-      <obj_property name="ElementShortName">PC_current[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_current[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/modeBranch" type="array">
-      <obj_property name="ElementShortName">modeBranch[2:0]</obj_property>
-      <obj_property name="ObjectShortName">modeBranch[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/regDispAdder" type="array">
-      <obj_property name="ElementShortName">regDispAdder[15:0]</obj_property>
-      <obj_property name="ObjectShortName">regDispAdder[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/PC_CounterDispAdder" type="array">
-      <obj_property name="ElementShortName">PC_CounterDispAdder[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_CounterDispAdder[15:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/doMemoryAccess" type="logic">
+      <obj_property name="ElementShortName">doMemoryAccess</obj_property>
+      <obj_property name="ObjectShortName">doMemoryAccess</obj_property>
    </wvobject>
 </wave_config>

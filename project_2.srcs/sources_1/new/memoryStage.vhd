@@ -38,10 +38,10 @@ entity memoryStage is Port (
     doWriteBackIn, doPCWriteBackIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut : out std_logic := '0';  
     modeMemory : in std_logic_vector(1 downto 0);
---    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
---    memoryRW : out std_logic;
---    memoryReadValue, 
-    PC_In : in std_logic_vector(15 downto 0);
+    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+    memoryRW : out std_logic;
+    memoryReadValue : in std_logic_vector(15 downto 0);
+    PC_In, memoryAddressFromExecuteStage : in std_logic_vector(15 downto 0);
     input : in std_logic_vector(15 downto 0);
     output, PC_out : out std_logic_vector(15 downto 0)
 );
@@ -59,6 +59,18 @@ process(clk) begin
             doWriteBackOut <= doWriteBackIn;
             PC_out <= PC_in;
             doPCWriteBackOut <= doPCWriteBackIn;
+            
+            if(doMemoryAccess = '1') then
+                if(modeMemory = "00") then
+                
+                elsif(modeMemory = "01") then
+                   memoryRW <= '1';
+                   memoryAddress <= input;
+                   memoryWriteValue <= input;
+                end if;
+            else 
+                memoryRW <= '0'; 
+            end if;
         end if;
     else -- rst is currently active
         output <= X"0000";

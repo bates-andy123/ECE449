@@ -49,7 +49,7 @@ entity executeStage is Port(
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
     modeMemory : out std_logic_vector(1 downto 0) := "00";
     PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
-    PC_out : out std_logic_vector(15 downto 0) := X"0000"
+    PC_out, memoryAddress : out std_logic_vector(15 downto 0) := X"0000"
 );
 end executeStage;
 
@@ -164,6 +164,7 @@ process(clk) begin
                 doPCWriteBack <= '0';
                 PC_out <= PC_in;
             end if;
+            
             if useALU = '1' then 
                 result <= resultALU;
                 destRegOut <= destRegIn;
@@ -183,11 +184,17 @@ process(clk) begin
                 doMemoryAccess <= '1';
 
                 case modeALU(1 downto 0) is
-                    when "00" => 
+                    when "00" => -- load
                         modeMemory<="00";
-                    when "01" => 
+                        doWriteBackOut <= '1';
+                        memoryAddress <= operand1Buffer;
+                        destRegOut <= destRegIn;
+                    when "01" => -- store
                         modeMemory<="01";
-                    when "10" =>
+                        result <= operand2Buffer;
+                        memoryAddress <= operand1Buffer;
+                        doWriteBackOut <= '0';
+                    when "10" => -- load_imm
                         modeMemory<="10";
                         destRegOut <= "111";
                         doWriteBackOut<='1';
@@ -196,13 +203,14 @@ process(clk) begin
                         else 
                             result <= (operand2Buffer(15 downto 8) & operand1(7 downto 0));
                         end if;
-                    when "11" =>
+                    when "11" => -- mov
                         modeMemory<="11";
                         destRegOut <= destRegIn;
                         result <= operand1Buffer;
                         doWriteBackOut<='1';
                     when others =>
                         doMemoryAccess <= '0';
+                        doWriteBackOut <= '0';
                   end case;
             else
                 doMemoryAccess <= '0';

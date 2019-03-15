@@ -82,7 +82,7 @@ component executeStage port(
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn : in std_logic;
     doWriteBackOut, doPCWriteBack, doMemoryAccess : out std_logic;
-    result : out std_logic_vector(15 downto 0);
+    result, memoryAddress : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
     modeMemory : out std_logic_vector(1 downto 0);
     PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
@@ -97,11 +97,11 @@ component memoryStage Port (
     doWriteBackIn, doPCWriteBackIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut : out std_logic;
     modeMemory : in std_logic_vector(1 downto 0);
---    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
---    memoryRW : out std_logic;
---    memoryReadValue, 
+    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+    memoryRW : out std_logic;
+    memoryReadValue : in std_logic_vector(15 downto 0);
     PC_In : in std_logic_vector(15 downto 0);
-    input : in std_logic_vector(15 downto 0);
+    input, memoryAddressFromExecuteStage : in std_logic_vector(15 downto 0);
     output, PC_out : out std_logic_vector(15 downto 0)
 );
 end component;
@@ -129,7 +129,7 @@ component memoryController Port (
     addressARAM : in std_logic_vector(15 downto 0); -- Address to read/write from in RAM port A
     writeContentRAM : in std_logic_vector(15 downto 0); -- Content to write to RAM port A
     outaContentRAM : out std_logic_vector(15 downto 0); -- Content read from port A of RAM
-    weaRAM : in std_logic_vector(0 downto 0); -- Write enable vector for port A in RAM
+    weaRAM : in std_logic; -- Write enable vector for port A in RAM
     rstaRAM : in std_logic; -- Reset signal for port A in RAM
     rstbRAM : in std_logic; -- Reset signal for port B in RAM
     regceaRAM : in std_logic; -- Clock enable for last register stage on output data path
@@ -169,6 +169,9 @@ signal PC_outExecuteStage : std_logic_vector(15 downto 0);
 signal doPCWriteBackExecuteStage : std_logic;
 signal modeMemoryExecuteStage : std_logic_vector(1 downto 0);
 signal resetExecuteStage, doMemoryAccessExecuteStage : std_logic;
+signal memoryAddress, memoryWriteValue, memoryAddressExecuteStage :  std_logic_vector(15 downto 0);
+signal memoryRW : std_logic;
+signal memoryReadValue : std_logic_vector(15 downto 0);
 
 signal doWriteBackOutputMemoryStage : std_logic := '0';
 signal writeBackRegOutputMemoryStage : std_logic_vector(2 downto 0);
@@ -181,6 +184,8 @@ signal doBranchResetWritebackStage : std_logic;
 signal doPCWriteBackOutWritebackStage : std_logic;
 signal PC_outWritebackStage : std_logic_vector(15 downto 0);
 signal resetWritebackStage : std_logic;
+
+
 
 begin
 
@@ -256,6 +261,7 @@ execute : executeStage port map(
     useWritebackDestValue=>doWriteBackOutputMemoryStage,
     result=>resultExecuteStage,
     modeMemory=>modeMemoryExecuteStage,
+    memoryAddress=>memoryAddressExecuteStage,
     --outputCPU=>output,
     doPCWriteBack=>doPCWriteBackExecuteStage,
     PC_in => PC_outDecodeStage,
@@ -278,11 +284,12 @@ memory : memoryStage Port map(
     doPCWriteBackOut=>doPCWriteBackMemoryStage,
     PC_In=>PC_outExecuteStage,
     PC_out=>PC_outMemoryStage,
+    memoryAddressFromExecuteStage=>memoryAddressExecuteStage,
     modeMemory=>modeMemoryExecuteStage,
-    --memoryAddress, 
-    --memoryWriteValue ,
-    --memoryRW ,
---    memoryReadValue=>X"0000",
+    memoryAddress=>memoryAddress, 
+    memoryWriteValue=>memoryWriteValue,
+    memoryRW=>memoryRW,
+    memoryReadValue=>memoryReadValue,
     input=>resultExecuteStage,
     output=>resultMemoryStage
 );
@@ -309,10 +316,10 @@ memCtrl : memoryController port map(
     clk=>clk,
     readOnlyAddress=>fetchAddressFetchStage,
     outputOnReadOnlyChannel=>instruction_inFetchStage,
-    addressARAM=>X"0000",
-    writeContentRAM=>X"0000",
-    --outaContentRAM=>outaContentRAMOut,
-    weaRAM=>"0",
+    addressARAM=>memoryAddress,
+    writeContentRAM=>memoryWriteValue,
+    outaContentRAM=>memoryReadValue,
+    weaRAM=>memoryRW,
     rstaRAM=>'0',
     rstbRAM=>'0',
     regceaRAM=>'1',
