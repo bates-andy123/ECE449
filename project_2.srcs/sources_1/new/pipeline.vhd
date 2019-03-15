@@ -43,9 +43,9 @@ architecture Behavioral of pipeline is
 
 component fetchStage port(
     clk, rst, halt : in std_logic;
-    instruction, PC_out: out std_logic_vector(15 downto 0);
-    inputIn: in std_logic_vector(15 downto 0);
-    InputOut: out std_logic_vector(15 downto 0);
+    instruction_out, PC_out: out std_logic_vector(15 downto 0);
+    inputIn, instruction_in: in std_logic_vector(15 downto 0);
+    InputOut, fetchAddress: out std_logic_vector(15 downto 0);
     PC_set : in std_logic_vector(15 downto 0);
     PC_doJump : in std_logic
 );
@@ -110,16 +110,40 @@ component writeBackStage port (
     inDoWriteBack, doPCWriteBackIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
     inWriteBackValue, PC_in : in std_logic_vector(15 downto 0);
-    outDoWriteBack, doPCWriteBackOut, requestReset : out std_logic;
+    outDoWriteBack, doPCWriteBackOut, doBranchReset : out std_logic;
     outDestRegister : out std_logic_vector(2 downto 0);
     outWriteBackValue, PC_out : out std_logic_vector(15 downto 0)
+);
+end component;
+
+component memoryController Port (
+    -- Clock flag
+    clk : in std_logic; -- Clk flag
+    
+    -- Port information shared between RAM and ROM
+    readOnlyAddress : in std_logic_vector(15 downto 0); -- Address to either read from RAM port B or ROM
+    outputOnReadOnlyChannel : out std_logic_vector(15 downto 0) := X"0000";
+    
+    -- Port information relating to RAM controller
+    addressARAM : in std_logic_vector(15 downto 0); -- Address to read/write from in RAM port A
+    writeContentRAM : in std_logic_vector(15 downto 0); -- Content to write to RAM port A
+    outaContentRAM : out std_logic_vector(15 downto 0); -- Content read from port A of RAM
+    weaRAM : in std_logic_vector(0 downto 0); -- Write enable vector for port A in RAM
+    rstaRAM : in std_logic; -- Reset signal for port A in RAM
+    rstbRAM : in std_logic; -- Reset signal for port B in RAM
+    regceaRAM : in std_logic; -- Clock enable for last register stage on output data path
+    
+    -- Port information relating to ROM controller
+    rstaROM : in std_logic
 );
 end component;
 
 signal fetchedInstruction: std_logic_vector(15 downto 0);
 signal inputOutputFetchStage : std_logic_vector(15 downto 0);
 signal PC_outFetchStage : std_logic_vector(15 downto 0);
+signal fetchAddressFetchStage : std_logic_vector(15 downto 0);
 signal resetFetchStage : std_logic;
+signal instruction_inFetchStage : std_logic_vector(15 downto 0);
 
 signal doWriteBack : std_logic;
 signal useALU, useBranch : std_logic := '0';
@@ -151,7 +175,7 @@ signal PC_outMemoryStage : std_logic_vector(15 downto 0);
 signal doPCWriteBackMemoryStage : std_logic; 
 signal resetMemoryStage : std_logic;
 
-signal requestResetWritebackStage : std_logic;
+signal doBranchResetWritebackStage : std_logic;
 signal doPCWriteBackOutWritebackStage : std_logic;
 signal PC_outWritebackStage : std_logic_vector(15 downto 0);
 signal resetWritebackStage : std_logic;
@@ -163,7 +187,9 @@ fetch : fetchStage port map(
     PC_out=>PC_outFetchStage,
     halt=>haltSig,
     rst=>rst,
-    instruction=>fetchedInstruction,
+    fetchAddress=>fetchAddressFetchStage,
+    instruction_in=>instruction_inFetchStage,
+    instruction_out=>fetchedInstruction,
     --instruction=>output, Was only for testing purposes
     inputIn=>input,
     inputOut=>inputOutputFetchStage,
@@ -199,7 +225,7 @@ decode : decodeStage port map(
     inputIn=>inputOutputFetchStage
 );
 
-resetExecuteStage <= (rst or requestResetWritebackStage);
+resetExecuteStage <= (rst or doBranchResetWritebackStage);
 
 execute : executeStage port map(
     clk=>clk,
@@ -232,7 +258,7 @@ execute : executeStage port map(
 
 output <= operand1;
 
-resetMemoryStage <= (requestResetWritebackStage or rst);
+resetMemoryStage <= (doBranchResetWritebackStage or rst);
 
 memory : memoryStage Port map(
     clk=>clk, 
@@ -254,7 +280,7 @@ memory : memoryStage Port map(
     output=>resultMemoryStage
 );
 
-resetWritebackStage <= (rst or requestResetWritebackStage);
+resetWritebackStage <= (rst or doBranchResetWritebackStage);
 
 writeback : writeBackStage port map( 
     clk=>clk,
@@ -269,7 +295,21 @@ writeback : writeBackStage port map(
     PC_out => PC_outWritebackStage,
     doPCWriteBackIn => doPCWriteBackMemoryStage,
     doPCWriteBackOut => doPCWriteBackOutWritebackStage, 
-    requestReset => requestResetWritebackStage
+    doBranchReset => doBranchResetWritebackStage
+);
+
+memCtrl : memoryController port map(
+    clk=>clk,
+    readOnlyAddress=>fetchAddressFetchStage,
+    outputOnReadOnlyChannel=>instruction_inFetchStage,
+    addressARAM=>X"0000",
+    writeContentRAM=>X"0000",
+    --outaContentRAM=>outaContentRAMOut,
+    weaRAM=>"0",
+    rstaRAM=>'0',
+    rstbRAM=>'0',
+    regceaRAM=>'1',
+    rstaROM=>'0'
 );
 
 end Behavioral;

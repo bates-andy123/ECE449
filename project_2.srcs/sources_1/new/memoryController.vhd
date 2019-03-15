@@ -51,8 +51,7 @@ Port (
     regceaRAM : in std_logic; -- Clock enable for last register stage on output data path
     
     -- Port information relating to ROM controller
-    rstaROM : in std_logic; -- Reset signal for ROM
-    sleepROM : in std_logic -- Sleep signal to enable dynamic power saving
+    rstaROM : in std_logic -- Reset signal for ROM
 );
 end memoryController;
 
@@ -73,23 +72,48 @@ end component;
 
 -- Component declaration for ROM module
 component ROMController Port (
-    addra : in std_logic_vector (15 downto 0);
-    douta : out std_logic_vector (15 downto 0);
-    clka, ena, rsta, sleep : in std_logic);
+    clka, ena, rsta : in std_logic;
+    addra : in std_logic_vector (7 downto 0);
+    douta : out std_logic_vector (15 downto 0)
+);
 end component;
+
+signal readOnlyAddressShifted, addressARAMShifted : std_logic_vector(15 downto 0);
 
 -- Signal declarations
 signal outbContentRAM, outContentROM : std_logic_vector(15 downto 0);
 
 begin
 
-u0 : RAMController port map(douta => outaContentRAM, doutb => outbContentRAM, addra => addressARAM, addrb => readOnlyAddress, dina => writeContentRAM,
-                    wea => weaRAM, clka => clk, ena => '1', enb => '1', regcea => regceaRAM, regceb => '1', rsta => rstaRAM, rstb => rstbRAM);
-u1 : ROMController port map(douta => outContentROM, addra => readOnlyAddress, clka => clk, ena => '1', rsta => rstaROM, sleep => '0');
+--readOnlyAddressShifted <= "0" & readOnlyAddress(15 downto 1);
+--addressARAMShifted <= "0" & addressARAM(15 downto 1);
+
+u0 : RAMController port map(
+    douta => outaContentRAM, 
+    doutb => outbContentRAM, 
+    addra => addressARAM, 
+    addrb => readOnlyAddress, 
+    dina => writeContentRAM,
+    wea => weaRAM, 
+    clka => clk, 
+    ena => '1', 
+    enb => '1', 
+    regcea => regceaRAM, 
+    regceb => '1', 
+    rsta => rstaRAM, 
+    rstb => rstbRAM
+);
+
+u1 : ROMController port map(
+    douta => outContentROM, 
+    addra => readOnlyAddress(7 downto 0), 
+    clka => clk, ena => '1', 
+    rsta => rstaROM
+);
 
 process(clk)
 begin
-    if rising_edge(clk) then
+    if falling_edge(clk) then
         if (readOnlyAddress(10) = '1') then 
             outputOnReadOnlyChannel <= outbContentRAM;
         else

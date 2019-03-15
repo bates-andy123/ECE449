@@ -31,13 +31,11 @@ use IEEE.STD_LOGIC_1164.ALL, xpm.vcomponents.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity ROMController is
-Port (
-  clka, ena, regcea, rsta : in std_logic;
+entity ROMController is Port (
+  clka, ena, rsta : in std_logic;
   addra : in std_logic_vector (7 downto 0);
   douta : out std_logic_vector (15 downto 0)
 );
-
 end ROMController;
 
 architecture Behavioral of ROMController is
@@ -75,7 +73,7 @@ port map (
  -- cycles when read operations are initiated. Pipelined internally.
  injectdbiterra => '0', -- 1-bit input: Do not change from the provided value.
  injectsbiterra => '0', -- 1-bit input: Do not change from the provided value.
- regcea => regcea, -- 1-bit input: Do not change from the provided value.
+ regcea => '1', -- 1-bit input: Do not change from the provided value.
  rsta => rsta, -- 1-bit input: Reset signal for the final port A output register
  -- stage. Synchronously resets output port douta to the value specified
  -- by parameter READ_RESET_VALUE_A.

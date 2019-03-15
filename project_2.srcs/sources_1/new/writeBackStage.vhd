@@ -36,7 +36,7 @@ entity writeBackStage is Port (
     inDoWriteBack, doPCWriteBackIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
     inWriteBackValue, PC_in : in std_logic_vector(15 downto 0);
-    outDoWriteBack, doPCWriteBackOut, requestReset : out std_logic := '0';
+    outDoWriteBack, doPCWriteBackOut, doBranchReset : out std_logic := '0';
     outDestRegister : out std_logic_vector(2 downto 0) := "000";
     outWriteBackValue, PC_out : out std_logic_vector(15 downto 0) := X"0000"
 );
@@ -58,14 +58,14 @@ process(clk) begin
             outWriteBackValue<=inWriteBackValue;
             PC_out<=PC_in;
             doPCWriteBackOut<=doPCWriteBackIn;
-            requestReset<=doPCWriteBackIn;
+            doBranchReset<=doPCWriteBackIn;
         else
             outDoWriteBack<='0';
             outDestRegister<="000";
             outWriteBackValue<=X"0000";
             PC_out<=X"0000";
             doPCWriteBackOut<='0';
-            requestReset<='0';
+            doBranchReset<='0';
         end if;
     end if;
 end process;

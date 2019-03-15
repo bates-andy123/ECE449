@@ -37,10 +37,9 @@ entity ROMController_TB is end ROMController_TB;
 architecture Behavioral of ROMController_TB is
 
 component ROMController port(
-    clka, ena, injectdbiterra, injectsbiterra, regcea, rsta, sleep : in std_logic;
-    addra : in std_logic_vector (7 downto 0);
-    douta : out std_logic_vector (15 downto 0);
-    dbiterra, sbiterra : out std_logic
+  clka, ena, rsta : in std_logic;
+  addra : in std_logic_vector (7 downto 0);
+  douta : out std_logic_vector (15 downto 0)
 );
 end component;
 
@@ -52,12 +51,8 @@ begin
 
 u0 : ROMController port map(
     clka=>clk,
-    ena=>'1', 
-    injectdbiterra=>'0', 
-    injectsbiterra=>'0', 
-    regcea=>'1', 
+    ena=>'1',  
     rsta=>'0', 
-    sleep=>'0',
     addra=>addrROM,
     douta=>doutROM
 );
@@ -73,7 +68,7 @@ end process;
 p1 : process(clk)
     variable addr : integer range 0 to 15 := 0; 
 begin 
-    if falling_edge(clk) then
+    if rising_edge(clk) then
         addr := addr + 1;
         addrROM <= std_logic_vector(to_unsigned(addr, addrROM'length));
     end if;
