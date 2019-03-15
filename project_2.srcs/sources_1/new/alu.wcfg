@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="76075183000fs"></ZoomStartTime>
-      <ZoomEndTime time="124423046841fs"></ZoomEndTime>
-      <Cursor1Time time="95880332000fs"></Cursor1Time>
+      <ZoomStartTime time="855207262927fs"></ZoomStartTime>
+      <ZoomEndTime time="909078547415fs"></ZoomEndTime>
+      <Cursor1Time time="875220696000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="184"></NameColumnWidth>
+      <NameColumnWidth column_width="180"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="31" />
+   <WVObjectSize size="34" />
    <wvobject fp_name="/pipeline_TB3/u0/fetch/instruction_out" type="array">
       <obj_property name="ElementShortName">instruction_out[15:0]</obj_property>
       <obj_property name="ObjectShortName">instruction_out[15:0]</obj_property>
@@ -120,6 +120,10 @@
       <obj_property name="ElementShortName">resultCalcedPC[15:0]</obj_property>
       <obj_property name="ObjectShortName">resultCalcedPC[15:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/execute/doPCWriteBack" type="logic">
       <obj_property name="ElementShortName">doPCWriteBack</obj_property>
       <obj_property name="ObjectShortName">doPCWriteBack</obj_property>
@@ -143,5 +147,13 @@
    <wvobject fp_name="/pipeline_TB3/u0/execute/u2/modeBranch" type="array">
       <obj_property name="ElementShortName">modeBranch[2:0]</obj_property>
       <obj_property name="ObjectShortName">modeBranch[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/regDispAdder" type="array">
+      <obj_property name="ElementShortName">regDispAdder[15:0]</obj_property>
+      <obj_property name="ObjectShortName">regDispAdder[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/PC_CounterDispAdder" type="array">
+      <obj_property name="ElementShortName">PC_CounterDispAdder[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_CounterDispAdder[15:0]</obj_property>
    </wvobject>
 </wave_config>

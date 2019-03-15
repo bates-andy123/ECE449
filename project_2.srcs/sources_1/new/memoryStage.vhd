@@ -32,12 +32,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity memoryStage is Port (
-    clk, rst : in std_logic;
+    clk, rst, doMemoryAccess : in std_logic;
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, doPCWriteBackIn : in std_logic;
-    doWriteBackOut, doPCWriteBackOut : out std_logic := '0';
---    modeMemory : in std_logic_vector(1 downto 0);
+    doWriteBackOut, doPCWriteBackOut : out std_logic := '0';  
+    modeMemory : in std_logic_vector(1 downto 0);
 --    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
 --    memoryRW : out std_logic;
 --    memoryReadValue, 

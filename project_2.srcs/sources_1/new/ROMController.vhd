@@ -50,7 +50,7 @@ generic map (
  ADDR_WIDTH_A => 6, -- DECIMAL
  AUTO_SLEEP_TIME => 0, -- DECIMAL
  ECC_MODE => "no_ecc", -- String
- MEMORY_INIT_FILE => "ROM3.mem", -- String
+ MEMORY_INIT_FILE => "ROM4.mem", -- String
  MEMORY_INIT_PARAM => "0", -- String
  MEMORY_OPTIMIZATION => "true", -- String
  MEMORY_PRIMITIVE => "auto", -- String
