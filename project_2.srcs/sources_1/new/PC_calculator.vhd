@@ -42,7 +42,7 @@ end PC_calculator;
 architecture Behavioral of PC_calculator is
 
 -- Component declaration for unary operator
-component unary port(
+component addSub port(
     in1 : in std_logic_vector(15 downto 0);
     in2 : in std_logic_vector(15 downto 0);
     operation : in std_logic_vector(2 downto 0);
@@ -51,18 +51,21 @@ component unary port(
 end component;
 
 signal regDispAdder, PC_CounterDispAdder : std_logic_vector(15 downto 0);
+signal dispShifted : std_logic_vector(15 downto 0) := X"0000"; 
 
 begin
 
-    adder1 : unary port map(
-        in1 => disp, 
+    dispShifted <=  disp(14 downto 0) & "0";
+
+    adder1 : addSub port map(
+        in1 => dispShifted, 
         in2 => reg, 
         operation => "001", 
         output => regDispAdder
         --overflow => unaryOverflow
     );
-    adder2 : unary port map(
-            in1 => disp, 
+    adder2 : addSub port map(
+            in1 => dispShifted, 
             in2 => PC_current, 
             operation => "001", 
             output => PC_CounterDispAdder

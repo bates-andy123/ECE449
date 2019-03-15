@@ -35,7 +35,7 @@ use ieee.numeric_std.all;
 entity executeStage is Port(
     clk, rst : in std_logic;
     useALU, useBranch : in std_logic;
-    useIO : in std_logic;
+    useIO, useLS : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
@@ -43,12 +43,13 @@ entity executeStage is Port(
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
-    doWriteBackOut : out std_logic := '0';
+    doWriteBackOut, doMemoryAccess : out std_logic := '0';
     doPCWriteBack : out std_logic := '0';
     result : out std_logic_vector(15 downto 0) := X"0000";
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
+    modeMemory : out std_logic_vector(1 downto 0) := "00";
     PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
-    PC_out : out std_logic_vector(15 downto 0) := X"0000"
+    PC_out, memoryAddress : out std_logic_vector(15 downto 0) := X"0000"
 );
 end executeStage;
 
@@ -153,7 +154,7 @@ process(clk) begin
                         PC_out <= resultCalcedPC;
                         destRegOut <= "111";
                         doWriteBackOut <= '1';
-                        result <= std_logic_vector(unsigned(PC_in) + 1);
+                        result <= std_logic_vector(unsigned(PC_in) + 2);
                     when "111" =>
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= operand2;
@@ -163,6 +164,7 @@ process(clk) begin
                 doPCWriteBack <= '0';
                 PC_out <= PC_in;
             end if;
+            
             if useALU = '1' then 
                 result <= resultALU;
                 destRegOut <= destRegIn;
@@ -175,8 +177,43 @@ process(clk) begin
                 else
                     outputCPU <= operand1;
                 end if;
-            else -- useBranch
-                
+            else
+            end if;
+            
+            if useLS = '1' then 
+                doMemoryAccess <= '1';
+
+                case modeALU(1 downto 0) is
+                    when "00" => -- load
+                        modeMemory<="00";
+                        doWriteBackOut <= '1';
+                        memoryAddress <= operand1Buffer;
+                        destRegOut <= destRegIn;
+                    when "01" => -- store
+                        modeMemory<="01";
+                        result <= operand2Buffer;
+                        memoryAddress <= operand1Buffer;
+                        doWriteBackOut <= '0';
+                    when "10" => -- load_imm
+                        modeMemory<="10";
+                        destRegOut <= "111";
+                        doWriteBackOut<='1';
+                        if operand1(8) = '1' then 
+                            result <= (operand1(7 downto 0) & operand2Buffer(7 downto 0));
+                        else 
+                            result <= (operand2Buffer(15 downto 8) & operand1(7 downto 0));
+                        end if;
+                    when "11" => -- mov
+                        modeMemory<="11";
+                        destRegOut <= destRegIn;
+                        result <= operand1Buffer;
+                        doWriteBackOut<='1';
+                    when others =>
+                        doMemoryAccess <= '0';
+                        doWriteBackOut <= '0';
+                  end case;
+            else
+                doMemoryAccess <= '0';
             end if;
             
             --operand1Buffer <= operand1;

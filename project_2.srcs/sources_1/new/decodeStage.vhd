@@ -36,7 +36,7 @@ entity decodeStage is Port (
     halt : out std_logic := '0';
     instruction, PC_in : in std_logic_vector(15 downto 0);
     useALU, useBranch : out std_logic := '0';
-    useIO : out std_logic := '0';
+    useIO, useLS : out std_logic := '0';
     modeALU : out std_logic_vector(2 downto 0) := "000";
     modeIO : out std_logic := '0';
     operand1, operand2 : out std_logic_vector(15 downto 0) := X"0000";
@@ -81,7 +81,12 @@ constant test_op : std_logic_vector(6 downto 0) := "0000111";
 constant out_op : std_logic_vector(6 downto 0)  := "0100000";
 constant in_op : std_logic_vector(6 downto 0)   := "0100001";
 
-constant brr : std_logic_vector(6 downto 0) 			:= "1000000";
+constant load_imm : std_logic_vector(6 downto 0)    := "0010010";
+constant load : std_logic_vector(6 downto 0)		:= "0010000";
+constant store : std_logic_vector(6 downto 0)	    := "0010001";
+constant mov : std_logic_vector(6 downto 0)		    := "0010011";
+
+constant brr : std_logic_vector(6 downto 0) 	    := "1000000";
 constant brr_neg : std_logic_vector(6 downto 0) 	:= "1000001";
 constant brr_zero : std_logic_vector(6 downto 0) 	:= "1000010";
 constant br : std_logic_vector(6 downto 0) 			:= "1000011"; --uses ra
@@ -111,15 +116,16 @@ registers : register_file port map(
 
     with instruction(15 downto 9) select
         rd_index1 <= 
-            instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op,
+            instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op | load | mov | store,
             instruction(8 downto 6) when shl_op | shr_op | test_op | out_op,
             "000" when others;
             
     with instruction(15 downto 9) select
         rd_index2 <= 
             instruction(2 downto 0) when add_op | sub_op | mul_op | nand_op,
-            instruction(8 downto 6) when br | br_neg | br_zero | br_sub,
-            "111" when rtn,
+            --instruction(5 downto 3) when ,
+            instruction(8 downto 6) when br | br_neg | br_zero | br_sub | store,
+            "111" when rtn | load_imm,
             "000" when others;
             
      with instruction(15 downto 9) select
@@ -134,7 +140,7 @@ registers : register_file port map(
             
      with instruction(15 downto 9) select
         destReg <=
-            instruction(8 downto 6) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op ,
+            instruction(8 downto 6) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op | load | mov,
             "UUU" when others;
             
     with instruction(15 downto 9) select
@@ -150,15 +156,16 @@ registers : register_file port map(
        
     with instruction(15 downto 9) select
         operand2 <=
-            rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub | rtn,
+            rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub | rtn | load_imm | store,
             X"000" & instruction(3 downto 0) when shl_op | shr_op ,
             PC_in when brr | brr_neg | brr_zero,
             X"0000" when others;   
             
     with instruction(15 downto 9) select
         operand1 <=
-            rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op,
+            rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op | load | store | mov,
             inputIn when in_op ,
+            ("0000000" & instruction(8 downto 0)) when load_imm,
             (signExtenderB1 & instruction(8 downto 0)) when brr | brr_neg | brr_zero,
             (signExtenderB2 & instruction(5 downto 0)) when br | br_neg | br_zero | br_sub,
             X"0000" when others;   
@@ -178,7 +185,12 @@ registers : register_file port map(
     with instruction(15 downto 9) select
         useBranch <=
             '1' when  brr | brr_neg | brr_zero | br | br_neg | br_zero | br_sub | rtn,
-            '0' when others;       
+            '0' when others;
+            
+    with instruction(15 downto 9) select
+        useLS <=
+            '1' when load_imm | load | store | mov,        
+            '0' when others;
              
     modeALU <= instruction(11 downto 9);
     
