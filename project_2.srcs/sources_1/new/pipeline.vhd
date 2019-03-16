@@ -35,7 +35,7 @@ entity pipeline is Port (
     clk, rst : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
     output : out std_logic_vector(15 downto 0);
-    out1, out2, out3, out4 : out std_logic_vector(15 downto 0)
+    out1, out2, out3, out4, out5, out6, out7, out8 : out std_logic_vector(15 downto 0)
 );
 end pipeline;
 
@@ -204,7 +204,11 @@ fetch : fetchStage port map(
     PC_doJump => doPCWriteBackOutWritebackStage
 );
 
-out1 <= inputOutputFetchStage;
+out1 <= fetchAddressFetchStage;
+out2 <= (X"000" & modeIO & doPCWriteBackOutWritebackStage & doBranchResetWritebackStage & rst);
+out3 <= PC_outFetchStage;
+out4 <= X"000" & "000" & doWriteBackOutputExecuteStage;
+out5 <= fetchedInstruction;
 
 --resetDecodeStage <= (rst or requestResetWritebackStage);
 
@@ -233,7 +237,9 @@ decode : decodeStage port map(
     inputIn=>inputOutputFetchStage
 );
 
+out6 <= ("0" & writeBackRegOutputExecuteStage & "0" & writeBackRegOutputDecodeStage & "0" & modeALU & useBranch & useLS & useIO & useALU);
 resetExecuteStage <= (rst or doBranchResetWritebackStage);
+out8 <= operand1;
 
 execute : executeStage port map(
     clk=>clk,
@@ -268,7 +274,8 @@ execute : executeStage port map(
     PC_out => PC_outExecuteStage
 );
 
-output <= operand1;
+out7 <= resultExecuteStage;
+output <= "000" & resetExecuteStage & "00" & modeMemoryExecuteStage & "0" & writeBackRegOutputExecuteStage & "00" & doWriteBackOutputExecuteStage & doMemoryAccessExecuteStage;
 
 resetMemoryStage <= (doBranchResetWritebackStage or rst);
 

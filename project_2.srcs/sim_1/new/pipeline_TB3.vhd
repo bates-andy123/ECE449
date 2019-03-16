@@ -38,13 +38,15 @@ architecture Behavioral of pipeline_TB3 is
 component pipeline Port (
     clk, rst : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
-    output : out std_logic_vector(15 downto 0) 
+    output : out std_logic_vector(15 downto 0);
+    out1, out2, out3, out4, out5, out6, out7, out8 : out std_logic_vector(15 downto 0)
 );
 end component;
 
 signal clk, rst : std_logic := '0';
 signal output : std_logic_vector(15 downto 0);
 signal input : std_logic_vector(15 downto 0) := X"C0A0";
+signal out1, out2, out3, out4, out5, out6, out7, out8 : std_logic_vector(15 downto 0);
 
 begin
 
@@ -52,10 +54,23 @@ u0 : pipeline port map(
     clk => clk,
     rst => rst,
     input=>input,
-    output => output
+    output => output,
+    out1=>out1,
+    out2=>out2,
+    out3=>out3,
+    out4=>out4,
+    out5=>out5, 
+    out6=>out6,
+    out7=>out7,
+    out8=>out8
 );
 
 process begin
+    input<=X"0009";
+    rst <= '1';
+    wait until falling_edge(clk);
+    rst<='0';
+    wait until falling_edge(clk);
     input<=X"0001";
     wait until falling_edge(clk);
     input<=X"0003";

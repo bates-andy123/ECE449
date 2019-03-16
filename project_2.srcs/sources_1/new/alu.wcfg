@@ -3,107 +3,69 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="pipeline_TB3_behav.wdb" id="1">
+      <db_ref path="pipeline_TB3_time_synth.wdb" id="1">
          <top_modules>
+            <top_module name="glbl" />
             <top_module name="pipeline_TB3" />
-            <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="558933858000fs"></ZoomStartTime>
-      <ZoomEndTime time="631133858001fs"></ZoomEndTime>
-      <Cursor1Time time="531890078000fs"></Cursor1Time>
+      <ZoomStartTime time="24509223000fs"></ZoomStartTime>
+      <ZoomEndTime time="133168129508fs"></ZoomEndTime>
+      <Cursor1Time time="260100000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="168"></NameColumnWidth>
+      <NameColumnWidth column_width="156"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="21" />
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/instruction_out" type="array">
-      <obj_property name="ElementShortName">instruction_out[15:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction_out[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[0]" type="array">
-      <obj_property name="ElementShortName">[0][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[0][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[1]" type="array">
-      <obj_property name="ElementShortName">[1][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[1][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[2]" type="array">
-      <obj_property name="ElementShortName">[2][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[2][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[3]" type="array">
-      <obj_property name="ElementShortName">[3][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[3][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[4]" type="array">
-      <obj_property name="ElementShortName">[4][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[4][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[5]" type="array">
-      <obj_property name="ElementShortName">[5][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[5][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[6]" type="array">
-      <obj_property name="ElementShortName">[6][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[6][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/registers/reg_file[7]" type="array">
-      <obj_property name="ElementShortName">[7][15:0]</obj_property>
-      <obj_property name="ObjectShortName">[7][15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/result" type="array">
-      <obj_property name="ElementShortName">result[15:0]</obj_property>
-      <obj_property name="ObjectShortName">result[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/destRegOut" type="array">
-      <obj_property name="ElementShortName">destRegOut[2:0]</obj_property>
-      <obj_property name="ObjectShortName">destRegOut[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/doWriteBackOut" type="logic">
-      <obj_property name="ElementShortName">doWriteBackOut</obj_property>
-      <obj_property name="ObjectShortName">doWriteBackOut</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/modeMemory" type="array">
-      <obj_property name="ElementShortName">modeMemory[1:0]</obj_property>
-      <obj_property name="ObjectShortName">modeMemory[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/execute/doMemoryAccess" type="logic">
-      <obj_property name="ElementShortName">doMemoryAccess</obj_property>
-      <obj_property name="ObjectShortName">doMemoryAccess</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/memory/memoryAddressFromExecuteStage" type="array">
-      <obj_property name="ElementShortName">memoryAddressFromExecuteStage[15:0]</obj_property>
-      <obj_property name="ObjectShortName">memoryAddressFromExecuteStage[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/memory/input" type="array">
-      <obj_property name="ElementShortName">input[15:0]</obj_property>
-      <obj_property name="ObjectShortName">input[15:0]</obj_property>
-   </wvobject>
+   <WVObjectSize size="12" />
    <wvobject fp_name="/pipeline_TB3/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB3/output" type="array">
       <obj_property name="ElementShortName">output[15:0]</obj_property>
       <obj_property name="ObjectShortName">output[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/fetch/PC_current" type="array">
-      <obj_property name="ElementShortName">PC_current[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_current[15:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+   <wvobject fp_name="/pipeline_TB3/input" type="array">
+      <obj_property name="ElementShortName">input[15:0]</obj_property>
+      <obj_property name="ObjectShortName">input[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/writeback/doPCWriteBackOut" type="logic">
-      <obj_property name="ElementShortName">doPCWriteBackOut</obj_property>
-      <obj_property name="ObjectShortName">doPCWriteBackOut</obj_property>
+   <wvobject fp_name="/pipeline_TB3/out1" type="array">
+      <obj_property name="ElementShortName">out1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out1[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/writeback/PC_out" type="array">
-      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+   <wvobject fp_name="/pipeline_TB3/out2" type="array">
+      <obj_property name="ElementShortName">out2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/out3" type="array">
+      <obj_property name="ElementShortName">out3[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out3[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/out4" type="array">
+      <obj_property name="ElementShortName">out4[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out4[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/out5" type="array">
+      <obj_property name="ElementShortName">out5[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out5[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/out6" type="array">
+      <obj_property name="ElementShortName">out6[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out6[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/out7" type="array">
+      <obj_property name="ElementShortName">out7[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out7[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/out8" type="array">
+      <obj_property name="ElementShortName">out8[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out8[15:0]</obj_property>
    </wvobject>
 </wave_config>

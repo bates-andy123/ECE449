@@ -182,7 +182,6 @@ process(clk) begin
             
             if useLS = '1' then 
                 doMemoryAccess <= '1';
-
                 case modeALU(1 downto 0) is
                     when "00" => -- load
                         modeMemory<="00";
