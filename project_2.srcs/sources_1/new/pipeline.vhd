@@ -192,7 +192,7 @@ begin
 fetch : fetchStage port map(
     clk=>clk,
     PC_out=>PC_outFetchStage,
-    halt=>haltSig,
+    halt=>doBranchResetWritebackStage,
     rst=>rst,
     fetchAddress=>fetchAddressFetchStage,
     instruction_in=>instruction_inFetchStage,

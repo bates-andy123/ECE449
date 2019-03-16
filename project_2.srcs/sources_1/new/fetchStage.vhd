@@ -50,42 +50,44 @@ signal doutROM : std_logic_vector (15 downto 0);
 signal PC_next : std_logic_vector(15 downto 0) := X"0002";
 signal PC_current : std_logic_vector(15 downto 0) := X"0000";
 
-signal PC_JustDidJump : std_logic := '0';
+signal PC_justHalted, validInstruction : std_logic := '0';
 
 begin
 
 fetchAddress <= PC_current;
 
-    with halt select
+    with validInstruction select
         instruction_out <=
             instruction_in when '0',
             X"0000" when others;
+
+validInstruction <= PC_justHalted or halt;
 
 process(clk)
 begin
     if(rst = '0') then 
         if falling_edge(clk) then
-            if(halt = '0') then
-
-                if (PC_doJump = '0' and PC_JustDidJump='0') then -- normal increment mode
-                    --addrROM <= PC_next(7 downto 0);
-                    --instruction_out <= doutROM;
-                    --instruction_out <= instruction_in;
+  --          if(halt = '0') then
+                
+                if (PC_doJump = '0' and halt='0') then -- normal increment mode
+                    if(PC_justHalted = '1' and halt='0') then 
+                        PC_justHalted <= '0';
+                    end if; 
                     PC_current <= PC_next;
                     PC_next <= std_logic_vector(unsigned(PC_next) + 2);
-                    PC_out <= PC_current;                
+                    PC_out <= PC_current;            
                 else
-                    --instruction_out <= X"0000";
                     PC_current <= PC_set;
                     PC_next <= std_logic_vector(unsigned(PC_set) + 2);
                     addrROM <= PC_set(7 downto 0);
                     PC_out <=  PC_set;
+                    PC_justHalted <= '1';
                 end if;
                 inputOut <= inputIn;
-            end if;
+            --end if;
         end if;
     else 
-        PC_next <= X"0001";
+        PC_next <= X"0002";
         PC_current <= X"0000";
         inputOut <= X"0000";
         --instruction_out <= X"0000";
