@@ -52,13 +52,21 @@ architecture Behavioral of memoryStage is
 begin
 
 process(clk) begin
+    if rst='1' then 
+        doPCWriteBackOut <= '0';
+        PC_out <= X"0000";
+    elsif rising_edge(clk) then
+        PC_out <= PC_in;
+        doPCWriteBackOut <= doPCWriteBackIn;
+    end if;
+end process;
+
+process(clk) begin
     if(rst = '0') then
         if (clk='0') then
             output <= input;
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
-            PC_out <= PC_in;
-            doPCWriteBackOut <= doPCWriteBackIn;
             
             if(doMemoryAccess = '1') then
                 if(modeMemory = "00") then
@@ -78,9 +86,9 @@ process(clk) begin
         destRegOut <= "000";
 --        memoryAddress <= X"0000"; 
 --        memoryWriteValue <= X"0000";
-        PC_out <= X"0000";
+        
 --        memoryRW <= '0';
-        doPCWriteBackOut <= '0';
+        
     end if;
 end process;
 

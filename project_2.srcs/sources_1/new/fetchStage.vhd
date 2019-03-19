@@ -86,7 +86,7 @@ begin
         PC_current <= X"0000";
         inputOut <= X"0000";
         PC_justHalted<='0';
-        validInstruction<='0';
+        --validInstruction<='0';
         PC_out<=X"0000";
         --instruction_out <= X"0000";
     end if;

@@ -32,9 +32,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity decodeStage is Port (
-    clk, rst : in std_logic;
+    clk, rst, addNOP : in std_logic;
     halt : out std_logic := '0';
-    instruction, PC_in : in std_logic_vector(15 downto 0);
+    instruction_in, PC_in : in std_logic_vector(15 downto 0);
     useALU, useBranch : out std_logic := '0';
     useIO, useLS : out std_logic := '0';
     modeALU : out std_logic_vector(2 downto 0) := "000";
@@ -97,8 +97,14 @@ constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
 
 signal signExtenderB1 : std_logic_vector(6 downto 0);
 signal signExtenderB2 : std_logic_vector(9 downto 0);
+signal instruction : std_logic_vector(15 downto 0) := X"0000";
 
 begin
+
+    with addNOP select
+        instruction <= instruction_in when '0',
+        X"0000" when others;
+            
 
 registers : register_file port map(
     clk=>clk,

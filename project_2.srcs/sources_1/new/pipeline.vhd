@@ -52,8 +52,8 @@ component fetchStage port(
 end component;
 
 component decodeStage port(
-    clk, rst : in std_logic;
-    instruction, PC_in : in std_logic_vector(15 downto 0);
+    clk, rst, addNOP : in std_logic;
+    instruction_in, PC_in : in std_logic_vector(15 downto 0);
     useALU, useBranch : out std_logic;
     useIO, useLS : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
@@ -204,10 +204,9 @@ fetch : fetchStage port map(
     PC_doJump => doPCWriteBackOutWritebackStage
 );
 
-out1 <= fetchAddressFetchStage;
-out2 <= (X"000" & modeIO & doPCWriteBackOutWritebackStage & doBranchResetWritebackStage & rst);
+--out2 <= (X"000" & modeIO & doPCWriteBackOutWritebackStage & doBranchResetWritebackStage & rst);
 out3 <= PC_outFetchStage;
-out4 <= X"000" & "000" & doWriteBackOutputExecuteStage;
+--out4 <= X"000" & "000" & doWriteBackOutputExecuteStage;
 out5 <= fetchedInstruction;
 
 --resetDecodeStage <= (rst or requestResetWritebackStage);
@@ -215,10 +214,11 @@ out5 <= fetchedInstruction;
 decode : decodeStage port map(
     clk => clk,
     rst => rst,
+    addNOP => doBranchResetWritebackStage,
     halt=>haltSig,
     PC_in=>PC_outFetchStage,
     PC_out=>PC_outDecodeStage,
-    instruction => fetchedInstruction,
+    instruction_in => fetchedInstruction,
     useALU => useALU,
     readReg1 => readReg1DecodeStage,
     readReg2 => readReg2DecodeStage,
@@ -237,9 +237,9 @@ decode : decodeStage port map(
     inputIn=>inputOutputFetchStage
 );
 
-out6 <= ("0" & writeBackRegOutputExecuteStage & "0" & writeBackRegOutputDecodeStage & "0" & modeALU & useBranch & useLS & useIO & useALU);
+--out6 <= ("0" & writeBackRegOutputExecuteStage & "0" & writeBackRegOutputDecodeStage & "0" & modeALU & useBranch & useLS & useIO & useALU);
 resetExecuteStage <= (rst or doBranchResetWritebackStage);
-out8 <= operand1;
+
 
 execute : executeStage port map(
     clk=>clk,
@@ -268,15 +268,16 @@ execute : executeStage port map(
     result=>resultExecuteStage,
     modeMemory=>modeMemoryExecuteStage,
     memoryAddress=>memoryAddressExecuteStage,
-    --outputCPU=>output,
+    outputCPU=>output,
     doPCWriteBack=>doPCWriteBackExecuteStage,
     PC_in => PC_outDecodeStage,
     PC_out => PC_outExecuteStage
 );
 
-out7 <= resultExecuteStage;
-output <= "000" & resetExecuteStage & "00" & modeMemoryExecuteStage & "0" & writeBackRegOutputExecuteStage & "00" & doWriteBackOutputExecuteStage & doMemoryAccessExecuteStage;
-
+out2 <= PC_outExecuteStage;
+out6 <= resultExecuteStage;
+out7 <= "000" & resetExecuteStage & "0" & modeALU & "0" & writeBackRegOutputExecuteStage & "000" & doBranchResetWritebackStage;
+out8 <= X"00" & "0" & readReg2DecodeStage & "0" & readReg1DecodeStage;
 resetMemoryStage <= (doBranchResetWritebackStage or rst);
 
 memory : memoryStage Port map(
@@ -332,5 +333,8 @@ memCtrl : memoryController port map(
     regceaRAM=>'1',
     rstaROM=>'0'
 );
+
+out1 <= X"0" & "000" & doPCWriteBackExecuteStage & "000" & doPCWriteBackMemoryStage & "000" & doPCWriteBackOutWritebackStage;
+out4 <= PC_outWritebackStage;
 
 end Behavioral;

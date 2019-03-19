@@ -3,20 +3,20 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="pipeline_TB3_time_synth.wdb" id="1">
+      <db_ref path="pipeline_TB3_behav.wdb" id="1">
          <top_modules>
-            <top_module name="glbl" />
             <top_module name="pipeline_TB3" />
+            <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="24509223000fs"></ZoomStartTime>
-      <ZoomEndTime time="133168129508fs"></ZoomEndTime>
-      <Cursor1Time time="260100000000fs"></Cursor1Time>
+      <ZoomStartTime time="203520350000fs"></ZoomStartTime>
+      <ZoomEndTime time="280420350001fs"></ZoomEndTime>
+      <Cursor1Time time="451404376000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="156"></NameColumnWidth>
+      <NameColumnWidth column_width="148"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="12" />
@@ -40,6 +40,10 @@
       <obj_property name="ElementShortName">out1[15:0]</obj_property>
       <obj_property name="ObjectShortName">out1[15:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/pipeline_TB3/out4" type="array">
+      <obj_property name="ElementShortName">out4[15:0]</obj_property>
+      <obj_property name="ObjectShortName">out4[15:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/pipeline_TB3/out2" type="array">
       <obj_property name="ElementShortName">out2[15:0]</obj_property>
       <obj_property name="ObjectShortName">out2[15:0]</obj_property>
@@ -47,10 +51,6 @@
    <wvobject fp_name="/pipeline_TB3/out3" type="array">
       <obj_property name="ElementShortName">out3[15:0]</obj_property>
       <obj_property name="ObjectShortName">out3[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/out4" type="array">
-      <obj_property name="ElementShortName">out4[15:0]</obj_property>
-      <obj_property name="ObjectShortName">out4[15:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB3/out5" type="array">
       <obj_property name="ElementShortName">out5[15:0]</obj_property>
