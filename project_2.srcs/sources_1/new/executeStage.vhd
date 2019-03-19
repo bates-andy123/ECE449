@@ -35,7 +35,7 @@ use ieee.numeric_std.all;
 entity executeStage is Port(
     clk, rst : in std_logic;
     useALU, useBranch : in std_logic;
-    useIO, useLS : in std_logic;
+    useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
@@ -112,7 +112,7 @@ u3 : dataForwarder port map(
     doMemoryWriteback=>useMemoryDestValue, 
     doWritebackWriteback=>useWritebackDestValue, 
     operand1Passthrough=>'0', 
-    operand2Passthrough=>'0',
+    operand2Passthrough=>operand2Passthrough,
     readReg1=>readReg1, 
     readReg2=>readReg2, 
     memoryWritebackDest=>memoryDestReg, 

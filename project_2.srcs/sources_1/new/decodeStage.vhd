@@ -38,7 +38,7 @@ entity decodeStage is Port (
     useALU, useBranch : out std_logic := '0';
     useIO, useLS : out std_logic := '0';
     modeALU : out std_logic_vector(2 downto 0) := "000";
-    modeIO : out std_logic := '0';
+    modeIO, operand2Passthrough : out std_logic := '0';
     operand1, operand2 : out std_logic_vector(15 downto 0) := X"0000";
     destReg, readReg1, readReg2 : out std_logic_vector(2 downto 0) := "000";
     doWriteBack : out std_logic;
@@ -119,6 +119,11 @@ registers : register_file port map(
     wr_data=>writeBackValue, 
     wr_enable=>regWriteEnable
 );
+
+    with instruction(15 downto 9) select
+        operand2Passthrough <= 
+            '1' when shl_op | shr_op,
+            '0' when others;
 
     with instruction(15 downto 9) select
         rd_index1 <= 
