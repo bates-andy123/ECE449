@@ -81,7 +81,7 @@ component executeStage port(
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn : in std_logic;
-    doWriteBackOut, doPCWriteBack, doMemoryAccess : out std_logic;
+    doWriteBackOut, doPCWriteBack, doMemoryAccess, doOutputUpdateOut : out std_logic;
     result, memoryAddress : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
     modeMemory : out std_logic_vector(1 downto 0);
@@ -94,12 +94,12 @@ component memoryStage Port (
     clk, rst, doMemoryAccess : in std_logic;
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
-    doWriteBackIn, doPCWriteBackIn : in std_logic;
-    doWriteBackOut, doPCWriteBackOut : out std_logic;
+    doWriteBackIn, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
+    doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut : out std_logic;
     modeMemory : in std_logic_vector(1 downto 0);
-    memoryAddress, memoryWriteValue : out std_logic_vector(15 downto 0);
+    memoryAddress, memoryWriteValue, CPUoutput : out std_logic_vector(15 downto 0);
     memoryRW : out std_logic;
-    memoryReadValue : in std_logic_vector(15 downto 0);
+    memoryReadValue, CPUinput : in std_logic_vector(15 downto 0);
     PC_In : in std_logic_vector(15 downto 0);
     input, memoryAddressFromExecuteStage : in std_logic_vector(15 downto 0);
     output, PC_out : out std_logic_vector(15 downto 0)
@@ -108,12 +108,12 @@ end component;
 
 component writeBackStage port ( 
     clk, rst : in std_logic;
-    inDoWriteBack, doPCWriteBackIn : in std_logic;
+    inDoWriteBack, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
-    inWriteBackValue, PC_in : in std_logic_vector(15 downto 0);
+    inWriteBackValue, PC_in, CPUinput : in std_logic_vector(15 downto 0);
     outDoWriteBack, doPCWriteBackOut, doBranchReset : out std_logic;
     outDestRegister : out std_logic_vector(2 downto 0);
-    outWriteBackValue, PC_out : out std_logic_vector(15 downto 0)
+    outWriteBackValue, PC_out, CPUoutput : out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -182,6 +182,7 @@ signal memoryAddress, memoryWriteValue, memoryAddressExecuteStage :  std_logic_v
 signal memoryRW : std_logic;
 signal memoryReadValue : std_logic_vector(15 downto 0);
 signal CPUoutputExecuteStage : std_logic_vector(15 downto 0);
+signal doOutputUpdateOutExecuteStage : std_logic;
 
 signal doWriteBackOutputMemoryStage : std_logic := '0';
 signal writeBackRegOutputMemoryStage : std_logic_vector(2 downto 0);
@@ -189,13 +190,15 @@ signal resultMemoryStage : std_logic_vector(15 downto 0);
 signal PC_outMemoryStage : std_logic_vector(15 downto 0);
 signal doPCWriteBackMemoryStage : std_logic; 
 signal resetMemoryStage : std_logic;
+signal doOutputUpdateOutMemoryStage : std_logic;
+signal CPUoutputMemoryStage : std_logic_vector(15 downto 0);
 
 signal doBranchResetWritebackStage : std_logic;
 signal doPCWriteBackOutWritebackStage : std_logic;
 signal PC_outWritebackStage : std_logic_vector(15 downto 0);
 signal resetWritebackStage : std_logic;
-
-
+signal doOutputUpdateOutWritebackStage : std_logic;
+signal CPUoutputWritebackStage : std_logic_vector(15 downto 0);
 
 begin
 
@@ -265,6 +268,7 @@ execute : executeStage port map(
     modeIO=>modeIO,
     operand1=>operand1, 
     operand2=>operand2,
+    doOutputUpdateOut=>doOutputUpdateOutExecuteStage,
     doMemoryAccess=>doMemoryAccessExecuteStage,
     destRegIn => writeBackRegOutputDecodeStage,
     destRegOut => writeBackRegOutputExecuteStage,
@@ -285,7 +289,7 @@ execute : executeStage port map(
     PC_out => PC_outExecuteStage
 );
 
-output <= CPUoutputExecuteStage;
+output <= CPUoutputWritebackStage;
 --out2 <= PC_outExecuteStage;
 resetMemoryStage <= (doBranchResetWritebackStage or rst);
 
@@ -299,6 +303,10 @@ memory : memoryStage Port map(
     doWriteBackOut=>doWriteBackOutputMemoryStage,
     doPCWriteBackIn=>doPCWriteBackExecuteStage,
     doPCWriteBackOut=>doPCWriteBackMemoryStage,
+    doOutputUpdateIn=>doOutputUpdateOutExecuteStage,
+    doOutputUpdateOut=>doOutputUpdateOutMemoryStage,
+    CPUinput=>CPUoutputExecuteStage,
+    CPUoutput=>CPUoutputMemoryStage,
     PC_In=>PC_outExecuteStage,
     PC_out=>PC_outMemoryStage,
     memoryAddressFromExecuteStage=>memoryAddressExecuteStage,
@@ -316,6 +324,9 @@ resetWritebackStage <= (rst or doBranchResetWritebackStage);
 writeback : writeBackStage port map( 
     clk=>clk,
     rst=>resetWritebackStage,
+    doOutputUpdateIn=>doOutputUpdateOutMemoryStage,
+    CPUinput=>CPUoutputMemoryStage,
+    CPUoutput=>CPUoutputWritebackStage,
     inDoWriteBack =>doWriteBackOutputMemoryStage,
     inDestRegister =>writeBackRegOutputMemoryStage,
     inWriteBackValue =>resultMemoryStage,

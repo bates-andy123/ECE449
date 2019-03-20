@@ -38,8 +38,8 @@ set_property PACKAGE_PIN C16 [get_ports {input[15]}]
 		
 ##Pmod Header JC
 ##Sch name = JC1
-#set_property PACKAGE_PIN K17 [get_ports {debounced_pulse}]
-		#set_property IOSTANDARD LVCMOS33 [get_ports {debounced_pulse}]
+set_property PACKAGE_PIN K17 [get_ports {input[0]}]
+		set_property IOSTANDARD LVCMOS33 [get_ports {input[0]}]
 ##Sch name = JC2
 set_property PACKAGE_PIN M18 [get_ports {input[1]}]
 		set_property IOSTANDARD LVCMOS33 [get_ports {input[1]}]

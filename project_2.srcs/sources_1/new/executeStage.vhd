@@ -43,7 +43,7 @@ entity executeStage is Port(
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
-    doWriteBackOut, doMemoryAccess : out std_logic := '0';
+    doWriteBackOut, doMemoryAccess, doOutputUpdateOut : out std_logic := '0';
     doPCWriteBack : out std_logic := '0';
     result : out std_logic_vector(15 downto 0) := X"0000";
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
@@ -162,6 +162,7 @@ process(clk) begin
             doPCWriteBack <= '0';
             PC_out <= PC_in; 
             doMemoryAccess <= '0';
+            doOutputUpdateOut <= '0';
             
             if useBranch = '1' then
                 case modeALU(2 downto 0) is
@@ -205,7 +206,8 @@ process(clk) begin
                 if modeIO = '1' then  -- Input, write the operand rand to memory
                     result <= operand1;
                 else
-                    outputCPU <= operand1;
+                    outputCPU <= operand1Buffer;
+                    doOutputUpdateOut <= '1';
                 end if;
                 
             elsif useLS = '1' then 
