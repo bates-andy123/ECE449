@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="76936449000fs"></ZoomStartTime>
-      <ZoomEndTime time="182968944182fs"></ZoomEndTime>
-      <Cursor1Time time="200100000000fs"></Cursor1Time>
+      <ZoomStartTime time="275312811000fs"></ZoomStartTime>
+      <ZoomEndTime time="368204477668fs"></ZoomEndTime>
+      <Cursor1Time time="320042811000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="140"></NameColumnWidth>
+      <NameColumnWidth column_width="132"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="12" />
+   <WVObjectSize size="16" />
    <wvobject fp_name="/pipeline_TB3/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -67,5 +67,21 @@
    <wvobject fp_name="/pipeline_TB3/u0/writeback/CPUinput" type="array">
       <obj_property name="ElementShortName">CPUinput[15:0]</obj_property>
       <obj_property name="ObjectShortName">CPUinput[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/writeback/CPUoutput" type="array">
+      <obj_property name="ElementShortName">CPUoutput[15:0]</obj_property>
+      <obj_property name="ObjectShortName">CPUoutput[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memory/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memory/CPUoutput" type="array">
+      <obj_property name="ElementShortName">CPUoutput[15:0]</obj_property>
+      <obj_property name="ObjectShortName">CPUoutput[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memory/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
    </wvobject>
 </wave_config>

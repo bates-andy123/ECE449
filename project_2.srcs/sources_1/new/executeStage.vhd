@@ -247,6 +247,7 @@ process(clk) begin
         PC_out <= X"0000";
         result <= X"0000";
         outputCPU <= X"0000";
+        doOutputUpdateOut<='0';
     end if;
 end process;
 

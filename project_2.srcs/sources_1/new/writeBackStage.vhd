@@ -51,9 +51,9 @@ signal inWriteBackValueBuffer : std_logic_vector(15 downto 0);
 
 begin
 
-process(clk, doOutputUpdateIn) begin
+process(rst, CPUinput, doOutputUpdateIn) begin
     if (rst='0') then
-        if (doOutputUpdateIn = '1') then
+        if (doOutputUpdateIn = '1' and clk='1') then
             CPUoutput <= CPUinput;
         end if;
     else

@@ -127,15 +127,15 @@ registers : register_file port map(
 
     with instruction(15 downto 9) select
         rd_index1 <= 
-            instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op | load | mov | store,
-            instruction(8 downto 6) when shl_op | shr_op | test_op | out_op,
+            instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op | load | mov, --| store,
+            instruction(8 downto 6) when shl_op | shr_op | test_op | out_op | store,
             "000" when others;
             
     with instruction(15 downto 9) select
         rd_index2 <= 
             instruction(2 downto 0) when add_op | sub_op | mul_op | nand_op,
-            --instruction(5 downto 3) when ,
-            instruction(8 downto 6) when br | br_neg | br_zero | br_sub | store,
+            instruction(5 downto 3) when store,
+            instruction(8 downto 6) when br | br_neg | br_zero | br_sub, --| store,
             "111" when rtn | load_imm,
             "000" when others;
             
