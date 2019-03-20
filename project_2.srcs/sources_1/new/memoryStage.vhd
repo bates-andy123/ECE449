@@ -57,7 +57,7 @@ process(clk) begin
     if rst='1' then 
         doPCWriteBackOut <= '0';
         PC_out <= X"0000";
-        PC_WritebackSet <= '0';
+        doOutputUpdateOut<='0';
         CPUoutput <= X"0000";
     elsif rising_edge(clk) then
         doOutputUpdateOut <= doOutputUpdateIn;
@@ -95,6 +95,7 @@ process(clk) begin
             
         end if;
     else -- rst is currently active
+        PC_WritebackSet <= '0';
         output <= X"0000";
         doWriteBackOut <= '0';
         destRegOut <= "000";

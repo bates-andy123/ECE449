@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity writeBackStage is Port ( 
-    clk, rst : in std_logic;
+    clk, rst, pipelineReset : in std_logic;
     inDoWriteBack, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
     inWriteBackValue, PC_in, CPUinput : in std_logic_vector(15 downto 0);
@@ -51,9 +51,9 @@ signal inWriteBackValueBuffer : std_logic_vector(15 downto 0);
 
 begin
 
-process(rst, CPUinput, doOutputUpdateIn) begin
-    if (rst='0') then
-        if (doOutputUpdateIn = '1' and clk='1') then
+process(clk) begin
+    if (pipelineReset='0') then
+        if (doOutputUpdateIn = '1' and clk='0') then
             CPUoutput <= CPUinput;
         end if;
     else
@@ -63,7 +63,7 @@ end process;
 
 process(clk) begin
     if rising_edge(clk) then
-        if rst = '0' then 
+        if (rst = '0' and pipelineReset='0') then 
             outDoWriteBack<=inDoWriteBack;
             outDestRegister<=inDestRegister;
             outWriteBackValue<=inWriteBackValue;

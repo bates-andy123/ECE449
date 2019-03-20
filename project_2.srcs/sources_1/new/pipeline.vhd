@@ -107,7 +107,7 @@ component memoryStage Port (
 end component;
 
 component writeBackStage port ( 
-    clk, rst : in std_logic;
+    clk, rst, pipelineReset : in std_logic;
     inDoWriteBack, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
     inWriteBackValue, PC_in, CPUinput : in std_logic_vector(15 downto 0);
@@ -319,11 +319,12 @@ memory : memoryStage Port map(
     output=>resultMemoryStage
 );
 
-resetWritebackStage <= (rst or doBranchResetWritebackStage);
+--resetWritebackStage <= (rst or doBranchResetWritebackStage);
 
 writeback : writeBackStage port map( 
     clk=>clk,
-    rst=>resetWritebackStage,
+    rst=>doBranchResetWritebackStage,
+    pipelineReset=>rst,
     doOutputUpdateIn=>doOutputUpdateOutMemoryStage,
     CPUinput=>CPUoutputMemoryStage,
     CPUoutput=>CPUoutputWritebackStage,
