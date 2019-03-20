@@ -250,7 +250,6 @@ decode : decodeStage port map(
     inputIn=>inputOutputFetchStage
 );
 
---out6 <= ("0" & writeBackRegOutputExecuteStage & "0" & writeBackRegOutputDecodeStage & "0" & modeALU & useBranch & useLS & useIO & useALU);
 resetExecuteStage <= (rst or doBranchResetWritebackStage);
 
 
@@ -289,7 +288,7 @@ execute : executeStage port map(
     PC_out => PC_outExecuteStage
 );
 
-output <= CPUoutputWritebackStage;
+output <= X"000" & useALU & useBranch & useIO & useLS;
 --out2 <= PC_outExecuteStage;
 resetMemoryStage <= (doBranchResetWritebackStage or rst);
 
