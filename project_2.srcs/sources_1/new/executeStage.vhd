@@ -35,7 +35,7 @@ use ieee.numeric_std.all;
 entity executeStage is Port(
     clk, rst : in std_logic;
     useALU, useBranch : in std_logic;
-    useIO, useLS : in std_logic;
+    useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
     modeIO : in std_logic;
@@ -43,7 +43,7 @@ entity executeStage is Port(
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
-    doWriteBackOut, doMemoryAccess : out std_logic := '0';
+    doWriteBackOut, doMemoryAccess, doOutputUpdateOut : out std_logic := '0';
     doPCWriteBack : out std_logic := '0';
     result : out std_logic_vector(15 downto 0) := X"0000";
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
@@ -112,7 +112,7 @@ u3 : dataForwarder port map(
     doMemoryWriteback=>useMemoryDestValue, 
     doWritebackWriteback=>useWritebackDestValue, 
     operand1Passthrough=>'0', 
-    operand2Passthrough=>'0',
+    operand2Passthrough=>operand2Passthrough,
     readReg1=>readReg1, 
     readReg2=>readReg2, 
     memoryWritebackDest=>memoryDestReg, 
@@ -125,9 +125,57 @@ u3 : dataForwarder port map(
     operand2=>operand2Buffer
 );
 
+modeMemory <= modeALU(1 downto 0);
+
+process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
+    if rst = '1' then
+        destRegOut <= "000";
+        doWriteBackOut <= '0';
+    --elsif falling_edge(clk) then
+    elsif falling_edge(clk) then
+        doWriteBackOut <= '0';
+    
+        if useBranch = '1' then
+            if modeALU = "110" then
+                doWriteBackOut <= '1';
+                destRegOut <= "111";
+            end if;
+        elsif useALU='1' then
+            destRegOut <= destRegIn;
+            doWriteBackOut <= doWriteBackIn;
+        elsif useIO='1' then
+            destRegOut <= destRegIn;
+            doWriteBackOut <= doWriteBackIn;
+        elsif useLS='1' then
+            case modeALU(1 downto 0) is
+                when "00" => -- load
+                    destRegOut <= destRegIn;
+                    doWriteBackOut <= '1';
+                when "01" => -- store
+                    destRegOut <= "000";
+                    doWriteBackOut <= '1';
+                when "10" => -- load_imm
+                    destRegOut <= "111";
+                    doWriteBackOut <= '1';
+                when "11" => -- mov
+                    destRegOut <= destRegIn;
+                    doWriteBackOut <= '1';
+                when others =>
+                    destRegOut <= "000";
+                    doWriteBackOut <= '0';
+            end case;
+        end if;
+    end if;  
+end process;
+
 process(clk) begin
     if rst='0' then
         if falling_edge(clk) then
+            doPCWriteBack <= '0';
+            PC_out <= PC_in; 
+            doMemoryAccess <= '0';
+            doOutputUpdateOut <= '0';
+            
             if useBranch = '1' then
                 case modeALU(2 downto 0) is
                     when "000" | "011" => 
@@ -152,79 +200,61 @@ process(clk) begin
                     when "110" =>
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= resultCalcedPC;
-                        destRegOut <= "111";
-                        doWriteBackOut <= '1';
+                        
                         result <= std_logic_vector(unsigned(PC_in) + 2);
                     when "111" =>
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= operand2;
                     when others => doPCWriteBack <= '0'; -- Temporary until all cases are completed 
                 end case;
-            else 
-                doPCWriteBack <= '0';
-                PC_out <= PC_in;
-            end if;
             
-            if useALU = '1' then 
+            elsif useALU = '1' then 
                 result <= resultALU;
-                destRegOut <= destRegIn;
-                doWriteBackOut <= doWriteBackIn;    
+                --doWriteBackOut <= doWriteBackIn; 
+                  
             elsif useIO = '1' then
-                destRegOut <= destRegIn;
-                doWriteBackOut <= doWriteBackIn;
+                --doWriteBackOut <= doWriteBackIn;
                 if modeIO = '1' then  -- Input, write the operand rand to memory
                     result <= operand1;
                 else
-                    outputCPU <= operand1;
+                    outputCPU <= operand1Buffer;
+                    doOutputUpdateOut <= '1';
                 end if;
-            else
-            end if;
-            
-            if useLS = '1' then 
+                
+            elsif useLS = '1' then 
                 doMemoryAccess <= '1';
-
                 case modeALU(1 downto 0) is
                     when "00" => -- load
-                        modeMemory<="00";
-                        doWriteBackOut <= '1';
+                        --doWriteBackOut <= '1';
                         memoryAddress <= operand1Buffer;
-                        destRegOut <= destRegIn;
                     when "01" => -- store
-                        modeMemory<="01";
                         result <= operand2Buffer;
                         memoryAddress <= operand1Buffer;
-                        doWriteBackOut <= '0';
+                        --doWriteBackOut <= '0';
                     when "10" => -- load_imm
-                        modeMemory<="10";
-                        destRegOut <= "111";
-                        doWriteBackOut<='1';
+                        --doWriteBackOut<='1';
                         if operand1(8) = '1' then 
                             result <= (operand1(7 downto 0) & operand2Buffer(7 downto 0));
                         else 
                             result <= (operand2Buffer(15 downto 8) & operand1(7 downto 0));
                         end if;
                     when "11" => -- mov
-                        modeMemory<="11";
-                        destRegOut <= destRegIn;
                         result <= operand1Buffer;
-                        doWriteBackOut<='1';
+                       -- doWriteBackOut<='1';
                     when others =>
                         doMemoryAccess <= '0';
-                        doWriteBackOut <= '0';
+                        --doWriteBackOut <= '0';
                   end case;
-            else
-                doMemoryAccess <= '0';
             end if;
-            
-            --operand1Buffer <= operand1;
+
         end if;
     else 
-        destRegOut <= "000";
-        doWriteBackOut <= '0';
+        --doWriteBackOut <= '0';
         doPCWriteBack <= '0';
         PC_out <= X"0000";
         result <= X"0000";
         outputCPU <= X"0000";
+        doOutputUpdateOut<='0';
     end if;
 end process;
 

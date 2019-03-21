@@ -62,14 +62,13 @@ begin
         in2 => reg, 
         operation => "001", 
         output => regDispAdder
-        --overflow => unaryOverflow
+
     );
     adder2 : addSub port map(
             in1 => dispShifted, 
             in2 => PC_current, 
             operation => "001", 
             output => PC_CounterDispAdder
-            --overflow => unaryOverflow
         );
 
     with modeBranch select
