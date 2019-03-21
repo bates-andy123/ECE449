@@ -38,6 +38,12 @@ architecture Behavioral of pipeline_TB3 is
 component pipeline Port (
     clk, rst, display_clock : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
+    
+--    modeIO_stat, useIO_stat, useLS_stat, useALU_stat, useBranch_stat, destRegDoWritebackExecute_stat, doOutputUpdateOutMemoryStage_stat : out std_logic;
+--    destRegDoWritebackDecode_stat, doBranchResetWritebackStage_stat, doOutputUpdateOutExecuteStage_stat : out std_logic;
+--    executeStageResult_stat : out std_logic_vector(15 downto 0);
+--    destRegOutExecute_state, destRegOutDecode_state, modeALU_stat : out std_logic_vector(2 downto 0);
+    
     output : out std_logic_vector(15 downto 0)
 );
 end component;
@@ -45,7 +51,12 @@ end component;
 signal clk, rst, display_clock : std_logic := '0';
 signal output : std_logic_vector(15 downto 0);
 signal input : std_logic_vector(15 downto 0) := X"C0A0";
-signal out1, out2, out3, out4, out5, out6, out7, out8 : std_logic_vector(15 downto 0);
+
+
+signal executeStageResult_stat : std_logic_vector(15 downto 0);
+signal destRegOutExecute_state, destRegOutDecode_state, modeALU_stat : std_logic_vector(2 downto 0);
+signal modeIO_stat, useIO_stat, useLS_stat, useALU_stat, useBranch_stat, destRegDoWritebackExecute_stat, doOutputUpdateOutMemoryStage_stat : std_logic;
+signal destRegDoWritebackDecode_stat, doBranchResetWritebackStage_stat, doOutputUpdateOutExecuteStage_stat : std_logic;
 
 begin
 
@@ -54,6 +65,22 @@ u0 : pipeline port map(
     display_clock => display_clock,
     rst => rst,
     input=>input,
+    
+--    doOutputUpdateOutExecuteStage_stat=>doOutputUpdateOutExecuteStage_stat,
+--    modeALU_stat=>modeALU_stat,
+--    destRegDoWritebackExecute_stat=>destRegDoWritebackExecute_stat,
+--    destRegOutExecute_state=>destRegOutExecute_state,
+--    destRegOutDecode_state=>destRegOutDecode_state,
+--    modeIO_stat=>modeIO_stat,
+--    useIO_stat=>useIO_stat,
+--    useLS_stat=>useLS_stat,
+--    useALU_stat=>useALU_stat,
+--    useBranch_stat=>useBranch_stat,
+--    executeStageResult_stat=>executeStageResult_stat,
+--    destRegDoWritebackDecode_stat=>destRegDoWritebackDecode_stat,
+--    doBranchResetWritebackStage_stat=>doBranchResetWritebackStage_stat,
+--    doOutputUpdateOutMemoryStage_stat=>doOutputUpdateOutMemoryStage_stat,
+    
     output => output
 );
 
@@ -81,21 +108,6 @@ process begin
     wait;
 
 end process;
-
---process(clk) 
---variable count : integer range 0 to 30 := 0;
---begin
---    if falling_edge(clk) then
---        count := count + 1;
---        if count > 34 then 
---            count := 0;
---            rst <= '0';
---        elsif count > 29 then 
---            rst <= '1';
---        else
---        end if;
---    end if;
---end process;
 
 
 process begin

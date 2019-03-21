@@ -127,30 +127,42 @@ u3 : dataForwarder port map(
 
 modeMemory <= modeALU(1 downto 0);
 
-process(clk) begin
+process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
     if rst = '1' then
         destRegOut <= "000";
+        doWriteBackOut <= '0';
+    --elsif falling_edge(clk) then
     elsif falling_edge(clk) then
+        doWriteBackOut <= '0';
+    
         if useBranch = '1' then
             if modeALU = "110" then
+                doWriteBackOut <= '1';
                 destRegOut <= "111";
             end if;
         elsif useALU='1' then
             destRegOut <= destRegIn;
+            doWriteBackOut <= doWriteBackIn;
         elsif useIO='1' then
             destRegOut <= destRegIn;
+            doWriteBackOut <= doWriteBackIn;
         elsif useLS='1' then
             case modeALU(1 downto 0) is
                 when "00" => -- load
                     destRegOut <= destRegIn;
+                    doWriteBackOut <= '1';
                 when "01" => -- store
                     destRegOut <= "000";
+                    doWriteBackOut <= '1';
                 when "10" => -- load_imm
                     destRegOut <= "111";
+                    doWriteBackOut <= '1';
                 when "11" => -- mov
                     destRegOut <= destRegIn;
+                    doWriteBackOut <= '1';
                 when others =>
                     destRegOut <= "000";
+                    doWriteBackOut <= '0';
             end case;
         end if;
     end if;  
@@ -188,8 +200,7 @@ process(clk) begin
                     when "110" =>
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= resultCalcedPC;
---                        destRegOut <= "111";
-                        doWriteBackOut <= '1';
+                        
                         result <= std_logic_vector(unsigned(PC_in) + 2);
                     when "111" =>
                         doPCWriteBack <= '1'; -- NOP operation
@@ -199,10 +210,10 @@ process(clk) begin
             
             elsif useALU = '1' then 
                 result <= resultALU;
-                doWriteBackOut <= doWriteBackIn; 
+                --doWriteBackOut <= doWriteBackIn; 
                   
             elsif useIO = '1' then
-                doWriteBackOut <= doWriteBackIn;
+                --doWriteBackOut <= doWriteBackIn;
                 if modeIO = '1' then  -- Input, write the operand rand to memory
                     result <= operand1;
                 else
@@ -214,35 +225,31 @@ process(clk) begin
                 doMemoryAccess <= '1';
                 case modeALU(1 downto 0) is
                     when "00" => -- load
-                        --modeMemory<="00";
-                        doWriteBackOut <= '1';
+                        --doWriteBackOut <= '1';
                         memoryAddress <= operand1Buffer;
                     when "01" => -- store
-                        --modeMemory<="01";
                         result <= operand2Buffer;
                         memoryAddress <= operand1Buffer;
-                        doWriteBackOut <= '0';
+                        --doWriteBackOut <= '0';
                     when "10" => -- load_imm
-                        --modeMemory<="10";
-                        doWriteBackOut<='1';
+                        --doWriteBackOut<='1';
                         if operand1(8) = '1' then 
                             result <= (operand1(7 downto 0) & operand2Buffer(7 downto 0));
                         else 
                             result <= (operand2Buffer(15 downto 8) & operand1(7 downto 0));
                         end if;
                     when "11" => -- mov
-                        --modeMemory<="11";
                         result <= operand1Buffer;
-                        doWriteBackOut<='1';
+                       -- doWriteBackOut<='1';
                     when others =>
                         doMemoryAccess <= '0';
-                        doWriteBackOut <= '0';
+                        --doWriteBackOut <= '0';
                   end case;
             end if;
 
         end if;
     else 
-        doWriteBackOut <= '0';
+        --doWriteBackOut <= '0';
         doPCWriteBack <= '0';
         PC_out <= X"0000";
         result <= X"0000";

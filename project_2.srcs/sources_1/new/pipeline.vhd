@@ -34,8 +34,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity pipeline is Port (
     clk, rst, display_clock : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
+    
+--    modeIO_stat, useIO_stat, useLS_stat, useALU_stat, useBranch_stat, destRegDoWritebackExecute_stat, doOutputUpdateOutMemoryStage_stat : out std_logic;
+--    destRegDoWritebackDecode_stat, doBranchResetWritebackStage_stat, doOutputUpdateOutExecuteStage_stat : out std_logic;
+--    executeStageResult_stat : out std_logic_vector(15 downto 0);
+--    destRegOutExecute_state, destRegOutDecode_state, modeALU_stat : out std_logic_vector(2 downto 0);
+    
     output : out std_logic_vector(15 downto 0)
-    --out1, out2, out3, out4 : out std_logic_vector(15 downto 0)
 );
 end pipeline;
 
@@ -252,6 +257,9 @@ decode : decodeStage port map(
 
 resetExecuteStage <= (rst or doBranchResetWritebackStage);
 
+--modeALU_stat <= modeALU;
+--destRegOutDecode_state <= writeBackRegOutputDecodeStage;
+--destRegDoWritebackDecode_stat <= doWriteBackOutputDecodeStage;
 
 execute : executeStage port map(
     clk=>clk,
@@ -288,8 +296,17 @@ execute : executeStage port map(
     PC_out => PC_outExecuteStage
 );
 
-output <= X"000" & useALU & useBranch & useIO & useLS;
---out2 <= PC_outExecuteStage;
+--modeIO_stat <= modeIO;
+--useIO_stat <= useIO;
+--useALU_stat <= useALU;
+--useBranch_stat <= useBranch;
+--useLS_stat <= useLS;
+--destRegDoWritebackExecute_stat <= doWriteBackOutputExecuteStage;
+--destRegOutExecute_state <= writeBackRegOutputExecuteStage;
+--executeStageResult_stat <= resultExecuteStage;
+--doOutputUpdateOutExecuteStage_stat<=doOutputUpdateOutExecuteStage;
+
+output <= CPUoutputWritebackStage;
 resetMemoryStage <= (doBranchResetWritebackStage or rst);
 
 memory : memoryStage Port map(
@@ -318,7 +335,8 @@ memory : memoryStage Port map(
     output=>resultMemoryStage
 );
 
---resetWritebackStage <= (rst or doBranchResetWritebackStage);
+--doBranchResetWritebackStage_stat <= doBranchResetWritebackStage;
+--doOutputUpdateOutMemoryStage_stat <= doOutputUpdateOutMemoryStage;
 
 writeback : writeBackStage port map( 
     clk=>clk,
