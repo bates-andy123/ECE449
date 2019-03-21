@@ -385,7 +385,4 @@ display : display_controller port map(
     sseg=>sseg
 );
 
---out1 <= X"0" & "000" & doPCWriteBackExecuteStage & "000" & doPCWriteBackMemoryStage & "000" & doPCWriteBackOutWritebackStage;
---out4 <= PC_outWritebackStage;
-
 end Behavioral;
