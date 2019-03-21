@@ -59,11 +59,16 @@ begin
 	-- This process controls the reset button of the clock.
 
 	process(clk, reset)
+	variable count : integer range 0 to 500000 := 0;
 	begin
 		if reset='1' then                       --If button pressed all  bits in q_reg set to 0
 			q_reg <= (others=>'0');
 		elsif (clk'event and clk='1') then       --If clock is rising q_next assigned to q_reg
-			q_reg <= q_next;
+            count := count + 1;
+            if count > 400000 then
+                q_reg <= q_next;
+                count := 0;
+            end if;
 		end if;
 	end process;
 	

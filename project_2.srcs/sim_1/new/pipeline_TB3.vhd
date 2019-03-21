@@ -115,12 +115,16 @@ process begin
 
 end process;
 
-
 process begin
-    clk<='0';
     display_clock<='0';
     wait for 5us;
     display_clock<='1';
+    wait for 5us;
+end process;
+
+process begin
+    clk<='0';
+    wait for 5us;
     clk<='1';
     wait for 5us;
 end process;

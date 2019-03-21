@@ -3,22 +3,23 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="pipeline_TB3_func_impl.wdb" id="1">
+      <db_ref path="pipeline_TB3_behav.wdb" id="1">
          <top_modules>
             <top_module name="pipeline_TB3" />
+            <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2050560689385fs"></ZoomStartTime>
-      <ZoomEndTime time="2086007862124fs"></ZoomEndTime>
-      <Cursor1Time time="2080100000000fs"></Cursor1Time>
+      <ZoomStartTime time="184551378000fs"></ZoomStartTime>
+      <ZoomEndTime time="213070239705fs"></ZoomEndTime>
+      <Cursor1Time time="1200100000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="284"></NameColumnWidth>
-      <ValueColumnWidth column_width="105"></ValueColumnWidth>
+      <ValueColumnWidth column_width="97"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="21" />
+   <WVObjectSize size="19" />
    <wvobject fp_name="/pipeline_TB3/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -35,72 +36,68 @@
       <obj_property name="ElementShortName">output[15:0]</obj_property>
       <obj_property name="ObjectShortName">output[15:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/fetch/instruction_out" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">instruction_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction_out[15:0]</obj_property>
+      <obj_property name="label">instruction_/pipeline_TB3/u0/fetch/instruction_outout[15:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/pipeline_TB3/input" type="array">
       <obj_property name="ElementShortName">input[15:0]</obj_property>
       <obj_property name="ObjectShortName">input[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/executeStageResult_stat" type="array">
-      <obj_property name="ElementShortName">executeStageResult_stat[15:0]</obj_property>
-      <obj_property name="ObjectShortName">executeStageResult_stat[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/destRegOutExecute_state" type="array">
-      <obj_property name="ElementShortName">destRegOutExecute_state[2:0]</obj_property>
-      <obj_property name="ObjectShortName">destRegOutExecute_state[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/destRegDoWritebackExecute_stat" type="logic">
-      <obj_property name="ElementShortName">destRegDoWritebackExecute_stat</obj_property>
-      <obj_property name="ObjectShortName">destRegDoWritebackExecute_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/destRegOutDecode_state" type="array">
-      <obj_property name="ElementShortName">destRegOutDecode_state[2:0]</obj_property>
-      <obj_property name="ObjectShortName">destRegOutDecode_state[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/modeALU_stat" type="array">
-      <obj_property name="ElementShortName">modeALU_stat[2:0]</obj_property>
-      <obj_property name="ObjectShortName">modeALU_stat[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/modeIO_stat" type="logic">
-      <obj_property name="ElementShortName">modeIO_stat</obj_property>
-      <obj_property name="ObjectShortName">modeIO_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/useIO_stat" type="logic">
-      <obj_property name="ElementShortName">useIO_stat</obj_property>
-      <obj_property name="ObjectShortName">useIO_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/useLS_stat" type="logic">
-      <obj_property name="ElementShortName">useLS_stat</obj_property>
-      <obj_property name="ObjectShortName">useLS_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/useALU_stat" type="logic">
-      <obj_property name="ElementShortName">useALU_stat</obj_property>
-      <obj_property name="ObjectShortName">useALU_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/useBranch_stat" type="logic">
-      <obj_property name="ElementShortName">useBranch_stat</obj_property>
-      <obj_property name="ObjectShortName">useBranch_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/doOutputUpdateOutMemoryStage_stat" type="logic">
-      <obj_property name="ElementShortName">doOutputUpdateOutMemoryStage_stat</obj_property>
-      <obj_property name="ObjectShortName">doOutputUpdateOutMemoryStage_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/destRegDoWritebackDecode_stat" type="logic">
-      <obj_property name="ElementShortName">destRegDoWritebackDecode_stat</obj_property>
-      <obj_property name="ObjectShortName">destRegDoWritebackDecode_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/doBranchResetWritebackStage_stat" type="logic">
-      <obj_property name="ElementShortName">doBranchResetWritebackStage_stat</obj_property>
-      <obj_property name="ObjectShortName">doBranchResetWritebackStage_stat</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/doOutputUpdateOutExecuteStage_stat" type="logic">
-      <obj_property name="ElementShortName">doOutputUpdateOutExecuteStage_stat</obj_property>
-      <obj_property name="ObjectShortName">doOutputUpdateOutExecuteStage_stat</obj_property>
-   </wvobject>
    <wvobject fp_name="/pipeline_TB3/SSEG" type="array">
       <obj_property name="ElementShortName">SSEG[6:0]</obj_property>
       <obj_property name="ObjectShortName">SSEG[6:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB3/AN" type="array">
       <obj_property name="ElementShortName">AN[3:0]</obj_property>
       <obj_property name="ObjectShortName">AN[3:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/display/hex3" type="array">
+      <obj_property name="ElementShortName">hex3[3:0]</obj_property>
+      <obj_property name="ObjectShortName">hex3[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/display/hex2" type="array">
+      <obj_property name="ElementShortName">hex2[3:0]</obj_property>
+      <obj_property name="ObjectShortName">hex2[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/display/hex1" type="array">
+      <obj_property name="ElementShortName">hex1[3:0]</obj_property>
+      <obj_property name="ObjectShortName">hex1[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/display/hex0" type="array">
+      <obj_property name="ElementShortName">hex0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">hex0[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/writeback/doPCWriteBackOut" type="logic">
+      <obj_property name="ElementShortName">doPCWriteBackOut</obj_property>
+      <obj_property name="ObjectShortName">doPCWriteBackOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/writeback/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/addNOP" type="logic">
+      <obj_property name="ElementShortName">addNOP</obj_property>
+      <obj_property name="ObjectShortName">addNOP</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/doOutputUpdateOut" type="logic">
+      <obj_property name="ElementShortName">doOutputUpdateOut</obj_property>
+      <obj_property name="ObjectShortName">doOutputUpdateOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/outputCPU" type="array">
+      <obj_property name="ElementShortName">outputCPU[15:0]</obj_property>
+      <obj_property name="ObjectShortName">outputCPU[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memory/doOutputUpdateOut" type="logic">
+      <obj_property name="ElementShortName">doOutputUpdateOut</obj_property>
+      <obj_property name="ObjectShortName">doOutputUpdateOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memory/CPUoutput" type="array">
+      <obj_property name="ElementShortName">CPUoutput[15:0]</obj_property>
+      <obj_property name="ObjectShortName">CPUoutput[15:0]</obj_property>
    </wvobject>
 </wave_config>

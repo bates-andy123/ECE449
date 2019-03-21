@@ -53,7 +53,7 @@ signal PC_WritebackSet : std_logic := '0';
 
 begin
 
-process(clk) begin
+process(rst, clk) begin
     if rst='1' then 
         doPCWriteBackOut <= '0';
         PC_out <= X"0000";
@@ -73,6 +73,7 @@ process(clk) begin
             output <= input;
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
+            
             if(PC_WritebackSet = '0' and doPCWriteBackIn = '0') then
                 
                 if(doMemoryAccess = '1') then
