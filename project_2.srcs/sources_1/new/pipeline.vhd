@@ -34,13 +34,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity pipeline is Port (
     clk, rst, display_clock : in  STD_LOGIC;
     input : in std_logic_vector(15 downto 0);
+    SSEG : out std_logic_vector(6 downto 0);
+    AN : out std_logic_vector(3 downto 0);
     
 --    modeIO_stat, useIO_stat, useLS_stat, useALU_stat, useBranch_stat, destRegDoWritebackExecute_stat, doOutputUpdateOutMemoryStage_stat : out std_logic;
 --    destRegDoWritebackDecode_stat, doBranchResetWritebackStage_stat, doOutputUpdateOutExecuteStage_stat : out std_logic;
 --    executeStageResult_stat : out std_logic_vector(15 downto 0);
 --    destRegOutExecute_state, destRegOutDecode_state, modeALU_stat : out std_logic_vector(2 downto 0);
     
-    output : out std_logic_vector(15 downto 0)
+    output : out std_logic_vector(15 downto 0) := X"0000"
 );
 end pipeline;
 
@@ -375,12 +377,12 @@ memCtrl : memoryController port map(
 display : display_controller port map(
     clk=>display_clock, 
     reset=>rst,
-    hex3=>CPUoutputExecuteStage(15 downto 12), 
-    hex2=>CPUoutputExecuteStage(11 downto 8), 
-    hex1=>CPUoutputExecuteStage(7 downto 4),  
-    hex0=>CPUoutputExecuteStage(3 downto 0)
-    --an,
-    --sseg,
+    hex3=>CPUoutputWritebackStage(15 downto 12), 
+    hex2=>CPUoutputWritebackStage(11 downto 8), 
+    hex1=>CPUoutputWritebackStage(7 downto 4),  
+    hex0=>CPUoutputWritebackStage(3 downto 0),
+    an=>an,
+    sseg=>sseg
 );
 
 --out1 <= X"0" & "000" & doPCWriteBackExecuteStage & "000" & doPCWriteBackMemoryStage & "000" & doPCWriteBackOutWritebackStage;
