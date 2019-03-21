@@ -34,7 +34,7 @@ use ieee.numeric_std.all;
 
 entity executeStage is Port(
     clk, rst : in std_logic;
-    useALU, useBranch : in std_logic;
+    useALU, useBranch, useCustomBranch : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
@@ -68,7 +68,7 @@ component alu port(
     mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
     clk, enable : in std_logic; -- Clk and reset flags
     result : out std_logic_vector(15 downto 0); -- Result of ALU operation
-    z, n : out std_logic
+    z, n, lastInstructionOverflow : out std_logic
 );
 end component;
 
@@ -85,9 +85,12 @@ signal z, n :  std_logic := '0';
 
 signal resultCalcedPC : std_logic_vector(15 downto 0);
 
+signal lastInstructionValidOverflow : std_logic := '0';
+
 constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
 
 begin
+
 
 u1:alu port map(
     in1=>operand1Buffer, 
@@ -97,7 +100,8 @@ u1:alu port map(
     enable=>useALU,
     result=>resultALU,
     n=>n, 
-    z=>z
+    z=>z,
+    lastInstructionOverflow=>lastInstructionValidOverflow
 );
 
 u2 : PC_calculator Port map(
@@ -176,7 +180,12 @@ process(clk) begin
             doMemoryAccess <= '0';
             doOutputUpdateOut <= '0';
             
-            if useBranch = '1' then
+            if useCustomBranch = '1' then
+                if lastInstructionValidOverflow = '1' then
+                    doPCWriteBack <= '1'; -- NOP operation
+                    PC_out <= resultCalcedPC;
+                end if;
+            elsif useBranch = '1' then
                 case modeALU(2 downto 0) is
                     when "000" | "011" => 
                         doPCWriteBack <= '1'; -- NOP operation

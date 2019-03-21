@@ -3,23 +3,23 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="pipeline_TB3_behav.wdb" id="1">
+      <db_ref path="pipeline_TB3_time_synth.wdb" id="1">
          <top_modules>
+            <top_module name="glbl" />
             <top_module name="pipeline_TB3" />
-            <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="184551378000fs"></ZoomStartTime>
-      <ZoomEndTime time="213070239705fs"></ZoomEndTime>
-      <Cursor1Time time="1200100000000fs"></Cursor1Time>
+      <ZoomStartTime time="127737837000fs"></ZoomStartTime>
+      <ZoomEndTime time="147739061268fs"></ZoomEndTime>
+      <Cursor1Time time="136230160000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="284"></NameColumnWidth>
-      <ValueColumnWidth column_width="97"></ValueColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="19" />
+   <WVObjectSize size="35" />
    <wvobject fp_name="/pipeline_TB3/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -99,5 +99,69 @@
    <wvobject fp_name="/pipeline_TB3/u0/memory/CPUoutput" type="array">
       <obj_property name="ElementShortName">CPUoutput[15:0]</obj_property>
       <obj_property name="ObjectShortName">CPUoutput[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/modeALU" type="array">
+      <obj_property name="ElementShortName">modeALU[2:0]</obj_property>
+      <obj_property name="ObjectShortName">modeALU[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u1/addSubOverflow" type="logic">
+      <obj_property name="ElementShortName">addSubOverflow</obj_property>
+      <obj_property name="ObjectShortName">addSubOverflow</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u1/multiplierOverflow" type="logic">
+      <obj_property name="ElementShortName">multiplierOverflow</obj_property>
+      <obj_property name="ObjectShortName">multiplierOverflow</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u1/u3/overflow" type="logic">
+      <obj_property name="ElementShortName">overflow</obj_property>
+      <obj_property name="ObjectShortName">overflow</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u1/u3/inter31" type="array">
+      <obj_property name="ElementShortName">inter31[30:16]</obj_property>
+      <obj_property name="ObjectShortName">inter31[30:16]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/instruction_in" type="array">
+      <obj_property name="ElementShortName">instruction_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/resultALU" type="array">
+      <obj_property name="ElementShortName">resultALU[15:0]</obj_property>
+      <obj_property name="ObjectShortName">resultALU[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/result" type="array">
+      <obj_property name="ElementShortName">result[15:0]</obj_property>
+      <obj_property name="ObjectShortName">result[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/useALU" type="logic">
+      <obj_property name="ElementShortName">useALU</obj_property>
+      <obj_property name="ObjectShortName">useALU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/useBranch" type="logic">
+      <obj_property name="ElementShortName">useBranch</obj_property>
+      <obj_property name="ObjectShortName">useBranch</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/useCustomBranch" type="logic">
+      <obj_property name="ElementShortName">useCustomBranch</obj_property>
+      <obj_property name="ObjectShortName">useCustomBranch</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/useIO" type="logic">
+      <obj_property name="ElementShortName">useIO</obj_property>
+      <obj_property name="ObjectShortName">useIO</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/useLS" type="logic">
+      <obj_property name="ElementShortName">useLS</obj_property>
+      <obj_property name="ObjectShortName">useLS</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_in" type="array">
+      <obj_property name="ElementShortName">PC_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/doPCWriteBack" type="logic">
+      <obj_property name="ElementShortName">doPCWriteBack</obj_property>
+      <obj_property name="ObjectShortName">doPCWriteBack</obj_property>
    </wvobject>
 </wave_config>

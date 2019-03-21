@@ -123,7 +123,7 @@ begin
     finalProduct : entity work.unsignedAddition port map(in1 => inter21, in2 => inter22, output => inter31);
     productTemp <= inter31(15 downto 0);
     product <= productTemp;
-    overflow <= '0';
---    overflow <= inter31(16) or inter31(17) or inter31(18) or inter31(19) or inter31(20) or inter31(21) or inter31(22) or inter31(23) or inter31(24)
---                or inter31(25) or inter31(26) or inter31(27) or inter31(28) or inter31(29) or inter31(30);
+    --overflow <= '0';
+    overflow <= inter31(16) or inter31(17) or inter31(18) or inter31(19) or inter31(20) or inter31(21) or inter31(22) or inter31(23) or inter31(24)
+                or inter31(25) or inter31(26) or inter31(27) or inter31(28) or inter31(29) or inter31(30);
 end Behavioral;

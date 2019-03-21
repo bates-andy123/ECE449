@@ -37,7 +37,7 @@ entity alu is
         mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
         clk, enable : in std_logic; -- Clk and reset flags
         result : out std_logic_vector(15 downto 0); -- Result of ALU operation
-        z, n : out std_logic := '0'
+        z, n, lastInstructionOverflow : out std_logic := '0'
     ); -- zero and negative flag from addition/subtraction operation
 end alu;
 
@@ -82,6 +82,9 @@ signal multiplierOutput : std_logic_vector(15 downto 0); -- Signal for the outpu
 signal addSubOverflow : std_logic; -- Overflow flag for add/subtract operation, 0 = no overflow, 1 = overflow
 signal multiplierOverflow : std_logic; -- Overflow flag for multiplier operation
 
+signal overflowCurrent : std_logic := '0'; 
+
+
 begin
 
 -- Component instantiations
@@ -90,15 +93,26 @@ u1 : barrelShiftLeft port map(input => in1, shiftBy => in2(3 downto 0), output =
 u2 : addSub port map(in1 => in1, in2 => in2, operation => mode, output => addSubOutput, overflow => addSubOverflow);
 u3 : multiplier port map(multiplicand => in1, multiplier => in2, overflow => multiplierOverflow, product => multiplierOutput);
 
+
 process(clk)
 begin
     if rising_edge(clk) then
         -- Determine ALU mode and perform appropriate action
+        
+        lastInstructionOverflow <= overflowCurrent;
+        overflowCurrent <= '0';
+        
         case mode(2 downto 0) is
             when "000" => null; -- NOP operation
-            when "001" => result <= addSubOutput; -- ADD operation
-            when "010" => result <= addSubOutput; -- SUB operation
-            when "011" => result <= multiplierOutput;-- MUL operation
+            when "001" => 
+                result <= addSubOutput; -- ADD operation
+                overflowCurrent <= addSubOverflow;
+            when "010" => 
+                result <= addSubOutput; -- SUB operation
+                overflowCurrent <= addSubOverflow;
+            when "011" => 
+                result <= multiplierOutput;-- MUL operation
+                overflowCurrent <= multiplierOverflow;
             when "100" => result <= (in1 nand in2); -- NAND operation
             when "101" => result <= barrelShiftLeftOutput; -- SHL operation
             when "110" => result <= barrelShiftRightOutput; -- SHR operation

@@ -62,7 +62,7 @@ component decodeStage port(
     clk, rst, addNOP : in std_logic;
     instruction_in, PC_in : in std_logic_vector(15 downto 0);
     useALU, useBranch : out std_logic;
-    useIO, useLS : out std_logic;
+    useIO, useLS, useCustomBranch : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
     modeIO, operand2Passthrough : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
@@ -79,7 +79,7 @@ end component;
 
 component executeStage port(
     clk, rst : in std_logic;
-    useALU, useBranch : in std_logic;
+    useALU, useBranch, useCustomBranch : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
@@ -175,7 +175,7 @@ signal doWriteBackOutputDecodeStage : std_logic := '0';
 signal writeBackRegOutputDecodeStage : std_logic_vector(2 downto 0) := "000";
 signal haltSig : std_logic := '0';
 signal PC_outDecodeStage : std_logic_vector(15 downto 0);
-signal resetDecodeStage : std_logic;
+signal resetDecodeStage, useCustomBranch : std_logic;
 signal operand2PassthroughDecodeStage : std_logic;
 
 signal doWriteBackOutputExecuteStage : std_logic;
@@ -244,6 +244,7 @@ decode : decodeStage port map(
     useBranch=>useBranch,
     useIO=>useIO,
     useLS=>useLS,
+    useCustomBranch=>useCustomBranch,
     operand2Passthrough=>operand2PassthroughDecodeStage,
     modeALU => modeALU,
     modeIO=>modeIO,
@@ -267,6 +268,7 @@ execute : executeStage port map(
     clk=>clk,
     rst=>resetExecuteStage,
     useALU=>useALU,
+    useCustomBranch=>useCustomBranch,
     useBranch=>useBranch,
     useIO=>useIO,
     useLS=>useLS,

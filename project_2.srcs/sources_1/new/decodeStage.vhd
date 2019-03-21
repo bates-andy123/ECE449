@@ -35,7 +35,7 @@ entity decodeStage is Port (
     clk, rst, addNOP : in std_logic;
     halt : out std_logic := '0';
     instruction_in, PC_in : in std_logic_vector(15 downto 0);
-    useALU, useBranch : out std_logic := '0';
+    useALU, useBranch, useCustomBranch : out std_logic := '0';
     useIO, useLS : out std_logic := '0';
     modeALU : out std_logic_vector(2 downto 0) := "000";
     modeIO, operand2Passthrough : out std_logic := '0';
@@ -94,6 +94,8 @@ constant br_neg : std_logic_vector(6 downto 0) 		:= "1000100"; --uses ra
 constant br_zero : std_logic_vector(6 downto 0) 	:= "1000101"; --uses ra
 constant br_sub : std_logic_vector(6 downto 0) 		:= "1000110"; --uses ra
 constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
+
+constant brr_o : std_logic_vector(6 downto 0)       := "1010000";
 
 signal signExtenderB1 : std_logic_vector(6 downto 0);
 signal signExtenderB2 : std_logic_vector(9 downto 0);
@@ -169,7 +171,7 @@ registers : register_file port map(
         operand2 <=
             rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub | rtn | load_imm | store,
             X"000" & instruction(3 downto 0) when shl_op | shr_op ,
-            PC_in when brr | brr_neg | brr_zero,
+            PC_in when brr | brr_neg | brr_zero | brr_o,
             X"0000" when others;   
             
     with instruction(15 downto 9) select
@@ -177,7 +179,7 @@ registers : register_file port map(
             rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op | load | store | mov,
             inputIn when in_op ,
             ("0000000" & instruction(8 downto 0)) when load_imm,
-            (signExtenderB1 & instruction(8 downto 0)) when brr | brr_neg | brr_zero,
+            (signExtenderB1 & instruction(8 downto 0)) when brr | brr_neg | brr_zero | brr_o,
             (signExtenderB2 & instruction(5 downto 0)) when br | br_neg | br_zero | br_sub,
             X"0000" when others;   
             
@@ -192,7 +194,12 @@ registers : register_file port map(
             ("1111111111") when '1',
             ("0000000000") when '0',
             ("0000000000") when others;
-            
+    
+    with instruction(15 downto 9) select
+        useCustomBranch <=
+            '1' when  brr_o,
+            '0' when others;
+
     with instruction(15 downto 9) select
         useBranch <=
             '1' when  brr | brr_neg | brr_zero | br | br_neg | br_zero | br_sub | rtn,
