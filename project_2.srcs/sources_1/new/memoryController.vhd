@@ -133,7 +133,7 @@ u1 : ROMController port map(
 
     with addressARAM select
         outaContentRAM <= 
-            (X"FF" & inputIn) when X"FFF0",
+            (X"00" & inputIn) when X"FFF0",
             outaContentRAMBuffer when others;
 
 process(clk)

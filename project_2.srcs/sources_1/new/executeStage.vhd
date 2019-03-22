@@ -41,7 +41,7 @@ entity executeStage is Port(
     modeIO : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
-    destRegOut : out std_logic_vector(2 downto 0) := "000";
+    destRegOut, readReg1Out : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
     doWriteBackOut, doMemoryAccess, doOutputUpdateOut : out std_logic := '0';
     doPCWriteBack : out std_logic := '0';
@@ -163,6 +163,7 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
                     modeMemory<="01";
                     destRegOut <= "000";
                     doWriteBackOut <= '0';
+                    
                 when "10" => -- load_imm
                     modeMemory<="10";
                     destRegOut <= "111";
@@ -187,6 +188,7 @@ process(clk) begin
             PC_out <= PC_in; 
             doMemoryAccess <= '0';
             doOutputUpdateOut <= '0';
+            readReg1Out <= readReg1;
             
             if useCustomBranch = '1' then
                 if lastInstructionValidOverflow = '1' then

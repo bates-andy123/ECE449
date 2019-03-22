@@ -82,11 +82,11 @@ component executeStage port(
     useALU, useBranch, useCustomBranch : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
-    readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
+    readReg1, readReg2,  memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
     modeIO, useMemoryDestValue, useWritebackDestValue : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
-    destRegOut : out std_logic_vector(2 downto 0);
+    destRegOut, readReg1Out : out std_logic_vector(2 downto 0);
     doWriteBackIn : in std_logic;
     doWriteBackOut, doPCWriteBack, doMemoryAccess, doOutputUpdateOut : out std_logic;
     result, memoryAddress : out std_logic_vector(15 downto 0);
@@ -99,7 +99,7 @@ end component;
 
 component memoryStage Port (
     clk, rst, doMemoryAccess : in std_logic;
-    destRegIn : in std_logic_vector(2 downto 0);
+    destRegIn, regUsedIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut : out std_logic;
@@ -182,6 +182,7 @@ signal operand2PassthroughDecodeStage : std_logic;
 
 signal doWriteBackOutputExecuteStage : std_logic;
 signal writeBackRegOutputExecuteStage : std_logic_vector(2 downto 0);
+signal readReg1OutExecuteStage : std_logic_vector(2 downto 0);
 signal resultExecuteStage : std_logic_vector(15 downto 0);
 signal PC_outExecuteStage : std_logic_vector(15 downto 0);
 signal doPCWriteBackExecuteStage : std_logic;
@@ -280,6 +281,7 @@ execute : executeStage port map(
     modeALU=>modeALU,
     readReg1 => readReg1DecodeStage,
     readReg2 => readReg2DecodeStage,
+    readReg1Out => readReg1OutExecuteStage,
     modeIO=>modeIO,
     operand1=>operand1, 
     operand2=>operand2,
@@ -320,6 +322,7 @@ resetMemoryStage <= (doBranchResetWritebackStage or rst);
 memory : memoryStage Port map(
     clk=>clk, 
     rst=>resetMemoryStage,
+    regUsedIn=>readReg1OutExecuteStage,
     doMemoryAccess=>doMemoryAccessExecuteStage,
     destRegIn=>writeBackRegOutputExecuteStage,
     destRegOut=>writeBackRegOutputMemoryStage,

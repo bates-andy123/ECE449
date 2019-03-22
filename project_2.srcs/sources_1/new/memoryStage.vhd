@@ -33,7 +33,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity memoryStage is Port (
     clk, rst, doMemoryAccess : in std_logic;
-    destRegIn : in std_logic_vector(2 downto 0);
+    destRegIn, regUsedIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut : out std_logic := '0';  
@@ -50,6 +50,8 @@ end memoryStage;
 architecture Behavioral of memoryStage is
 
 signal PC_WritebackSet : std_logic := '0';
+
+signal lastRegUsed : std_logic_vector( 2 downto 0);
 
 begin
 
