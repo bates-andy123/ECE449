@@ -137,12 +137,14 @@ component memoryController Port (
     writeContentRAM : in std_logic_vector(15 downto 0); -- Content to write to RAM port A
     outaContentRAM : out std_logic_vector(15 downto 0); -- Content read from port A of RAM
     weaRAM : in std_logic; -- Write enable vector for port A in RAM
-    rstaRAM : in std_logic; -- Reset signal for port A in RAM
+    rstaRAM, rst : in std_logic; -- Reset signal for port A in RAM
     rstbRAM : in std_logic; -- Reset signal for port B in RAM
     regceaRAM : in std_logic; -- Clock enable for last register stage on output data path
     
     -- Port information relating to ROM controller
-    rstaROM : in std_logic
+    rstaROM : in std_logic;
+    hexDigitsOut : out std_logic_vector(15 downto 0);
+    inputIn : in std_logic_vector(7 downto 0)
 );
 end component;
 
@@ -206,6 +208,8 @@ signal PC_outWritebackStage : std_logic_vector(15 downto 0);
 signal resetWritebackStage : std_logic;
 signal doOutputUpdateOutWritebackStage : std_logic;
 signal CPUoutputWritebackStage : std_logic_vector(15 downto 0);
+
+signal hexDigitsOut : std_logic_vector(15 downto 0);
 
 begin
 
@@ -364,6 +368,7 @@ writeback : writeBackStage port map(
 
 memCtrl : memoryController port map(
     clk=>clk,
+    rst=>rst,
     readOnlyAddress=>fetchAddressFetchStage,
     outputOnReadOnlyChannel=>instruction_inFetchStage,
     addressARAM=>memoryAddress,
@@ -373,16 +378,18 @@ memCtrl : memoryController port map(
     rstaRAM=>'0',
     rstbRAM=>'0',
     regceaRAM=>'1',
-    rstaROM=>'0'
+    rstaROM=>'0',
+    hexDigitsOut=>hexDigitsOut,
+    InputIn=>X"00"
 );
 
 display : display_controller port map(
     clk=>display_clock, 
     reset=>rst,
-    hex3=>CPUoutputWritebackStage(15 downto 12), 
-    hex2=>CPUoutputWritebackStage(11 downto 8), 
-    hex1=>CPUoutputWritebackStage(7 downto 4),  
-    hex0=>CPUoutputWritebackStage(3 downto 0),
+    hex3=>hexDigitsOut(15 downto 12), 
+    hex2=>hexDigitsOut(11 downto 8), 
+    hex1=>hexDigitsOut(7 downto 4),  
+    hex0=>hexDigitsOut(3 downto 0),
     an=>an,
     sseg=>sseg
 );

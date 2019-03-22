@@ -129,7 +129,7 @@ u3 : dataForwarder port map(
     operand2=>operand2Buffer
 );
 
-modeMemory <= modeALU(1 downto 0);
+--modeMemory <= modeALU(1 downto 0);
 
 process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
     if rst = '1' then
@@ -138,6 +138,7 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
     --elsif falling_edge(clk) then
     elsif falling_edge(clk) then
         doWriteBackOut <= '0';
+        modeMemory <= "00";
     
         if useBranch = '1' then
             if modeALU = "110" then
@@ -153,18 +154,25 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
         elsif useLS='1' then
             case modeALU(1 downto 0) is
                 when "00" => -- load
+                    memoryAddress <= operand1Buffer;
+                    modeMemory<="00";
                     destRegOut <= destRegIn;
                     doWriteBackOut <= '1';
                 when "01" => -- store
+                    memoryAddress <= operand1Buffer;
+                    modeMemory<="01";
                     destRegOut <= "000";
-                    doWriteBackOut <= '1';
+                    doWriteBackOut <= '0';
                 when "10" => -- load_imm
+                    modeMemory<="10";
                     destRegOut <= "111";
                     doWriteBackOut <= '1';
                 when "11" => -- mov
+                    modeMemory<="11";
                     destRegOut <= destRegIn;
                     doWriteBackOut <= '1';
                 when others =>
+                    modeMemory<="00";
                     destRegOut <= "000";
                     doWriteBackOut <= '0';
             end case;
@@ -219,10 +227,8 @@ process(clk) begin
             
             elsif useALU = '1' then 
                 result <= resultALU;
-                --doWriteBackOut <= doWriteBackIn; 
                   
             elsif useIO = '1' then
-                --doWriteBackOut <= doWriteBackIn;
                 if modeIO = '1' then  -- Input, write the operand rand to memory
                     result <= operand1;
                 else
@@ -234,14 +240,11 @@ process(clk) begin
                 doMemoryAccess <= '1';
                 case modeALU(1 downto 0) is
                     when "00" => -- load
-                        --doWriteBackOut <= '1';
-                        memoryAddress <= operand1Buffer;
+                        --memoryAddress <= operand1Buffer;
                     when "01" => -- store
                         result <= operand2Buffer;
-                        memoryAddress <= operand1Buffer;
-                        --doWriteBackOut <= '0';
+                        --memoryAddress <= operand1Buffer;
                     when "10" => -- load_imm
-                        --doWriteBackOut<='1';
                         if operand1(8) = '1' then 
                             result <= (operand1(7 downto 0) & operand2Buffer(7 downto 0));
                         else 
@@ -249,10 +252,8 @@ process(clk) begin
                         end if;
                     when "11" => -- mov
                         result <= operand1Buffer;
-                       -- doWriteBackOut<='1';
                     when others =>
                         doMemoryAccess <= '0';
-                        --doWriteBackOut <= '0';
                   end case;
             end if;
 

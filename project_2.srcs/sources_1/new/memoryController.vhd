@@ -46,12 +46,15 @@ Port (
     writeContentRAM : in std_logic_vector(15 downto 0); -- Content to write to RAM port A
     outaContentRAM : out std_logic_vector(15 downto 0); -- Content read from port A of RAM
     weaRAM : in std_logic; -- Write enable vector for port A in RAM
-    rstaRAM : in std_logic; -- Reset signal for port A in RAM
+    rstaRAM, rst : in std_logic; -- Reset signal for port A in RAM
     rstbRAM : in std_logic; -- Reset signal for port B in RAM
     regceaRAM : in std_logic; -- Clock enable for last register stage on output data path
     
     -- Port information relating to ROM controller
-    rstaROM : in std_logic -- Reset signal for ROM
+    rstaROM : in std_logic; -- Reset signal for ROM,
+    
+    hexDigitsOut : out std_logic_vector(15 downto 0);
+    inputIn : in std_logic_vector(7 downto 0)
 );
 end memoryController;
 
@@ -80,19 +83,23 @@ end component;
 
 signal readOnlyAddressShifted, addressARAMShifted : std_logic_vector(15 downto 0);
 
+signal weaRAMBuffer : std_logic := '0';
+
 -- Signal declarations
 signal outbContentRAM, outContentROM : std_logic_vector(15 downto 0);
 signal weaRAMVector : std_logic_vector(0 downto 0);
+
+signal outaContentRAMBuffer : std_logic_vector(15 downto 0);
 
 begin
 
 readOnlyAddressShifted <= "0" & readOnlyAddress(15 downto 1);
 addressARAMShifted <= "0" & addressARAM(15 downto 1);
 
-weaRAMVector <= ("" & weaRAM);
+weaRAMVector <= ("" & weaRAMBuffer);
 
 u0 : RAMController port map(
-    douta => outaContentRAM, 
+    douta => outaContentRAMBuffer, 
     doutb => outbContentRAM, 
     addra => addressARAMShifted, 
     addrb => readOnlyAddressShifted, 
@@ -114,6 +121,21 @@ u1 : ROMController port map(
     rsta => rstaROM
 );
 
+--    with readOnlyAddress(10) select
+--        outputOnReadOnlyChannel <=
+--            outbContentRAM when '1',
+--            outContentROM when others;
+    
+    with addressARAM select
+        weaRAMBuffer <=
+            '0' when X"FFF2" | X"FFF0",
+            weaRAM when others;
+
+    with addressARAM select
+        outaContentRAM <= 
+            (X"FF" & inputIn) when X"FFF0",
+            outaContentRAMBuffer when others;
+
 process(clk)
 begin
     if falling_edge(clk) then
@@ -122,6 +144,17 @@ begin
         else
             outputOnReadOnlyChannel <= outContentROM;
         end if;    
+    end if;
+end process;
+
+process(clk, rst) begin
+    if (rst='1') then
+        hexDigitsOut <= X"0000";
+    elsif (rising_edge(clk) and weaRAM = '1') then
+    
+        if (addressARAM = X"FFF2") then
+            hexDigitsOut <= writeContentRAM;
+        end if;
     end if;
 end process;
 

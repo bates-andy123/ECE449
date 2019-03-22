@@ -67,9 +67,18 @@ process(rst, clk) begin
     end if;
 end process;
 
+    memoryAddress <= memoryAddressFromExecuteStage;
+    memoryWriteValue <= input;
+    
+    with modeMemory select
+        memoryRW <= 
+            '1' when "01",
+            '0' when others;
+
 process(clk) begin
     if(rst = '0') then
         if (clk='0') then
+            
             output <= input;
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
@@ -78,21 +87,17 @@ process(clk) begin
                 
                 if(doMemoryAccess = '1') then
                     if(modeMemory = "00") then
-                    
-                    elsif(modeMemory = "01") then
-                       memoryRW <= '1';
-                       memoryAddress <= input;
-                       memoryWriteValue <= input;
+                        output <=  memoryReadValue;
                     end if;
                 else 
-                    memoryRW <= '0'; 
+
                 end if;
             else
                 PC_WritebackSet <= '1'; -- If the condition did not pass either of:
                                         --doPCWriteBackIn exclusively equals 1 thus set PC_WritebackSet <= '1'
                                         --or PC_WritebackSet='1' and PC_WritebackSet <='1' has no effect
             end if;
-             
+         else
             
         end if;
     else -- rst is currently active
@@ -100,11 +105,7 @@ process(clk) begin
         output <= X"0000";
         doWriteBackOut <= '0';
         destRegOut <= "000";
-        memoryAddress <= X"0000"; 
-        memoryWriteValue <= X"0000";
-        
-        memoryRW <= '0';
-        
+
     end if;
 end process;
 
