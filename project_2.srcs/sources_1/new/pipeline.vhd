@@ -33,7 +33,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity pipeline is Port (
     clk, rst, display_clock : in  STD_LOGIC;
-    input : in std_logic_vector(15 downto 0);
+    input, switchInput : in std_logic_vector(15 downto 0);
     SSEG : out std_logic_vector(6 downto 0);
     AN : out std_logic_vector(3 downto 0);
     
@@ -144,7 +144,7 @@ component memoryController Port (
     -- Port information relating to ROM controller
     rstaROM : in std_logic;
     hexDigitsOut : out std_logic_vector(15 downto 0);
-    inputIn : in std_logic_vector(7 downto 0)
+    inputIn : in std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -383,7 +383,7 @@ memCtrl : memoryController port map(
     regceaRAM=>'1',
     rstaROM=>'0',
     hexDigitsOut=>hexDigitsOut,
-    InputIn=>X"00"
+    InputIn=>switchInput
 );
 
 display : display_controller port map(

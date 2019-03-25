@@ -37,7 +37,7 @@ architecture Behavioral of pipeline_TB3 is
 
 component pipeline Port (
     clk, rst, display_clock : in  STD_LOGIC;
-    input : in std_logic_vector(15 downto 0);
+    input, switchInput : in std_logic_vector(15 downto 0);
     SSEG : out std_logic_vector(6 downto 0);
     AN : out std_logic_vector(3 downto 0);
     
@@ -52,7 +52,7 @@ end component;
 
 signal clk, rst, display_clock : std_logic := '0';
 signal output : std_logic_vector(15 downto 0);
-signal input : std_logic_vector(15 downto 0) := X"C0A0";
+signal input, switchInput : std_logic_vector(15 downto 0) := X"C0A0";
 signal SSEG : std_logic_vector(6 downto 0);
 signal AN : std_logic_vector(3 downto 0);
 
@@ -71,7 +71,7 @@ u0 : pipeline port map(
     input=>input,
     an=>an,
     SSEG=>sseg,
-    
+    switchInput=>switchInput,
 --    doOutputUpdateOutExecuteStage_stat=>doOutputUpdateOutExecuteStage_stat,
 --    modeALU_stat=>modeALU_stat,
 --    destRegDoWritebackExecute_stat=>destRegDoWritebackExecute_stat,
@@ -91,6 +91,7 @@ u0 : pipeline port map(
 );
 
 process begin
+    switchInput<=X"A0B4";
     input<=X"0009";
     rst <= '1';
     wait until falling_edge(clk);

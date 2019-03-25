@@ -54,7 +54,7 @@ Port (
     rstaROM : in std_logic; -- Reset signal for ROM,
     
     hexDigitsOut : out std_logic_vector(15 downto 0);
-    inputIn : in std_logic_vector(7 downto 0)
+    inputIn : in std_logic_vector(15 downto 0)
 );
 end memoryController;
 
@@ -133,7 +133,7 @@ u1 : ROMController port map(
 
     with addressARAM select
         outaContentRAM <= 
-            (X"00" & inputIn) when X"FFF0",
+            inputIn when X"FFF0",
             outaContentRAMBuffer when others;
 
 process(clk)
