@@ -51,7 +51,13 @@ architecture Behavioral of memoryStage is
 
 signal PC_WritebackSet : std_logic := '0';
 
-signal lastRegUsed : std_logic_vector( 2 downto 0);
+signal outputBuffer : std_logic_vector(15 downto 0);
+
+signal destRegOutBuffer  : std_logic_vector( 2 downto 0);
+
+signal lastModeMemory : std_logic_vector(1 downto 0);
+
+signal dataForwardNeeded, lastDoMemoryAccess : std_logic;
 
 begin
 
@@ -69,27 +75,67 @@ process(rst, clk) begin
     end if;
 end process;
 
+process (lastDoMemoryAccess, lastModeMemory, doMemoryAccess, modeMemory, clk) begin
+
+    if((lastDoMemoryAccess='1') and (lastModeMemory="00") and doMemoryAccess='1' and modeMemory="01") then
+        if (destRegOutBuffer = destRegIn) then
+            dataForwardNeeded <= '1';
+        end if;
+    else 
+        dataForwardNeeded <= '0';
+    end if;
+
+end process;
+
+
     memoryAddress <= memoryAddressFromExecuteStage;
-    memoryWriteValue <= input;
+    
+    --memoryWriteValue <= input;
+    
+    with dataForwardNeeded select
+        memoryWriteValue <=
+            outputBuffer when '1',
+            input when others;
+            
     
     with modeMemory select
         memoryRW <= 
             '1' when "01",
             '0' when others;
 
+    output <= outputBuffer;
+    destRegOut <= destRegOutBuffer;
+    
+process(clk) begin
+    if rst='0' then
+        if clk='1' then
+            lastDoMemoryAccess <= (doMemoryAccess);
+            lastModeMemory <= modeMemory;
+        end if;
+    else
+        lastDoMemoryAccess <= '0';
+        lastModeMemory <= "00";
+    end if;
+end process;
+
+--process(doMemoryAccess, modeMemory) begin
+--    lastDoMemoryAccess <= (doMemoryAccess);
+--    lastModeMemory <= modeMemory;
+--end process;
+
 process(clk) begin
     if(rst = '0') then
         if (clk='0') then
             
-            output <= input;
-            destRegOut <= destRegIn;
+            outputBuffer <= input;
+            destRegOutBuffer <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
             
             if(PC_WritebackSet = '0' and doPCWriteBackIn = '0') then
                 
                 if(doMemoryAccess = '1') then
                     if(modeMemory = "00") then
-                        output <=  memoryReadValue;
+                        outputBuffer <=  memoryReadValue;
                     end if;
                 else 
 
@@ -104,9 +150,9 @@ process(clk) begin
         end if;
     else -- rst is currently active
         PC_WritebackSet <= '0';
-        output <= X"0000";
+        outputBuffer <= X"0000";
         doWriteBackOut <= '0';
-        destRegOut <= "000";
+        destRegOutBuffer <= "000";
 
     end if;
 end process;

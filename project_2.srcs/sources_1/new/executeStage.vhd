@@ -161,7 +161,7 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
                 when "01" => -- store
                     memoryAddress <= operand1Buffer;
                     modeMemory<="01";
-                    destRegOut <= "000";
+                    destRegOut <= destRegIn;
                     doWriteBackOut <= '0';
                     
                 when "10" => -- load_imm
