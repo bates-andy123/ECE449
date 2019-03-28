@@ -36,7 +36,7 @@ entity pipeline_TB3 is end pipeline_TB3;
 architecture Behavioral of pipeline_TB3 is
 
 component pipeline Port (
-    clk, rst, display_clock : in  STD_LOGIC;
+    clk, rst, rstExecute, display_clock : in  STD_LOGIC;
     input, switchInput : in std_logic_vector(15 downto 0);
     SSEG : out std_logic_vector(6 downto 0);
     AN : out std_logic_vector(3 downto 0);
@@ -50,7 +50,7 @@ component pipeline Port (
 );
 end component;
 
-signal clk, rst, display_clock : std_logic := '0';
+signal clk, rst, rstExecute, display_clock : std_logic := '0';
 signal output : std_logic_vector(15 downto 0);
 signal input, switchInput : std_logic_vector(15 downto 0) := X"C0A0";
 signal SSEG : std_logic_vector(6 downto 0);
@@ -66,6 +66,7 @@ begin
 
 u0 : pipeline port map(
     clk => clk,
+    rstExecute=>rstExecute,
     display_clock => display_clock,
     rst => rst,
     input=>input,
@@ -94,8 +95,10 @@ process begin
     switchInput<=X"A0B4";
     input<=X"0009";
     rst <= '1';
+    rstExecute<='0';
     wait until falling_edge(clk);
     rst<='0';
+    rstExecute<='0';
     wait until falling_edge(clk);
     input<=X"0001";
     wait until falling_edge(clk);

@@ -33,7 +33,7 @@ use ieee.numeric_std.all;
 --use UNISIM.VComponents.all;
 
 entity fetchStage is Port (
-    clk, rst, halt : in std_logic;
+    clk, rst, rstExecute, halt : in std_logic;
     instruction_out, PC_out: out std_logic_vector(15 downto 0) := X"0000";
     inputIn, instruction_in : in std_logic_vector(15 downto 0);
     inputOut, fetchAddress : out std_logic_vector(15 downto 0) := X"0000";
@@ -62,7 +62,7 @@ validInstruction <= PC_justHalted or halt;
 
 process(clk)
 begin
-    if(rst = '0') then 
+    if(rst = '0' and rstExecute='0') then 
         if (clk='0' and clk'event) then
                 
                 if (PC_doJump = '0' and halt='0') then -- normal increment mode
@@ -82,13 +82,19 @@ begin
 
         end if;
     else 
-        PC_next <= X"0002";
-        PC_current <= X"0000";
-        inputOut <= X"0000";
-        PC_justHalted<='0';
-        --validInstruction<='0';
-        PC_out<=X"0000";
-        --instruction_out <= X"0000";
+        
+            inputOut <= X"0000";
+            PC_justHalted<='0';
+            
+            if rstExecute = '1' then
+                PC_next <= X"0004";
+                PC_current <= X"0002";
+                PC_out<=X"0002";
+            else --must be normal rst aka rst_load
+                PC_next <= X"0002";
+                PC_current <= X"0000";
+                PC_out<=X"0000";
+            end if;
     end if;
 
 end process;

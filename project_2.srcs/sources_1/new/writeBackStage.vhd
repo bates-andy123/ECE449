@@ -53,8 +53,12 @@ begin
 
 process(clk) begin
     if (pipelineReset='0') then
-        if (doOutputUpdateIn = '1' and clk='0') then
-            CPUoutput <= CPUinput;
+        if (clk='0') then
+            if doOutputUpdateIn = '1' then
+                CPUoutput <= CPUinput;
+            else
+                CPUoutput <= X"0000";
+            end if;
         end if;
     else
         CPUoutput <= X"0000";

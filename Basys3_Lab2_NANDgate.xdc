@@ -35,8 +35,15 @@ set_property PACKAGE_PIN C16 [get_ports {input[15]}]
 		set_property IOSTANDARD LVCMOS33 [get_ports {input[15]}]
 
 # Switch
-set_property PACKAGE_PIN T18 [get_ports {rst}]					
-	set_property IOSTANDARD LVCMOS33 [get_ports {rst}]		
+set_property PACKAGE_PIN W19 [get_ports {rstExecute}]					
+	set_property IOSTANDARD LVCMOS33 [get_ports {rstExecute}]
+	set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets rstExecute_IBUF] 
+
+# Switch
+set_property PACKAGE_PIN T17 [get_ports {rst}]					
+	set_property IOSTANDARD LVCMOS33 [get_ports {rst}]	
+
+   
 		
 ##Switch 0		
 set_property PACKAGE_PIN V17 [get_ports {switchInput[0]}]
@@ -89,10 +96,10 @@ set_property PACKAGE_PIN R2 [get_ports {switchInput[15]}]
 
 ##Pmod Header JC
 ##Sch name = JC1
-set_property PACKAGE_PIN T17 [get_ports {input[0]}]
+set_property PACKAGE_PIN T18 [get_ports {input[0]}]
 		set_property IOSTANDARD LVCMOS33 [get_ports {input[0]}]
 ##Sch name = JC2
-set_property PACKAGE_PIN M18 [get_ports {input[1]}]
+set_property PACKAGE_PIN U16 [get_ports {input[1]}]
 		set_property IOSTANDARD LVCMOS33 [get_ports {input[1]}]
 ##Sch name = in_port3
 set_property PACKAGE_PIN N17 [get_ports {input[2]}]
@@ -139,7 +146,7 @@ set_property PACKAGE_PIN W4 [get_ports {AN[3]}]
     set_property IOSTANDARD LVCMOS33 [get_ports {AN[3]}]
     
 ## LEDs
-set_property PACKAGE_PIN U16 [get_ports {output[0]}]                    
+set_property PACKAGE_PIN M18 [get_ports {output[0]}]                    
     set_property IOSTANDARD LVCMOS33 [get_ports {output[0]}]
 set_property PACKAGE_PIN E19 [get_ports {output[1]}]                    
     set_property IOSTANDARD LVCMOS33 [get_ports {output[1]}]

@@ -50,9 +50,9 @@ end memoryStage;
 architecture Behavioral of memoryStage is
 
 signal PC_WritebackSet : std_logic := '0';
-signal memoryModeIsStore : std_logic;
+signal memoryModeIsStore, memoryModeIsLoad : std_logic;
 signal destRegOutMatchIn : std_logic;
-signal dataForwardNeeded : std_logic;
+signal dataForwardNeededStore, dataForwardNeededLoad : std_logic;
 
 signal destRegOutBuffer, destRegOutLatched : std_logic_vector(2 downto 0);
 signal doWritebackOutBuffer : std_logic;
@@ -79,12 +79,15 @@ end process;
     memoryModeIsStore <= '1' when modeMemory = "01" else '0';
     destRegOutMatchIn <= '1' when destRegOutLatched = regUsedIn else '0';
     
-    dataForwardNeeded <= doWriteBackInLatched and destRegOutMatchIn and memoryModeIsStore;
+    dataForwardNeededStore <= doWriteBackInLatched and destRegOutMatchIn and memoryModeIsStore;
     
-    with dataForwardNeeded select
+    with dataForwardNeededStore select
         memoryWriteValue <= 
             outputLatched when '1',
             input when others; 
+
+    memoryModeIsLoad <= '1' when modeMemory = "00" else '0';
+    dataForwardNeededLoad <= doWriteBackInLatched and destRegOutMatchIn and memoryModeIsLoad;
 
     memoryAddress <= memoryAddressFromExecuteStage;
     
