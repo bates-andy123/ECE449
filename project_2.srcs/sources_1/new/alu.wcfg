@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="128278107000fs"></ZoomStartTime>
-      <ZoomEndTime time="176748350583fs"></ZoomEndTime>
-      <Cursor1Time time="200100000000fs"></Cursor1Time>
+      <ZoomStartTime time="154257402000fs"></ZoomStartTime>
+      <ZoomEndTime time="198867340078fs"></ZoomEndTime>
+      <Cursor1Time time="300100000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="283"></NameColumnWidth>
+      <NameColumnWidth column_width="271"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="59" />
+   <WVObjectSize size="69" />
    <wvobject fp_name="/pipeline_TB3/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -120,10 +120,6 @@
       <obj_property name="ElementShortName">inter31[31:0]</obj_property>
       <obj_property name="ObjectShortName">inter31[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/instruction_in" type="array">
-      <obj_property name="ElementShortName">instruction_in[15:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction_in[15:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/execute/resultALU" type="array">
       <obj_property name="ElementShortName">resultALU[15:0]</obj_property>
       <obj_property name="ObjectShortName">resultALU[15:0]</obj_property>
@@ -139,10 +135,6 @@
    <wvobject fp_name="/pipeline_TB3/u0/decode/useBranch" type="logic">
       <obj_property name="ElementShortName">useBranch</obj_property>
       <obj_property name="ObjectShortName">useBranch</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/decode/useCustomBranch" type="logic">
-      <obj_property name="ElementShortName">useCustomBranch</obj_property>
-      <obj_property name="ObjectShortName">useCustomBranch</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/decode/useIO" type="logic">
       <obj_property name="ElementShortName">useIO</obj_property>
@@ -259,5 +251,53 @@
    <wvobject fp_name="/pipeline_TB3/u0/memory/destRegIn" type="array">
       <obj_property name="ElementShortName">destRegIn[2:0]</obj_property>
       <obj_property name="ObjectShortName">destRegIn[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/writeback/overflowOut" type="logic">
+      <obj_property name="ElementShortName">overflowOut</obj_property>
+      <obj_property name="ObjectShortName">overflowOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/writeback/outDestRegister" type="array">
+      <obj_property name="ElementShortName">outDestRegister[2:0]</obj_property>
+      <obj_property name="ObjectShortName">outDestRegister[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/writeback/outDoWriteBack" type="logic">
+      <obj_property name="ElementShortName">outDoWriteBack</obj_property>
+      <obj_property name="ObjectShortName">outDoWriteBack</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u1/overflow" type="logic">
+      <obj_property name="ElementShortName">overflow</obj_property>
+      <obj_property name="ObjectShortName">overflow</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/readReg1" type="array">
+      <obj_property name="ElementShortName">readReg1[2:0]</obj_property>
+      <obj_property name="ObjectShortName">readReg1[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/readReg2" type="array">
+      <obj_property name="ElementShortName">readReg2[2:0]</obj_property>
+      <obj_property name="ObjectShortName">readReg2[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/useALU" type="logic">
+      <obj_property name="ElementShortName">useALU</obj_property>
+      <obj_property name="ObjectShortName">useALU</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/overflowStatusIn" type="logic">
+      <obj_property name="ElementShortName">overflowStatusIn</obj_property>
+      <obj_property name="ObjectShortName">overflowStatusIn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/instruction_in" type="array">
+      <obj_property name="ElementShortName">instruction_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/overflowOut" type="logic">
+      <obj_property name="ElementShortName">overflowOut</obj_property>
+      <obj_property name="ObjectShortName">overflowOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/rd_index1" type="array">
+      <obj_property name="ElementShortName">rd_index1[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_index1[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/decode/rd_index2" type="array">
+      <obj_property name="ElementShortName">rd_index2[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_index2[2:0]</obj_property>
    </wvobject>
 </wave_config>

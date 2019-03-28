@@ -51,6 +51,7 @@ TEST	= 0x0e00
 # add new opcode here
 #MYOP		= 0xff00
 HALT		= 0x1000 	# unused, but needed for assembler
+TEST2	=	0xA000
 
 
 opcode2string = \
@@ -82,6 +83,7 @@ opcode2string = \
 	LOAD_SP		: 'LOAD.SP',	# note the difference
 	RTI		: 'RTI',
 	TEST	: 'TEST',
+	TEST2	: 'TEST2',
 	
 
 

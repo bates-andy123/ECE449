@@ -34,17 +34,17 @@ use ieee.numeric_std.all;
 
 entity executeStage is Port(
     clk, rst : in std_logic;
-    useALU, useBranch, useCustomBranch : in std_logic;
+    useALU, useBranch, useCustomTest : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
-    modeIO : in std_logic;
+    modeIO, overflowStatusIn : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut, readReg1Out : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
     doWriteBackOut, doMemoryAccess, doOutputUpdateOut : out std_logic := '0';
-    doPCWriteBack : out std_logic := '0';
+    doPCWriteBack, overflowOut : out std_logic := '0';
     result : out std_logic_vector(15 downto 0) := X"0000";
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
     modeMemory : out std_logic_vector(1 downto 0) := "00";
@@ -68,7 +68,7 @@ component alu port(
     mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
     clk, enable : in std_logic; -- Clk and reset flags
     result : out std_logic_vector(15 downto 0); -- Result of ALU operation
-    z, n, lastInstructionOverflow : out std_logic
+    z, n, overflow, lastInstructionOverflow : out std_logic
 );
 end component;
 
@@ -81,11 +81,11 @@ end component;
 
 signal resultALU : std_logic_vector(15 downto 0);
 signal operand1Buffer, operand2Buffer : std_logic_vector(15 downto 0) := X"0000";
-signal z, n :  std_logic := '0';
+signal z, n, aluOverflow :  std_logic := '0';
 
 signal resultCalcedPC : std_logic_vector(15 downto 0);
 
-signal lastInstructionValidOverflow : std_logic := '0';
+signal test2Active : std_logic := '0';
 
 constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
 
@@ -101,7 +101,8 @@ u1:alu port map(
     result=>resultALU,
     n=>n, 
     z=>z,
-    lastInstructionOverflow=>lastInstructionValidOverflow
+    overflow=>aluOverflow--,
+    --lastInstructionOverflow=>lastInstructionValidOverflow
 );
 
 u2 : PC_calculator Port map(
@@ -135,10 +136,11 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
     if rst = '1' then
         destRegOut <= "000";
         doWriteBackOut <= '0';
-    --elsif falling_edge(clk) then
+        overflowOut<='0';
     elsif falling_edge(clk) then
         doWriteBackOut <= '0';
         modeMemory <= "00";
+        overflowOut<='0';
     
         if useBranch = '1' then
             if modeALU = "110" then
@@ -148,6 +150,12 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
         elsif useALU='1' then
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
+            if (modeALU = "001") or (modeALU = "010") or (modeALU = "011") then
+                overflowOut<=aluOverflow;
+            else
+                
+            end if;
+                
         elsif useIO='1' then
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
@@ -190,10 +198,9 @@ process(clk) begin
             doOutputUpdateOut <= '0';
             readReg1Out <= readReg1;
             
-            if useCustomBranch = '1' then
-                if lastInstructionValidOverflow = '1' then
-                    doPCWriteBack <= '1'; -- NOP operation
-                    PC_out <= resultCalcedPC;
+            if useCustomTest = '1' then
+                if overflowStatusIn='1' then
+                    test2Active<='1';
                 end if;
             elsif useBranch = '1' then
                 case modeALU(2 downto 0) is
@@ -201,7 +208,7 @@ process(clk) begin
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= resultCalcedPC;
                     when "001" | "100" => 
-                        if(n='1') then
+                        if(n='1' or test2Active='1') then
                             doPCWriteBack <= '1';
                             PC_out <= resultCalcedPC;
                         else
@@ -209,7 +216,7 @@ process(clk) begin
                             PC_out <= PC_in;
                         end if;
                     when "010" | "101" => 
-                        if(z='1') then
+                        if(z='1' or test2Active='1') then
                             doPCWriteBack <= '1';
                             PC_out <= resultCalcedPC;
                         else
@@ -262,6 +269,7 @@ process(clk) begin
         end if;
     else 
         --doWriteBackOut <= '0';
+        test2Active<='0';
         doPCWriteBack <= '0';
         PC_out <= X"0000";
         result <= X"0000";

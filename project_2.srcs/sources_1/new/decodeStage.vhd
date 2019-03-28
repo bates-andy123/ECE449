@@ -32,10 +32,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity decodeStage is Port (
-    clk, rst, addNOP : in std_logic;
-    halt : out std_logic := '0';
+    clk, rst, addNOP, overflowInFromWriteback : in std_logic;
+    halt, overflowOut : out std_logic := '0';
     instruction_in, PC_in : in std_logic_vector(15 downto 0);
-    useALU, useBranch, useCustomBranch : out std_logic := '0';
+    useALU, useBranch, useCustomTest : out std_logic := '0';
     useIO, useLS : out std_logic := '0';
     modeALU : out std_logic_vector(2 downto 0) := "000";
     modeIO, operand2Passthrough : out std_logic := '0';
@@ -57,8 +57,10 @@ component register_file port(
     clk: in std_logic; 
     rd_index1, rd_index2: in std_logic_vector(2 downto 0);
     rd_data1, rd_data2: out std_logic_vector(15 downto 0); 
+    rd_overflow1, rd_overflow2: out std_logic;
     wr_index: in std_logic_vector(2 downto 0); 
     wr_data: in std_logic_vector(15 downto 0); 
+    wr_overflow: in std_logic;
     wr_enable: in std_logic
 );
 end component; 
@@ -95,11 +97,12 @@ constant br_zero : std_logic_vector(6 downto 0) 	:= "1000101"; --uses ra
 constant br_sub : std_logic_vector(6 downto 0) 		:= "1000110"; --uses ra
 constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
 
-constant brr_o : std_logic_vector(6 downto 0)       := "1010000";
+constant test2_op : std_logic_vector(6 downto 0)       := "1010000";
 
 signal signExtenderB1 : std_logic_vector(6 downto 0);
 signal signExtenderB2 : std_logic_vector(9 downto 0);
 signal instruction : std_logic_vector(15 downto 0) := X"0000";
+signal wr_overflow, rd_overflow1, rd_overflow2 : std_logic;
 
 begin
 
@@ -112,15 +115,21 @@ registers : register_file port map(
     clk=>clk,
     rst=>rst,
     --read signals
+    rd_overflow1=>rd_overflow1,
+    rd_overflow2=>rd_overflow2,
     rd_index1=>rd_index1, 
     rd_index2=>rd_index2, 
     rd_data1=>rd_data1, 
     rd_data2=>rd_data2,
     --write signals
+    wr_overflow=>wr_overflow,
     wr_index=>regWriteAddress, 
     wr_data=>writeBackValue, 
     wr_enable=>regWriteEnable
 );
+
+    overflowOut <= rd_overflow1 or rd_overflow2;
+    wr_overflow <= overflowInFromWriteback;
 
     with instruction(15 downto 9) select
         operand2Passthrough <= 
@@ -130,7 +139,7 @@ registers : register_file port map(
     with instruction(15 downto 9) select
         rd_index1 <= 
             instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op | load | mov, --| store,
-            instruction(8 downto 6) when shl_op | shr_op | test_op | out_op | store,
+            instruction(8 downto 6) when shl_op | shr_op | test_op | test2_op | out_op | store,
             "000" when others;
             
     with instruction(15 downto 9) select
@@ -171,15 +180,15 @@ registers : register_file port map(
         operand2 <=
             rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub | rtn | load_imm | store,
             X"000" & instruction(3 downto 0) when shl_op | shr_op ,
-            PC_in when brr | brr_neg | brr_zero | brr_o,
+            PC_in when brr | brr_neg | brr_zero,
             X"0000" when others;   
             
     with instruction(15 downto 9) select
         operand1 <=
-            rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | out_op | load | store | mov,
+            rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | test2_op | out_op | load | store | mov,
             inputIn when in_op ,
             ("0000000" & instruction(8 downto 0)) when load_imm,
-            (signExtenderB1 & instruction(8 downto 0)) when brr | brr_neg | brr_zero | brr_o,
+            (signExtenderB1 & instruction(8 downto 0)) when brr | brr_neg | brr_zero,
             (signExtenderB2 & instruction(5 downto 0)) when br | br_neg | br_zero | br_sub,
             X"0000" when others;   
             
@@ -196,8 +205,8 @@ registers : register_file port map(
             ("0000000000") when others;
     
     with instruction(15 downto 9) select
-        useCustomBranch <=
-            '1' when  brr_o,
+        useCustomTest <=
+            '1' when  test2_op,
             '0' when others;
 
     with instruction(15 downto 9) select

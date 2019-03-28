@@ -59,10 +59,10 @@ component fetchStage port(
 end component;
 
 component decodeStage port(
-    clk, rst, addNOP : in std_logic;
+    clk, rst, addNOP, overflowInFromWriteback : in std_logic;
     instruction_in, PC_in : in std_logic_vector(15 downto 0);
-    useALU, useBranch : out std_logic;
-    useIO, useLS, useCustomBranch : out std_logic;
+    useALU, useBranch, overflowOut : out std_logic;
+    useIO, useLS, useCustomTest : out std_logic;
     modeALU : out std_logic_vector(2 downto 0);
     modeIO, operand2Passthrough : out std_logic;
     operand1, operand2 : out std_logic_vector(15 downto 0);
@@ -79,7 +79,7 @@ end component;
 
 component executeStage port(
     clk, rst : in std_logic;
-    useALU, useBranch, useCustomBranch : in std_logic;
+    useALU, useBranch, useCustomTest : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
     readReg1, readReg2,  memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
@@ -87,8 +87,8 @@ component executeStage port(
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut, readReg1Out : out std_logic_vector(2 downto 0);
-    doWriteBackIn : in std_logic;
-    doWriteBackOut, doPCWriteBack, doMemoryAccess, doOutputUpdateOut : out std_logic;
+    doWriteBackIn, overflowStatusIn : in std_logic;
+    doWriteBackOut, doPCWriteBack, doMemoryAccess, doOutputUpdateOut, overflowOut : out std_logic;
     result, memoryAddress : out std_logic_vector(15 downto 0);
     outputCPU : out std_logic_vector(15 downto 0);
     modeMemory : out std_logic_vector(1 downto 0);
@@ -98,14 +98,14 @@ component executeStage port(
 end component;
 
 component memoryStage Port (
-    clk, rst, doMemoryAccess : in std_logic;
+    clk, rst, doMemoryAccess, overflowIn : in std_logic;
     destRegIn, regUsedIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut : out std_logic;
     modeMemory : in std_logic_vector(1 downto 0);
     memoryAddress, memoryWriteValue, CPUoutput : out std_logic_vector(15 downto 0);
-    memoryRW : out std_logic;
+    memoryRW, overflowOut : out std_logic;
     memoryReadValue, CPUinput : in std_logic_vector(15 downto 0);
     PC_In : in std_logic_vector(15 downto 0);
     input, memoryAddressFromExecuteStage : in std_logic_vector(15 downto 0);
@@ -114,11 +114,11 @@ component memoryStage Port (
 end component;
 
 component writeBackStage port ( 
-    clk, rst, pipelineReset : in std_logic;
+    clk, rst, pipelineReset, overflowIn : in std_logic;
     inDoWriteBack, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
     inWriteBackValue, PC_in, CPUinput : in std_logic_vector(15 downto 0);
-    outDoWriteBack, doPCWriteBackOut, doBranchReset : out std_logic;
+    outDoWriteBack, doPCWriteBackOut, doBranchReset, overflowOut : out std_logic;
     outDestRegister : out std_logic_vector(2 downto 0);
     outWriteBackValue, PC_out, CPUoutput : out std_logic_vector(15 downto 0)
 );
@@ -177,8 +177,9 @@ signal doWriteBackOutputDecodeStage : std_logic := '0';
 signal writeBackRegOutputDecodeStage : std_logic_vector(2 downto 0) := "000";
 signal haltSig : std_logic := '0';
 signal PC_outDecodeStage : std_logic_vector(15 downto 0);
-signal resetDecodeStage, useCustomBranch : std_logic;
+signal resetDecodeStage, useCustomTest : std_logic;
 signal operand2PassthroughDecodeStage : std_logic;
+signal overflowOutDecodeStage : std_logic;
 
 signal doWriteBackOutputExecuteStage : std_logic;
 signal writeBackRegOutputExecuteStage : std_logic_vector(2 downto 0);
@@ -193,6 +194,7 @@ signal memoryRW : std_logic;
 signal memoryReadValue : std_logic_vector(15 downto 0);
 signal CPUoutputExecuteStage : std_logic_vector(15 downto 0);
 signal doOutputUpdateOutExecuteStage : std_logic;
+signal overflowOutExecuteStage : std_logic;
 
 signal doWriteBackOutputMemoryStage : std_logic := '0';
 signal writeBackRegOutputMemoryStage : std_logic_vector(2 downto 0);
@@ -202,6 +204,7 @@ signal doPCWriteBackMemoryStage : std_logic;
 signal resetMemoryStage : std_logic;
 signal doOutputUpdateOutMemoryStage : std_logic;
 signal CPUoutputMemoryStage : std_logic_vector(15 downto 0);
+signal overflowOutMemoryStage : std_logic;
 
 signal doBranchResetWritebackStage : std_logic;
 signal doPCWriteBackOutWritebackStage : std_logic;
@@ -209,6 +212,7 @@ signal PC_outWritebackStage : std_logic_vector(15 downto 0);
 signal resetWritebackStage : std_logic;
 signal doOutputUpdateOutWritebackStage : std_logic;
 signal CPUoutputWritebackStage : std_logic_vector(15 downto 0);
+signal overflowOutWritebackStage : std_logic;
 
 signal hexDigitsOut : std_logic_vector(15 downto 0);
 
@@ -239,6 +243,8 @@ decode : decodeStage port map(
     clk => clk,
     rst => rst,
     addNOP => doBranchResetWritebackStage,
+    overflowInFromWriteback=>overflowOutWritebackStage,
+    overflowOut=>overflowOutDecodeStage,
     halt=>haltSig,
     PC_in=>PC_outFetchStage,
     PC_out=>PC_outDecodeStage,
@@ -249,7 +255,7 @@ decode : decodeStage port map(
     useBranch=>useBranch,
     useIO=>useIO,
     useLS=>useLS,
-    useCustomBranch=>useCustomBranch,
+    useCustomTest=>useCustomTest,
     operand2Passthrough=>operand2PassthroughDecodeStage,
     modeALU => modeALU,
     modeIO=>modeIO,
@@ -273,10 +279,11 @@ execute : executeStage port map(
     clk=>clk,
     rst=>resetExecuteStage,
     useALU=>useALU,
-    useCustomBranch=>useCustomBranch,
+    useCustomTest=>useCustomTest,
     useBranch=>useBranch,
     useIO=>useIO,
     useLS=>useLS,
+    overflowStatusIn=>overflowOutDecodeStage,
     operand2Passthrough=>operand2PassthroughDecodeStage,
     modeALU=>modeALU,
     readReg1 => readReg1DecodeStage,
@@ -298,6 +305,7 @@ execute : executeStage port map(
     useMemoryDestValue=>doWriteBackOutputExecuteStage, 
     useWritebackDestValue=>doWriteBackOutputMemoryStage,
     result=>resultExecuteStage,
+    overflowOut=>overflowOutExecuteStage,
     modeMemory=>modeMemoryExecuteStage,
     memoryAddress=>memoryAddressExecuteStage,
     outputCPU=>CPUoutputExecuteStage,
@@ -343,6 +351,8 @@ memory : memoryStage Port map(
     memoryRW=>memoryRW,
     memoryReadValue=>memoryReadValue,
     input=>resultExecuteStage,
+    overflowIn=>overflowOutExecuteStage,
+    overflowOut=>overflowOutMemoryStage,
     output=>resultMemoryStage
 );
 
@@ -351,6 +361,8 @@ memory : memoryStage Port map(
 
 writeback : writeBackStage port map( 
     clk=>clk,
+    overflowIn=>overflowOutMemoryStage,
+    overflowOut=>overflowOutWritebackStage,
     rst=>doBranchResetWritebackStage,
     pipelineReset=>rst,
     doOutputUpdateIn=>doOutputUpdateOutMemoryStage,

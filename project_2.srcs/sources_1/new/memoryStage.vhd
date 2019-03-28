@@ -32,11 +32,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity memoryStage is Port (
-    clk, rst, doMemoryAccess : in std_logic;
+    clk, rst, doMemoryAccess, overflowIn : in std_logic;
     destRegIn, regUsedIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
-    doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut : out std_logic := '0';  
+    doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut, overflowOut : out std_logic := '0';  
     modeMemory : in std_logic_vector(1 downto 0);
     memoryAddress, memoryWriteValue, CPUoutput : out std_logic_vector(15 downto 0);
     memoryRW : out std_logic;
@@ -83,6 +83,7 @@ process(clk) begin
             
             output <= input;
             destRegOut <= destRegIn;
+            overflowOut <= overflowIn;
             doWriteBackOut <= doWriteBackIn;
             
             if(PC_WritebackSet = '0' and doPCWriteBackIn = '0') then
@@ -103,6 +104,7 @@ process(clk) begin
             
         end if;
     else -- rst is currently active
+        overflowOut<='0';
         PC_WritebackSet <= '0';
         output <= X"0000";
         doWriteBackOut <= '0';

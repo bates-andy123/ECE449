@@ -37,7 +37,7 @@ entity alu is
         mode : in std_logic_vector(2 downto 0); -- ALU mode, see comments in process block for values associated to modes
         clk, enable : in std_logic; -- Clk and reset flags
         result : out std_logic_vector(15 downto 0); -- Result of ALU operation
-        z, n, lastInstructionOverflow : out std_logic := '0'
+        z, n, overflow, lastInstructionOverflow : out std_logic := '0'
     ); -- zero and negative flag from addition/subtraction operation
 end alu;
 
@@ -93,6 +93,7 @@ u1 : barrelShiftLeft port map(input => in1, shiftBy => in2(3 downto 0), output =
 u2 : addSub port map(in1 => in1, in2 => in2, operation => mode, output => addSubOutput, overflow => addSubOverflow);
 u3 : multiplier port map(multiplicand => in1, multiplier => in2, overflow => multiplierOverflow, product => multiplierOutput);
 
+overflow <= multiplierOverflow or addSubOverflow;
 
 process(clk)
 begin

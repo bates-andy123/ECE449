@@ -563,7 +563,7 @@ DATA """ % (time.ctime(time.time()), Version, self.memory_depth)
 				self.UpdateAddress()
 
 				# 1 parameter ra opcodes
-			elif opcode in [IN, OUT, TEST, PUSH, POP , LOAD_SP]:				
+			elif opcode in [IN, OUT, TEST, TEST2, PUSH, POP , LOAD_SP]:				
 					#    SHL R[ra]
 					# ex SHL R1
 					# etc
@@ -769,7 +769,7 @@ DATA """ % (time.ctime(time.time()), Version, self.memory_depth)
 				self.StoreByte(opcode, LineToPrint)
 
 				# 1 parameter ra opcodes
-			elif opcode in [IN, OUT, TEST, PUSH, POP, LOAD_SP ]:
+			elif opcode in [IN, OUT, TEST, TEST2, PUSH, POP, LOAD_SP ]:
 					# ex IN R[ra]
 					# ex OUT R1
 					# etc
