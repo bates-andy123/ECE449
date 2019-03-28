@@ -32,8 +32,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity memoryStage is Port (
-    clk, rst, doMemoryAccess, overflowIn : in std_logic;
-    destRegIn, regUsedIn : in std_logic_vector(2 downto 0);
+    clk, rst, doMemoryAccess, overflowIn, doWriteBackOutBackIn : in std_logic;
+    destRegIn, regUsedIn, destRegOutBackIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0) := "000";
     doWriteBackIn, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut, overflowOut : out std_logic := '0';  
@@ -42,7 +42,7 @@ entity memoryStage is Port (
     memoryRW : out std_logic;
     memoryReadValue, CPUinput : in std_logic_vector(15 downto 0);
     PC_In, memoryAddressFromExecuteStage : in std_logic_vector(15 downto 0);
-    input : in std_logic_vector(15 downto 0);
+    input, outputBackIn : in std_logic_vector(15 downto 0);
     output, PC_out : out std_logic_vector(15 downto 0)
 );
 end memoryStage;
@@ -50,8 +50,15 @@ end memoryStage;
 architecture Behavioral of memoryStage is
 
 signal PC_WritebackSet : std_logic := '0';
+signal memoryModeIsStore : std_logic;
+signal destRegOutMatchIn : std_logic;
+signal dataForwardNeeded : std_logic;
 
-signal lastRegUsed : std_logic_vector( 2 downto 0);
+signal destRegOutBuffer : std_logic_vector(2 downto 0);
+signal doWritebackOutBuffer : std_logic;
+signal outputBuffer : std_logic_vector(15 downto 0);
+signal regUsedLatched : std_logic_vector(2 downto 0);
+signal doWriteBackInLatched : std_logic;
 
 begin
 
@@ -69,8 +76,17 @@ process(rst, clk) begin
     end if;
 end process;
 
+    memoryModeIsStore <= '1' when modeMemory = "01" else '0';
+    destRegOutMatchIn <= '1' when destRegOutBuffer = regUsedLatched else '0';
+    
+    dataForwardNeeded <= doWriteBackInLatched and destRegOutMatchIn and memoryModeIsStore;
+    
+    with dataForwardNeeded select
+        memoryWriteValue <= 
+            outputBuffer when '1',
+            input when others; 
+
     memoryAddress <= memoryAddressFromExecuteStage;
-    memoryWriteValue <= input;
     
     with modeMemory select
         memoryRW <= 
@@ -78,10 +94,37 @@ end process;
             '0' when others;
 
 process(clk) begin
+    if rst = '0' then
+        if rising_edge(clk) then
+            regUsedLatched <= regUsedIn;
+            doWriteBackInLatched <= doWriteBackIn;
+        end if;
+    else
+        regUsedLatched <= "000";
+        doWriteBackInLatched <= '0';
+    end if;
+end process;
+
+process (clk) begin
+    if rst='0' then
+        if falling_edge(clk) then
+            destRegOutBuffer <= destRegOutBackIn;
+            doWritebackOutBuffer <= doWriteBackOutBackIn;
+        end if;
+    else
+        destRegOutBuffer <= "000";
+        doWritebackOutBuffer <= '0';
+        
+    end if;
+end process;
+
+output <= outputBuffer;
+
+process(clk) begin
     if(rst = '0') then
         if (clk='0') then
             
-            output <= input;
+            outputBuffer <= input;
             destRegOut <= destRegIn;
             overflowOut <= overflowIn;
             doWriteBackOut <= doWriteBackIn;
@@ -90,7 +133,7 @@ process(clk) begin
                 
                 if(doMemoryAccess = '1') then
                     if(modeMemory = "00") then
-                        output <=  memoryReadValue;
+                        outputBuffer <=  memoryReadValue;
                     end if;
                 else 
 
@@ -104,9 +147,9 @@ process(clk) begin
             
         end if;
     else -- rst is currently active
+        outputBuffer <= X"0000";
         overflowOut<='0';
         PC_WritebackSet <= '0';
-        output <= X"0000";
         doWriteBackOut <= '0';
         destRegOut <= "000";
 

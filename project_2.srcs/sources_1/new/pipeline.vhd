@@ -98,8 +98,8 @@ component executeStage port(
 end component;
 
 component memoryStage Port (
-    clk, rst, doMemoryAccess, overflowIn : in std_logic;
-    destRegIn, regUsedIn : in std_logic_vector(2 downto 0);
+    clk, rst, doMemoryAccess, overflowIn, doWriteBackOutBackIn : in std_logic;
+    destRegIn, regUsedIn, destRegOutBackIn : in std_logic_vector(2 downto 0);
     destRegOut : out std_logic_vector(2 downto 0);
     doWriteBackIn, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     doWriteBackOut, doPCWriteBackOut, doOutputUpdateOut : out std_logic;
@@ -108,7 +108,7 @@ component memoryStage Port (
     memoryRW, overflowOut : out std_logic;
     memoryReadValue, CPUinput : in std_logic_vector(15 downto 0);
     PC_In : in std_logic_vector(15 downto 0);
-    input, memoryAddressFromExecuteStage : in std_logic_vector(15 downto 0);
+    input, memoryAddressFromExecuteStage, outputBackIn : in std_logic_vector(15 downto 0);
     output, PC_out : out std_logic_vector(15 downto 0)
 );
 end component;
@@ -355,6 +355,9 @@ memory : memoryStage Port map(
     input=>resultExecuteStage,
     overflowIn=>overflowOutExecuteStage,
     overflowOut=>overflowOutMemoryStage,
+    doWriteBackOutBackIn=>doWriteBackOutputMemoryStage,
+    destRegOutBackIn=>writeBackRegOutputMemoryStage,
+    outputBackIn=>resultMemoryStage,
     output=>resultMemoryStage
 );
 

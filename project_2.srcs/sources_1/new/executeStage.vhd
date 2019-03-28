@@ -231,13 +231,23 @@ process(clk) begin
 end process;
 
 process(clk) begin
+    if rst = '0' then
+        if falling_edge(clk) then
+            readReg1Out <= readReg2;
+        end if;
+    else
+        readReg1Out <= "000";
+    end if;
+end process;
+
+process(clk) begin
     if rst='0' then
         if falling_edge(clk) then
             doPCWriteBack <= '0';
             PC_out <= PC_in; 
             doMemoryAccess <= '0';
             doOutputUpdateOut <= '0';
-            readReg1Out <= readReg1;
+            
             
             if useCustomTest = '1' then
                 if dataForwarderOverflow='1' then
