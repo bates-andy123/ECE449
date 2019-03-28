@@ -35,9 +35,9 @@ set_property PACKAGE_PIN C16 [get_ports {input[15]}]
 		set_property IOSTANDARD LVCMOS33 [get_ports {input[15]}]
 
 # Switch
-set_property PACKAGE_PIN W19 [get_ports {rstExecute}]					
-	set_property IOSTANDARD LVCMOS33 [get_ports {rstExecute}]
-	set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets rstExecute_IBUF] 
+set_property PACKAGE_PIN W19 [get_ports {rstLoad}]					
+	set_property IOSTANDARD LVCMOS33 [get_ports {rstLoad}]
+	set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets rstLoad_IBUF] 
 
 # Switch
 set_property PACKAGE_PIN T17 [get_ports {rst}]					

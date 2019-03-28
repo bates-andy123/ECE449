@@ -70,6 +70,9 @@ StepSize:	equ		0x0002
 ;
 ;++
 		org		0x0000
+		loadimm.upper LedDisplay.hi
+		loadimm.lower LedDisplay.lo
+		mov r5, r7
 		brr		ResetExecute
 		brr		ResetLoad		
 		brr		Interrupt

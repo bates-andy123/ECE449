@@ -56,11 +56,11 @@ end executeStage;
 architecture Behavioral of executeStage is
 
 component dataForwarder Port (
-    doMemoryWriteback, doWritebackWriteback, operand1Passthrough, operand2Passthrough : in std_logic;
-    overflowInMemoryStage, overflowInWritebackStage, overflowIn: in std_logic;
+    doExecuteWriteback, doMemoryWriteback, doWritebackWriteback, operand1Passthrough, operand2Passthrough : in std_logic;
+    overflowExecuteStage, overflowInMemoryStage, overflowInWritebackStage, overflowIn: in std_logic;
     overflowOut : out std_logic;
-    readReg1, readReg2, memoryWritebackDest, writebackWritebackDest : in std_logic_vector(2 downto 0);
-    operand1DecodeStage, operand2DecodeStage, memoryWritebackValue, writebackWritebackValue : in std_logic_vector(15 downto 0);
+    readReg1, readReg2, executeWritebackDest, memoryWritebackDest, writebackWritebackDest : in std_logic_vector(2 downto 0);
+    operand1DecodeStage, operand2DecodeStage, executeWritebackValue, memoryWritebackValue, writebackWritebackValue : in std_logic_vector(15 downto 0);
     operand1, operand2 : out std_logic_vector(15 downto 0)
 );
 end component;

@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity pipeline is Port (
-    clk, rst, rstExecute, display_clock : in  STD_LOGIC;
+    clk, rst, rstLoad, display_clock : in  STD_LOGIC;
     input, switchInput : in std_logic_vector(15 downto 0);
     SSEG : out std_logic_vector(6 downto 0);
     AN : out std_logic_vector(3 downto 0);
@@ -49,7 +49,7 @@ end pipeline;
 architecture Behavioral of pipeline is
 
 component fetchStage port(
-    clk, rst, rstExecute, halt : in std_logic;
+    clk, rst, rstLoad, halt : in std_logic;
     instruction_out, PC_out: out std_logic_vector(15 downto 0);
     inputIn, instruction_in: in std_logic_vector(15 downto 0);
     InputOut, fetchAddress: out std_logic_vector(15 downto 0);
@@ -224,7 +224,7 @@ fetch : fetchStage port map(
     PC_out=>PC_outFetchStage,
     halt=>doBranchResetWritebackStage,
     rst=>rst,
-    rstExecute=>rstExecute,
+    rstLoad=>rstLoad,
     fetchAddress=>fetchAddressFetchStage,
     instruction_in=>instruction_inFetchStage,
     instruction_out=>fetchedInstruction,
@@ -239,7 +239,7 @@ fetch : fetchStage port map(
 --out3 <= PC_outFetchStage;
 --out4 <= X"000" & "000" & doWriteBackOutputExecuteStage;
 
-resetDecodeStage <= (rst or rstExecute);
+resetDecodeStage <= (rst or rstLoad);
 
 decode : decodeStage port map(
     clk => clk,
@@ -271,7 +271,7 @@ decode : decodeStage port map(
     inputIn=>inputOutputFetchStage
 );
 
-resetExecuteStage <= (rst or doBranchResetWritebackStage or rstExecute);
+resetExecuteStage <= (rst or doBranchResetWritebackStage or rstLoad);
 
 --modeALU_stat <= modeALU;
 --destRegOutDecode_state <= writeBackRegOutputDecodeStage;
@@ -329,7 +329,7 @@ execute : executeStage port map(
 --doOutputUpdateOutExecuteStage_stat<=doOutputUpdateOutExecuteStage;
 
 output <= CPUoutputWritebackStage;
-resetMemoryStage <= (doBranchResetWritebackStage or rst or rstExecute);
+resetMemoryStage <= (doBranchResetWritebackStage or rst or rstLoad);
 
 memory : memoryStage Port map(
     clk=>clk, 
@@ -366,7 +366,7 @@ memory : memoryStage Port map(
 --doBranchResetWritebackStage_stat <= doBranchResetWritebackStage;
 --doOutputUpdateOutMemoryStage_stat <= doOutputUpdateOutMemoryStage;
 
-writebackPipelineReset <= (rst or rstExecute);
+writebackPipelineReset <= (rst or rstLoad);
 
 writeback : writeBackStage port map( 
     clk=>clk,

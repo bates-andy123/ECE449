@@ -52,7 +52,7 @@ architecture Behavioral of memoryStage is
 signal PC_WritebackSet : std_logic := '0';
 signal memoryModeIsStore, memoryModeIsLoad : std_logic;
 signal destRegOutMatchIn : std_logic;
-signal dataForwardNeededStore, dataForwardNeededLoad : std_logic;
+signal dataForwardNeededStore, outputIsLoad : std_logic;
 
 signal destRegOutBuffer, destRegOutLatched : std_logic_vector(2 downto 0);
 signal doWritebackOutBuffer : std_logic;
@@ -87,7 +87,12 @@ end process;
             input when others; 
 
     memoryModeIsLoad <= '1' when modeMemory = "00" else '0';
-    dataForwardNeededLoad <= doWriteBackInLatched and destRegOutMatchIn and memoryModeIsLoad;
+    outputIsLoad <= doMemoryAccess and memoryModeIsLoad;
+
+    with outputIsLoad select
+        outputBuffer <= 
+            memoryReadValue when '1',
+            input when others;
 
     memoryAddress <= memoryAddressFromExecuteStage;
     
@@ -131,30 +136,30 @@ process(clk) begin
     if(rst = '0') then
         if (clk='0') then
             
-            outputBuffer <= input;
+            --outputBuffer <= input;
             destRegOutBuffer <= destRegIn;
             overflowOut <= overflowIn;
             doWriteBackOutBuffer <= doWriteBackIn;
             
-            if(PC_WritebackSet = '0' and doPCWriteBackIn = '0') then
+--            if(PC_WritebackSet = '0' and doPCWriteBackIn = '0') then
                 
-                if(doMemoryAccess = '1') then
-                    if(modeMemory = "00") then
-                        outputBuffer <=  memoryReadValue;
-                    end if;
-                else 
+--                if(doMemoryAccess = '1') then
+--                    if(modeMemory = "00") then
+--                        outputBuffer <=  memoryReadValue;
+--                    end if;
+--                else 
 
-                end if;
-            else
-                PC_WritebackSet <= '1'; -- If the condition did not pass either of:
-                                        --doPCWriteBackIn exclusively equals 1 thus set PC_WritebackSet <= '1'
-                                        --or PC_WritebackSet='1' and PC_WritebackSet <='1' has no effect
-            end if;
-         else
+--                end if;
+--            else
+--                PC_WritebackSet <= '1'; -- If the condition did not pass either of:
+--                                        --doPCWriteBackIn exclusively equals 1 thus set PC_WritebackSet <= '1'
+--                                        --or PC_WritebackSet='1' and PC_WritebackSet <='1' has no effect
+--            end if;
+         --else
             
         end if;
     else -- rst is currently active
-        outputBuffer <= X"0000";
+        --outputBuffer <= X"0000";
         overflowOut<='0';
         PC_WritebackSet <= '0';
         doWriteBackOutBuffer <= '0';

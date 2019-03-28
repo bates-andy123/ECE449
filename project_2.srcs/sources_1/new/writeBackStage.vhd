@@ -66,7 +66,7 @@ process(clk) begin
 end process;
 
 process(clk) begin
-    if rising_edge(clk) then
+    if falling_edge(clk) then
         if (rst = '0' and pipelineReset='0') then 
             outDoWriteBack<=inDoWriteBack;
             outDestRegister<=inDestRegister;
