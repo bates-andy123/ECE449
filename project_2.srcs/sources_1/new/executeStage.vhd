@@ -160,10 +160,7 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
             doWriteBackOut <= doWriteBackIn;
             if (modeALU = "001") or (modeALU = "010") or (modeALU = "011") then
                 overflowOut<=aluOverflow;
-            else
-                
             end if;
-                
         elsif useIO='1' then
             destRegOut <= destRegIn;
             doWriteBackOut <= doWriteBackIn;
@@ -195,6 +192,42 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
             end case;
         end if;
     end if;  
+end process;
+
+process(clk) begin
+    if rst='0' then
+        if falling_edge(clk) then
+            if useALU = '1' then 
+                result <= resultALU;
+            elsif useBranch = '1' then
+                if modeALU = "110" then
+                    result <= std_logic_vector(unsigned(PC_in) + 2);
+                end if;
+            elsif useIO = '1' then
+                if modeIO = '1' then
+                     result <= operand1;
+                 end if;
+            elsif useLS = '1' then
+                case modeALU(1 downto 0) is
+                    when "01" => -- store
+                        result <= operand2Buffer;
+            
+                    when "10" => -- load_imm
+                        if operand1(8) = '1' then 
+                            result <= (operand1(7 downto 0) & operand2Buffer(7 downto 0));
+                        else 
+                            result <= (operand2Buffer(15 downto 8) & operand1(7 downto 0));
+                        end if;
+                    when "11" => -- mov
+                        result <= operand1Buffer;
+                    when others =>
+                        null;
+                  end case;
+            end if;
+        end if;
+    else
+        result <= X"0000";
+    end if;
 end process;
 
 process(clk) begin
@@ -235,43 +268,23 @@ process(clk) begin
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= resultCalcedPC;
                         
-                        result <= std_logic_vector(unsigned(PC_in) + 2);
+--                        result <= std_logic_vector(unsigned(PC_in) + 2);
                     when "111" =>
                         doPCWriteBack <= '1'; -- NOP operation
                         PC_out <= operand2;
                     when others => doPCWriteBack <= '0'; -- Temporary until all cases are completed 
                 end case;
             
-            elsif useALU = '1' then 
-                result <= resultALU;
-                  
             elsif useIO = '1' then
-                if modeIO = '1' then  -- Input, write the operand rand to memory
-                    result <= operand1;
-                else
+                if modeIO = '0' then  -- Input, write the operand rand to memory
+--                    result <= operand1;
+--                else
                     outputCPU <= operand1Buffer;
                     doOutputUpdateOut <= '1';
                 end if;
                 
             elsif useLS = '1' then 
                 doMemoryAccess <= '1';
-                case modeALU(1 downto 0) is
-                    when "00" => -- load
-                        --memoryAddress <= operand1Buffer;
-                    when "01" => -- store
-                        result <= operand2Buffer;
-                        --memoryAddress <= operand1Buffer;
-                    when "10" => -- load_imm
-                        if operand1(8) = '1' then 
-                            result <= (operand1(7 downto 0) & operand2Buffer(7 downto 0));
-                        else 
-                            result <= (operand2Buffer(15 downto 8) & operand1(7 downto 0));
-                        end if;
-                    when "11" => -- mov
-                        result <= operand1Buffer;
-                    when others =>
-                        doMemoryAccess <= '0';
-                  end case;
             end if;
 
         end if;
@@ -280,7 +293,6 @@ process(clk) begin
         test2Active<='0';
         doPCWriteBack <= '0';
         PC_out <= X"0000";
-        result <= X"0000";
         outputCPU <= X"0000";
         doOutputUpdateOut<='0';
     end if;
