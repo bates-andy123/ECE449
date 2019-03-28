@@ -78,22 +78,23 @@ component decodeStage port(
 end component;
 
 component executeStage port(
-    clk, rst, overflowInMemoryStage, overflowInWritebackStage : in std_logic;
+    clk, rst, overflowExecuteStage, overflowInMemoryStage, overflowInWritebackStage : in std_logic;
     useALU, useBranch, useCustomTest : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
-    readReg1, readReg2,  memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
-    modeIO, useMemoryDestValue, useWritebackDestValue : in std_logic;
+    readReg1, readReg2, executeDestReg, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
+    modeIO, overflowStatusIn : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
-    destRegOut, readReg1Out : out std_logic_vector(2 downto 0);
-    doWriteBackIn, overflowStatusIn : in std_logic;
-    doWriteBackOut, doPCWriteBack, doMemoryAccess, doOutputUpdateOut, overflowOut : out std_logic;
-    result, memoryAddress : out std_logic_vector(15 downto 0);
-    outputCPU : out std_logic_vector(15 downto 0);
-    modeMemory : out std_logic_vector(1 downto 0);
-    PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
-    PC_out : out std_logic_vector(15 downto 0)
+    destRegOut, readReg1Out : out std_logic_vector(2 downto 0) := "000";
+    doWriteBackIn, useExecuteDestValue, useMemoryDestValue, useWritebackDestValue : in std_logic;
+    doWriteBackOut, doMemoryAccess, doOutputUpdateOut : out std_logic := '0';
+    doPCWriteBack, overflowOut : out std_logic := '0';
+    result : out std_logic_vector(15 downto 0) := X"0000";
+    outputCPU : out std_logic_vector(15 downto 0) := X"0000";
+    modeMemory : out std_logic_vector(1 downto 0) := "00";
+    PC_in, executeDestValue, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
+    PC_out, memoryAddress : out std_logic_vector(15 downto 0) := X"0000"
 );
 end component;
 
@@ -280,8 +281,9 @@ resetExecuteStage <= (rst or doBranchResetWritebackStage or rstLoad);
 execute : executeStage port map(
     clk=>clk,
     rst=>resetExecuteStage,
-    overflowInMemoryStage=>overflowOutExecuteStage, 
-    overflowInWritebackStage=>overflowOutMemoryStage,
+    overflowExecuteStage=>overflowOutExecuteStage,
+    overflowInMemoryStage=>overflowOutMemoryStage, 
+    overflowInWritebackStage=>overflowOutWritebackStage,
     useALU=>useALU,
     useCustomTest=>useCustomTest,
     useBranch=>useBranch,
@@ -302,12 +304,15 @@ execute : executeStage port map(
     destRegOut => writeBackRegOutputExecuteStage,
     doWriteBackIn=>doWriteBackOutputDecodeStage,
     doWriteBackOut=>doWriteBackOutputExecuteStage,
-    memoryDestReg=>writeBackRegOutputExecuteStage,
-    writebackDestReg=>writeBackRegOutputMemoryStage,
-    memoryDestValue=>resultExecuteStage,
-    writebackDestValue=>resultMemoryStage,
-    useMemoryDestValue=>doWriteBackOutputExecuteStage, 
-    useWritebackDestValue=>doWriteBackOutputMemoryStage,
+    executeDestReg=>writeBackRegOutputExecuteStage,
+    memoryDestReg=>writeBackRegOutputMemoryStage,
+    writebackDestReg=>regWriteAddress,
+    executeDestValue=>resultExecuteStage,
+    memoryDestValue=>resultMemoryStage,
+    writebackDestValue=>writeBackValue,
+    useExecuteDestValue=>doWriteBackOutputExecuteStage,
+    useMemoryDestValue=>doWriteBackOutputMemoryStage, 
+    useWritebackDestValue=>regWriteEnable,
     result=>resultExecuteStage,
     overflowOut=>overflowOutExecuteStage,
     modeMemory=>modeMemoryExecuteStage,

@@ -33,22 +33,22 @@ use ieee.numeric_std.all;
 --use UNISIM.VComponents.all;
 
 entity executeStage is Port(
-    clk, rst, overflowInMemoryStage, overflowInWritebackStage : in std_logic;
+    clk, rst, overflowExecuteStage, overflowInMemoryStage, overflowInWritebackStage : in std_logic;
     useALU, useBranch, useCustomTest : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
-    readReg1, readReg2, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
+    readReg1, readReg2, executeDestReg, memoryDestReg, writebackDestReg : in std_logic_vector(2 downto 0);
     modeIO, overflowStatusIn : in std_logic;
     operand1, operand2 : in std_logic_vector(15 downto 0);
     destRegIn : in std_logic_vector(2 downto 0);
     destRegOut, readReg1Out : out std_logic_vector(2 downto 0) := "000";
-    doWriteBackIn, useMemoryDestValue, useWritebackDestValue : in std_logic;
+    doWriteBackIn, useExecuteDestValue, useMemoryDestValue, useWritebackDestValue : in std_logic;
     doWriteBackOut, doMemoryAccess, doOutputUpdateOut : out std_logic := '0';
     doPCWriteBack, overflowOut : out std_logic := '0';
     result : out std_logic_vector(15 downto 0) := X"0000";
     outputCPU : out std_logic_vector(15 downto 0) := X"0000";
     modeMemory : out std_logic_vector(1 downto 0) := "00";
-    PC_in, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
+    PC_in, executeDestValue, memoryDestValue, writebackDestValue : in std_logic_vector(15 downto 0);
     PC_out, memoryAddress : out std_logic_vector(15 downto 0) := X"0000"
 );
 end executeStage;
@@ -118,20 +118,24 @@ u2 : PC_calculator Port map(
 );
 
 u3 : dataForwarder port map(
+    doExecuteWriteback=>useExecuteDestValue,
     doMemoryWriteback=>useMemoryDestValue, 
     doWritebackWriteback=>useWritebackDestValue, 
     operand1Passthrough=>'0', 
     operand2Passthrough=>operand2Passthrough,
+    overflowExecuteStage=>overflowExecuteStage,
     overflowInMemoryStage=>overflowInMemoryStage, 
     overflowInWritebackStage=>overflowInWritebackStage, 
     overflowIn=>overflowStatusIn,
     overflowOut=>dataForwarderOverflow,
     readReg1=>readReg1, 
     readReg2=>readReg2, 
+    executeWritebackDest=>executeDestReg,
     memoryWritebackDest=>memoryDestReg, 
     writebackWritebackDest=>writebackDestReg,
     operand1DecodeStage=>operand1, 
     operand2DecodeStage=>operand2, 
+    executeWritebackValue=>executeDestValue,
     memoryWritebackValue=>memoryDestValue, 
     writebackWritebackValue=>writebackDestValue,
     operand1=>operand1Buffer, 
