@@ -78,7 +78,7 @@ component decodeStage port(
 end component;
 
 component executeStage port(
-    clk, rst : in std_logic;
+    clk, rst, overflowInMemoryStage, overflowInWritebackStage : in std_logic;
     useALU, useBranch, useCustomTest : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
@@ -278,6 +278,8 @@ resetExecuteStage <= (rst or doBranchResetWritebackStage);
 execute : executeStage port map(
     clk=>clk,
     rst=>resetExecuteStage,
+    overflowInMemoryStage=>overflowOutExecuteStage, 
+    overflowInWritebackStage=>overflowOutMemoryStage,
     useALU=>useALU,
     useCustomTest=>useCustomTest,
     useBranch=>useBranch,

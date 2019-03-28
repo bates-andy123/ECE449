@@ -34,6 +34,8 @@ use ieee.std_logic_unsigned.all;
 
 entity dataForwarder is Port (
     doMemoryWriteback, doWritebackWriteback, operand1Passthrough, operand2Passthrough : in std_logic;
+    overflowInMemoryStage, overflowInWritebackStage, overflowIn: in std_logic;
+    overflowOut : out std_logic;
     readReg1, readReg2, memoryWritebackDest, writebackWritebackDest : in std_logic_vector(2 downto 0);
     operand1DecodeStage, operand2DecodeStage, memoryWritebackValue, writebackWritebackValue : in std_logic_vector(15 downto 0);
     operand1, operand2 : out std_logic_vector(15 downto 0)
@@ -77,5 +79,11 @@ with operand2Selector select
         writebackWritebackValue when "001",
         operand2DecodeStage when others;
 
+with operand1Selector select
+    overflowOut <=
+        overflowIn when "100" | "101" | "110" | "111" | "000",
+        overflowInMemoryStage when "010" | "011",
+        overflowInWritebackStage when "001",
+        overflowIn when others;
 
 end Behavioral;

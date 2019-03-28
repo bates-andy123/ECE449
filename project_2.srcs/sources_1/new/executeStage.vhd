@@ -33,7 +33,7 @@ use ieee.numeric_std.all;
 --use UNISIM.VComponents.all;
 
 entity executeStage is Port(
-    clk, rst : in std_logic;
+    clk, rst, overflowInMemoryStage, overflowInWritebackStage : in std_logic;
     useALU, useBranch, useCustomTest : in std_logic;
     useIO, useLS, operand2Passthrough : in std_logic;
     modeALU : in std_logic_vector(2 downto 0);
@@ -57,6 +57,8 @@ architecture Behavioral of executeStage is
 
 component dataForwarder Port (
     doMemoryWriteback, doWritebackWriteback, operand1Passthrough, operand2Passthrough : in std_logic;
+    overflowInMemoryStage, overflowInWritebackStage, overflowIn: in std_logic;
+    overflowOut : out std_logic;
     readReg1, readReg2, memoryWritebackDest, writebackWritebackDest : in std_logic_vector(2 downto 0);
     operand1DecodeStage, operand2DecodeStage, memoryWritebackValue, writebackWritebackValue : in std_logic_vector(15 downto 0);
     operand1, operand2 : out std_logic_vector(15 downto 0)
@@ -78,6 +80,8 @@ component PC_calculator is Port (
     calcedPC : out std_logic_vector(15 downto 0)
 );
 end component;
+
+signal dataForwarderOverflow : std_logic;
 
 signal resultALU : std_logic_vector(15 downto 0);
 signal operand1Buffer, operand2Buffer : std_logic_vector(15 downto 0) := X"0000";
@@ -118,6 +122,10 @@ u3 : dataForwarder port map(
     doWritebackWriteback=>useWritebackDestValue, 
     operand1Passthrough=>'0', 
     operand2Passthrough=>operand2Passthrough,
+    overflowInMemoryStage=>overflowInMemoryStage, 
+    overflowInWritebackStage=>overflowInWritebackStage, 
+    overflowIn=>overflowStatusIn,
+    overflowOut=>dataForwarderOverflow,
     readReg1=>readReg1, 
     readReg2=>readReg2, 
     memoryWritebackDest=>memoryDestReg, 
@@ -199,7 +207,7 @@ process(clk) begin
             readReg1Out <= readReg1;
             
             if useCustomTest = '1' then
-                if overflowStatusIn='1' then
+                if dataForwarderOverflow='1' then
                     test2Active<='1';
                 end if;
             elsif useBranch = '1' then

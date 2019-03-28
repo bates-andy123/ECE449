@@ -128,7 +128,7 @@ registers : register_file port map(
     wr_enable=>regWriteEnable
 );
 
-    overflowOut <= rd_overflow1 or rd_overflow2;
+    overflowOut <= rd_overflow1;
     wr_overflow <= overflowInFromWriteback;
 
     with instruction(15 downto 9) select
