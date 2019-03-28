@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="43402706534fs"></ZoomEndTime>
+      <ZoomStartTime time="138988314000fs"></ZoomStartTime>
+      <ZoomEndTime time="182522543888fs"></ZoomEndTime>
       <Cursor1Time time="300100000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="259"></NameColumnWidth>
+      <NameColumnWidth column_width="255"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="91" />
+   <WVObjectSize size="92" />
    <wvobject fp_name="/pipeline_TB3/rst" type="logic">
       <obj_property name="ElementShortName">rst</obj_property>
       <obj_property name="ObjectShortName">rst</obj_property>
@@ -174,10 +174,6 @@
    <wvobject fp_name="/pipeline_TB3/u0/execute/memoryAddress" type="array">
       <obj_property name="ElementShortName">memoryAddress[15:0]</obj_property>
       <obj_property name="ObjectShortName">memoryAddress[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/hexDigitsOut" type="array">
-      <obj_property name="ElementShortName">hexDigitsOut[15:0]</obj_property>
-      <obj_property name="ObjectShortName">hexDigitsOut[15:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/memCtrl/addressARAM" type="array">
       <obj_property name="ElementShortName">addressARAM[15:0]</obj_property>
@@ -386,5 +382,13 @@
    <wvobject fp_name="/pipeline_TB3/u0/execute/doMemoryAccess" type="logic">
       <obj_property name="ElementShortName">doMemoryAccess</obj_property>
       <obj_property name="ObjectShortName">doMemoryAccess</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/hexDigitsOut" type="array">
+      <obj_property name="ElementShortName">hexDigitsOut[15:0]</obj_property>
+      <obj_property name="ObjectShortName">hexDigitsOut[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memory/regUsedIn" type="array">
+      <obj_property name="ElementShortName">regUsedIn[2:0]</obj_property>
+      <obj_property name="ObjectShortName">regUsedIn[2:0]</obj_property>
    </wvobject>
 </wave_config>

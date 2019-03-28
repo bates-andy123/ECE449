@@ -51,7 +51,14 @@ architecture Behavioral of memoryStage is
 
 signal PC_WritebackSet : std_logic := '0';
 
-signal lastRegUsed : std_logic_vector( 2 downto 0);
+signal outputBuffer : std_logic_vector(15 downto 0);
+signal doWriteBackOutBuffer : std_logic;
+signal destRegOutBuffer : std_logic_vector(2 downto 0);
+signal memoryModeIsStore : std_logic;
+
+signal destRegOutMatchIn : std_logic;
+
+signal dataForwardNeeded : std_logic;
 
 begin
 
@@ -69,8 +76,24 @@ process(rst, clk) begin
     end if;
 end process;
 
+--    with instruction(15 downto 9) select
+--        useALU <= 
+--            '1' when nop_op | add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op,
+--            '0' when others;
+            
+            
+    memoryModeIsStore <= '1' when modeMemory = "01" else '0';
+    destRegOutMatchIn <= '1' when destRegOutBuffer = regUsedIn else '0';
+    
+    dataForwardNeeded <= doWriteBackOutBuffer and destRegOutMatchIn and memoryModeIsStore;
+    
+    with dataForwardNeeded select
+        memoryWriteValue <= 
+            outputBuffer when '1',
+            input when others;   
+
     memoryAddress <= memoryAddressFromExecuteStage;
-    memoryWriteValue <= input;
+    --memoryWriteValue <= input;
     
     with modeMemory select
         memoryRW <= 
@@ -86,11 +109,16 @@ process(clk) begin
             overflowOut <= overflowIn;
             doWriteBackOut <= doWriteBackIn;
             
+            doWriteBackOutBuffer <= doWriteBackIn;
+            destRegOutBuffer <= destRegIn;
+            outputBuffer <= input;
+            
             if(PC_WritebackSet = '0' and doPCWriteBackIn = '0') then
                 
                 if(doMemoryAccess = '1') then
                     if(modeMemory = "00") then
                         output <=  memoryReadValue;
+                        outputBuffer <= memoryReadValue;
                     end if;
                 else 
 
