@@ -54,9 +54,9 @@ signal memoryModeIsStore : std_logic;
 signal destRegOutMatchIn : std_logic;
 signal dataForwardNeeded : std_logic;
 
-signal destRegOutBuffer : std_logic_vector(2 downto 0);
+signal destRegOutBuffer, destRegOutLatched : std_logic_vector(2 downto 0);
 signal doWritebackOutBuffer : std_logic;
-signal outputBuffer : std_logic_vector(15 downto 0);
+signal outputBuffer, outputLatched : std_logic_vector(15 downto 0);
 signal regUsedLatched : std_logic_vector(2 downto 0);
 signal doWriteBackInLatched : std_logic;
 
@@ -77,13 +77,13 @@ process(rst, clk) begin
 end process;
 
     memoryModeIsStore <= '1' when modeMemory = "01" else '0';
-    destRegOutMatchIn <= '1' when destRegOutBuffer = regUsedLatched else '0';
+    destRegOutMatchIn <= '1' when destRegOutLatched = regUsedIn else '0';
     
     dataForwardNeeded <= doWriteBackInLatched and destRegOutMatchIn and memoryModeIsStore;
     
     with dataForwardNeeded select
         memoryWriteValue <= 
-            outputBuffer when '1',
+            outputLatched when '1',
             input when others; 
 
     memoryAddress <= memoryAddressFromExecuteStage;
@@ -95,39 +95,43 @@ end process;
 
 process(clk) begin
     if rst = '0' then
-        if rising_edge(clk) then
-            regUsedLatched <= regUsedIn;
-            doWriteBackInLatched <= doWriteBackIn;
+        if clk='1' then
+            doWriteBackInLatched <= doWriteBackOutBuffer;
+            destRegOutLatched <= destRegOutBuffer;
+            outputLatched <= outputBuffer;
         end if;
     else
-        regUsedLatched <= "000";
+        outputLatched <= X"0000";
+        destRegOutLatched <= "000";
         doWriteBackInLatched <= '0';
     end if;
 end process;
 
-process (clk) begin
-    if rst='0' then
-        if falling_edge(clk) then
-            destRegOutBuffer <= destRegOutBackIn;
-            doWritebackOutBuffer <= doWriteBackOutBackIn;
-        end if;
-    else
-        destRegOutBuffer <= "000";
-        doWritebackOutBuffer <= '0';
+--process (clk) begin
+--    if rst='0' then
+--        if falling_edge(clk) then
+--            destRegOutBuffer <= destRegOutBackIn;
+--            doWritebackOutBuffer <= doWriteBackOutBackIn;
+--        end if;
+--    else
+--        destRegOutBuffer <= "000";
+--        doWritebackOutBuffer <= '0';
         
-    end if;
-end process;
+--    end if;
+--end process;
 
 output <= outputBuffer;
+doWriteBackOut <=  doWriteBackOutBuffer;
+destRegOut <= destRegOutBuffer;
 
 process(clk) begin
     if(rst = '0') then
         if (clk='0') then
             
             outputBuffer <= input;
-            destRegOut <= destRegIn;
+            destRegOutBuffer <= destRegIn;
             overflowOut <= overflowIn;
-            doWriteBackOut <= doWriteBackIn;
+            doWriteBackOutBuffer <= doWriteBackIn;
             
             if(PC_WritebackSet = '0' and doPCWriteBackIn = '0') then
                 
@@ -150,8 +154,8 @@ process(clk) begin
         outputBuffer <= X"0000";
         overflowOut<='0';
         PC_WritebackSet <= '0';
-        doWriteBackOut <= '0';
-        destRegOut <= "000";
+        doWriteBackOutBuffer <= '0';
+        destRegOutBuffer <= "000";
 
     end if;
 end process;

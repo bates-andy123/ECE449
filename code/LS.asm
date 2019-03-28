@@ -12,7 +12,6 @@
 	
 	STORE R0, R1
 	LOAD R3, R2
-	NOP
 	STORE R0, R3
 	
 	BRR 0
