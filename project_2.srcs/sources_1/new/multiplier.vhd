@@ -59,6 +59,8 @@ signal inter31 : std_logic_vector(31 downto 0); -- Final sum
 -- Temporary signals
 signal multiplicand32 : std_logic_vector(31 downto 0);
 signal productTemp : std_logic_vector(15 downto 0);
+signal overflowTemp1 : std_logic;
+signal overflowTemp2 : std_logic;
 
 begin
     multiplicand32 <= (X"0000" & multiplicand);
@@ -124,6 +126,12 @@ begin
     productTemp <= inter31(15 downto 0);
     product <= productTemp;
     --overflow <= '0';
-    overflow <= inter31(16) or inter31(17) or inter31(18) or inter31(19) or inter31(20) or inter31(21) or inter31(22) or inter31(23) or inter31(24)
-                or inter31(25) or inter31(26) or inter31(27) or inter31(28) or inter31(29) or inter31(30);
+    -- Check high 16 bits to see if an overflow occurred; result masked if either multiplicand or multiplier was negative 
+    overflowTemp1 <= (inter31(16) or inter31(17) or inter31(18) or inter31(19) or inter31(20) or inter31(21) or inter31(22)
+                         or inter31(23) or inter31(24) or inter31(25) or inter31(26) or inter31(27) or inter31(28) or inter31(29)
+                         or inter31(30) or inter31(31)) and (not (multiplicand(15) or multiplier(15)));
+    -- Compare MSB of multiplicand, multiplier, and result to see if the result has the correct sign
+    overflowTemp2 <= (multiplicand(15) xnor multiplier(15) xnor productTemp(15));
+    -- Overflow is legitimate if either overflowTemp1 or overflowTemp2 return 1
+    overflow <= (overflowTemp1 or overflowTemp2);
 end Behavioral;

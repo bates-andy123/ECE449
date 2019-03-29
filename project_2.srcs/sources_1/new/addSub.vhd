@@ -54,9 +54,9 @@ begin
 
     -- Check for overflow
     overflow <=
-        '1' when (operation = "001" and (in1(15) = in2(15)) and (resultTemp(15) /= in1(15))) -- Overflow when operation is addition and MSB mismatch
-        or (operation = "010" and (in1(15) = in2(15)) and (resultTemp(15) /= in1(15))) -- Overflow when operation is subtraction and MSB mismatch
-        else '0'; -- Otherwise no overflow
+        '0' when (in1(15) /= in2(15)) -- Overflow impossible if in1 and in2 have differing signs
+        else '1' when ((in1(15) = in2(15)) and (resultTemp(15) /= in1(15))) -- Overflow when MSB of in1 and in2 match but result MSB differs
+        else '0'; -- No overflow in other cases
 
     output <= resultTemp; -- Output the result
 end Behavioral;
