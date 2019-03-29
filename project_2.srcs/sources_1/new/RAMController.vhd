@@ -5,7 +5,7 @@ entity RAMController is
     port(
         douta : out std_logic_vector (15 downto 0);
         doutb : out std_logic_vector (15 downto 0);
-        addra, addrb : in std_logic_vector (15 downto 0); -- The address for port A read/write operations, and port B read operations
+        addra, addrb : in std_logic_vector (9 downto 0); -- The address for port A read/write operations, and port B read operations
         dina : in std_logic_vector (15 downto 0); -- Data in for port A
         wea : in std_logic_vector (0 downto 0); -- Write enable for port A input data port dina
         clka, ena, enb, regcea, regceb, rsta, rstb : in std_logic
@@ -18,8 +18,8 @@ begin
 -- Xilinx Parameterized Macro, version 2018.3
 xpm_memory_dpdistram_inst : xpm_memory_dpdistram
     generic map (
-        ADDR_WIDTH_A => 16, -- DECIMAL
-        ADDR_WIDTH_B => 16, -- DECIMAL
+        ADDR_WIDTH_A => 10, -- DECIMAL
+        ADDR_WIDTH_B => 10, -- DECIMAL
         BYTE_WRITE_WIDTH_A => 16, -- DECIMAL
         CLOCKING_MODE => "common_clock", -- String
         MEMORY_INIT_FILE => "RAM.mem", -- String

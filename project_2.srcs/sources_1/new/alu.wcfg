@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="183672606000fs"></ZoomStartTime>
-      <ZoomEndTime time="319047857196fs"></ZoomEndTime>
-      <Cursor1Time time="251887668000fs"></Cursor1Time>
+      <ZoomStartTime time="518059998000fs"></ZoomStartTime>
+      <ZoomEndTime time="610241210123fs"></ZoomEndTime>
+      <Cursor1Time time="700100000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="147"></NameColumnWidth>
+      <NameColumnWidth column_width="135"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="107" />
+   <WVObjectSize size="113" />
    <wvobject fp_name="/pipeline_TB3/rst" type="logic">
       <obj_property name="ElementShortName">rst</obj_property>
       <obj_property name="ObjectShortName">rst</obj_property>
@@ -335,10 +335,6 @@
       <obj_property name="ElementShortName">regUsedIn[2:0]</obj_property>
       <obj_property name="ObjectShortName">regUsedIn[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/hexDigitsOut" type="array">
-      <obj_property name="ElementShortName">hexDigitsOut[15:0]</obj_property>
-      <obj_property name="ObjectShortName">hexDigitsOut[15:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/memory/destRegOut" type="array">
       <obj_property name="ElementShortName">destRegOut[2:0]</obj_property>
       <obj_property name="ObjectShortName">destRegOut[2:0]</obj_property>
@@ -439,6 +435,10 @@
       <obj_property name="ElementShortName">PC_in[15:0]</obj_property>
       <obj_property name="ObjectShortName">PC_in[15:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/writeback/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/pipeline_TB3/u0/writeback/doPCWriteBackOut" type="logic">
       <obj_property name="ElementShortName">doPCWriteBackOut</obj_property>
       <obj_property name="ObjectShortName">doPCWriteBackOut</obj_property>
@@ -446,5 +446,29 @@
    <wvobject fp_name="/pipeline_TB3/u0/fetch/instruction_out" type="array">
       <obj_property name="ElementShortName">instruction_out[15:0]</obj_property>
       <obj_property name="ObjectShortName">instruction_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_out" type="array">
+      <obj_property name="ElementShortName">PC_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/PC_in" type="array">
+      <obj_property name="ElementShortName">PC_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/PC_CounterDispAdder" type="array">
+      <obj_property name="ElementShortName">PC_CounterDispAdder[15:1]</obj_property>
+      <obj_property name="ObjectShortName">PC_CounterDispAdder[15:1]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/operand2Buffer" type="array">
+      <obj_property name="ElementShortName">operand2Buffer[15:0]</obj_property>
+      <obj_property name="ObjectShortName">operand2Buffer[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/hexDigitsOut" type="array">
+      <obj_property name="ElementShortName">hexDigitsOut[15:0]</obj_property>
+      <obj_property name="ObjectShortName">hexDigitsOut[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/readOnlyAddress" type="array">
+      <obj_property name="ElementShortName">readOnlyAddress[15:0]</obj_property>
+      <obj_property name="ObjectShortName">readOnlyAddress[15:0]</obj_property>
    </wvobject>
 </wave_config>

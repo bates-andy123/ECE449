@@ -6,7 +6,7 @@ import string
 
 # constants
 
-DEFAULT_MEMORY_DEPTH = 512
+DEFAULT_MEMORY_DEPTH = 2048
 STACK_SIZE = 16
 MAX_INT = 255 # may need to consider negatives
 

@@ -111,7 +111,7 @@ u1:alu port map(
 
 u2 : PC_calculator Port map(
     disp=>operand1, 
-    reg=>operand2, 
+    reg=>operand2Buffer, 
     PC_current=>PC_in,
     modeBranch=>modeALU,
     calcedPC=>resultCalcedPC
@@ -149,6 +149,7 @@ process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
         destRegOut <= "000";
         doWriteBackOut <= '0';
         overflowOut<='0';
+        modeMemory<="00";
     elsif falling_edge(clk) then
         doWriteBackOut <= '0';
         modeMemory <= "00";

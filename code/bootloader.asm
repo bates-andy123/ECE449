@@ -57,6 +57,7 @@ LedDisplay:	equ		0xFFF2
 BootVector:	equ		0x0400
 BootVector_1:	equ		0x0402
 BootVector_2:	equ		0x0404
+StepSizeBranch:	equ		0x0001
 StepSize:	equ		0x0002
 
 
@@ -75,7 +76,45 @@ StepSize:	equ		0x0002
 		brr		Interrupt
 
 Interrupt:
-WaitForever:	brr		WaitForever	
+WaitForever:	
+	loadimm.upper	0		; Display Number of packets left to download
+	loadimm.lower	2
+	mov R0, R7
+	loadimm.upper	BootVector.hi		; Display Number of packets left to download
+	loadimm.lower	BootVector.lo
+
+	mov R4, R7
+	loadimm.upper	LedDisplay.hi		; Display Number of packets left to download
+	loadimm.lower	LedDisplay.lo
+waitforeverpart:
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	load 	R1, R4
+	store	r7, r1
+	add R4, R4, R0
+	brr		waitforeverpart	
 
 ;++
 ;
@@ -90,10 +129,11 @@ WaitForever:	brr		WaitForever
 ;
 
 	
-ResetExecute:	loadimm.upper	BootVector.hi
+ResetExecute:	
+		;BRR WaitForever
+		loadimm.upper	BootVector.hi
 		loadimm.lower	BootVector.lo
 		load		r7, r7
-		nop
 		nop
 		loadimm.lower	0x00
 		mov		r2, r7
@@ -108,7 +148,6 @@ ResetExecute_1:
 		loadimm.lower	BootVector_1.lo
 		load		r7, r7
 		nop
-		nop
 		loadimm.lower	0x00
 		mov		r2, r7
 		loadimm.upper	0x24
@@ -122,7 +161,6 @@ ResetExecute_2:
 		loadimm.upper	BootVector_2.hi
 		loadimm.lower	BootVector_2.lo
 		load		r2, r7
-		nop
 		nop
 		loadimm.upper	0x87
 		loadimm.lower	0xc0
@@ -174,8 +212,6 @@ WaitFor_AA:	in		r2			; wait for data available to go high
 
 Got_AA:		loadimm.lower	0x01
 		nop
-		nop
-		nop
 		out		r7
 
 WaitForEnd_AA:
@@ -187,8 +223,6 @@ WaitForEnd_AA:
 		brr		WaitForEnd_AA
 
 Done_AA:	loadimm.lower	0x00
-		nop
-		nop
 		nop
 		out		r7
 
@@ -231,8 +265,6 @@ WaitFor_55:	in		r2			; wait for load signal
 
 Got_55:		loadimm.lower	0x01
 		nop
-		nop
-		nop
 		out		r7
 
 
@@ -245,8 +277,6 @@ WaitForEnd_55:
 		brr		WaitForEnd_55
 
 Done_55:	loadimm.lower	0x00
-		nop
-		nop
 		nop
 		out		r7
 
@@ -273,8 +303,6 @@ WaitForSize:	in		r2			; wait for load signal
 
 		loadimm.lower	0x01
 		nop
-		nop
-		nop
 		out		r7
 
 
@@ -287,8 +315,6 @@ WaitForSizeEnd:
 		brr		WaitForSizeEnd
 
 DoneSize:	loadimm.lower	0x00
-		nop
-		nop
 		nop
 		out		r7
 
@@ -307,10 +333,6 @@ DoneSize:	loadimm.lower	0x00
 
 GetProgram:	loadimm.upper	LedDisplay.hi		; Display Number of packets left to download
 		loadimm.lower	LedDisplay.lo
-		nop			
-		nop
-		nop
-		nop
 		nop
 		store		r7, r4
 
@@ -329,8 +351,7 @@ WaitForHighByte:
 		shl		r1, 8
 
 		loadimm.lower	0x01
-		nop
-		nop
+
 		nop
 		out		r7
 
@@ -346,8 +367,6 @@ WaitForHighByteEnd:
 DoneHighByte:	
 		loadimm.lower	0x00
 		nop
-		nop
-		nop
 		out		r7
 		mov		r0, r1			; save the upper 8 bits of the instruction
 
@@ -362,8 +381,7 @@ WaitForLowByte:
 		shr		r1, 8			; R1 has the lower 8 bits of the instruction
 
 		loadimm.lower	0x01
-		nop
-		nop
+
 		nop
 		out		r7
 
@@ -377,8 +395,7 @@ WaitForLowByteEnd:
 
 DoneLowByte: 	in		r2			; See if the packet contains an address or instruction
 		loadimm.lower	0x00
-		nop
-		nop
+
 		nop
 		out		r7
 
@@ -421,9 +438,9 @@ DoneLowByte: 	in		r2			; See if the packet contains an address or instruction
 
 GotInstruction:	store		r3, r1
 
-;		loadimm.upper	0xFF			; Display the instruction we just received
-;		loadimm.lower	0xF2
-;		store		r7, r1
+		loadimm.upper	0xFF			; Display the instruction we just received
+		loadimm.lower	0xF2
+		store		r7, r3
 		
 		loadimm.upper	StepSize.hi
 		loadimm.lower	StepSize.lo
@@ -435,4 +452,3 @@ DecrementCount:
 		sub		r4, r4, r7
 		brr		GetProgram
 							
-		

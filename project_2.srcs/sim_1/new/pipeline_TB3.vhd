@@ -94,8 +94,8 @@ u0 : pipeline port map(
 process begin
     switchInput<=X"A0B4";
     input<=X"0009";
-    rst <= '0';
-    rstLoad<='1';
+    rst <= '1';
+    rstLoad<='0';
     wait until falling_edge(clk);
     rst<='0';
     rstLoad<='0';

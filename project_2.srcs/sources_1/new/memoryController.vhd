@@ -63,7 +63,7 @@ architecture Behavioral of memoryController is
 
 -- Component declaration for RAM module
 component RAMController port(
-    addra, addrb : in std_logic_vector (15 downto 0); -- The address for port A read/write operations, and port B read operations
+    addra, addrb : in std_logic_vector (9 downto 0); -- The address for port A read/write operations, and port B read operations
     dina : in std_logic_vector (15 downto 0); -- Data in for port A
     wea : in std_logic_vector (0 downto 0); -- Write enable for port A input data port dina
     douta : out std_logic_vector (15 downto 0); -- Data out from port A
@@ -81,7 +81,7 @@ component ROMController Port (
 );
 end component;
 
-signal readOnlyAddressShifted, addressARAMShifted : std_logic_vector(15 downto 0);
+signal readOnlyAddressShifted, addressARAMShifted : std_logic_vector(9 downto 0);
 
 signal weaRAMBuffer : std_logic := '0';
 
@@ -93,8 +93,8 @@ signal outaContentRAMBuffer : std_logic_vector(15 downto 0);
 
 begin
 
-readOnlyAddressShifted <= "0" & readOnlyAddress(15 downto 1);
-addressARAMShifted <= "0" & addressARAM(15 downto 1);
+readOnlyAddressShifted <= readOnlyAddress(10 downto 1);
+addressARAMShifted <= addressARAM(10 downto 1);
 
 weaRAMVector <= ("" & weaRAMBuffer);
 
@@ -120,11 +120,6 @@ u1 : ROMController port map(
     clka => clk, ena => '1', 
     rsta => rstaROM
 );
-
---    with readOnlyAddress(10) select
---        outputOnReadOnlyChannel <=
---            outbContentRAM when '1',
---            outContentROM when others;
     
     with addressARAM select
         weaRAMBuffer <=
@@ -136,16 +131,11 @@ u1 : ROMController port map(
             inputIn when X"FFF0",
             outaContentRAMBuffer when others;
 
-process(clk)
-begin
-    if falling_edge(clk) then
-        if (readOnlyAddress(10) = '1') then 
-            outputOnReadOnlyChannel <= outbContentRAM;
-        else
-            outputOnReadOnlyChannel <= outContentROM;
-        end if;    
-    end if;
-end process;
+with readOnlyAddress(10) select
+    outputOnReadOnlyChannel <=
+        outbContentRAM when '1',
+        outContentROM when others;
+
 
 process(clk, rst) begin
     if (rst='1') then
