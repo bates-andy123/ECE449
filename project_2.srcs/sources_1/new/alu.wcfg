@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="518059998000fs"></ZoomStartTime>
-      <ZoomEndTime time="610241210123fs"></ZoomEndTime>
-      <Cursor1Time time="700100000000fs"></Cursor1Time>
+      <ZoomStartTime time="479146855000fs"></ZoomStartTime>
+      <ZoomEndTime time="576115945911fs"></ZoomEndTime>
+      <Cursor1Time time="502482310000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="135"></NameColumnWidth>
+      <NameColumnWidth column_width="115"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="113" />
+   <WVObjectSize size="124" />
    <wvobject fp_name="/pipeline_TB3/rst" type="logic">
       <obj_property name="ElementShortName">rst</obj_property>
       <obj_property name="ObjectShortName">rst</obj_property>
@@ -467,8 +467,52 @@
       <obj_property name="ElementShortName">hexDigitsOut[15:0]</obj_property>
       <obj_property name="ObjectShortName">hexDigitsOut[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/readOnlyAddress" type="array">
-      <obj_property name="ElementShortName">readOnlyAddress[15:0]</obj_property>
-      <obj_property name="ObjectShortName">readOnlyAddress[15:0]</obj_property>
+   <wvobject fp_name="/pipeline_TB3/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/fetch/PC_next" type="array">
+      <obj_property name="ElementShortName">PC_next[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_next[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/fetch/PC_set" type="array">
+      <obj_property name="ElementShortName">PC_set[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_set[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/calcedPC" type="array">
+      <obj_property name="ElementShortName">calcedPC[15:0]</obj_property>
+      <obj_property name="ObjectShortName">calcedPC[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/disp" type="array">
+      <obj_property name="ElementShortName">disp[15:0]</obj_property>
+      <obj_property name="ObjectShortName">disp[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/reg" type="array">
+      <obj_property name="ElementShortName">reg[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/PC_current" type="array">
+      <obj_property name="ElementShortName">PC_current[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_current[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/execute/u2/modeBranch" type="array">
+      <obj_property name="ElementShortName">modeBranch[2:0]</obj_property>
+      <obj_property name="ObjectShortName">modeBranch[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/outputOnReadOnlyChannel" type="array">
+      <obj_property name="ElementShortName">outputOnReadOnlyChannel[15:0]</obj_property>
+      <obj_property name="ObjectShortName">outputOnReadOnlyChannel[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/fetch/fetchAddress" type="array">
+      <obj_property name="ElementShortName">fetchAddress[15:0]</obj_property>
+      <obj_property name="ObjectShortName">fetchAddress[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/doutb" type="array">
+      <obj_property name="ElementShortName">doutb[15:0]</obj_property>
+      <obj_property name="ObjectShortName">doutb[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_TB3/u0/memCtrl/u0/addrb" type="array">
+      <obj_property name="ElementShortName">addrb[9:0]</obj_property>
+      <obj_property name="ObjectShortName">addrb[9:0]</obj_property>
    </wvobject>
 </wave_config>

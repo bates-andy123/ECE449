@@ -1,6 +1,6 @@
 
 ;
-; Created on Thu Mar 28 21:53:38 2019 with ECE 449 assembler v1.10 Beta 4 (16 bit).
+; Created on Fri Mar 29 11:17:04 2019 with ECE 449 assembler v1.10 Beta 4 (16 bit).
 ;
 ;Header Section
 RADIX 10
@@ -252,18 +252,15 @@ DATA
 0470 => "0010010110000111", -- 01D6 - 2587                     loadimm.upper 0x87
 0472 => "0010010011000000", -- 01D8 - 24C0                     loadimm.lower 0xC0
 0474 => "0010001000111000", -- 01DA - 2238                     store         r0,r7
-0476 => "1000000000001000", -- 01DC - 8008                     brr           DecrementCount
+0476 => "1000000000000101", -- 01DC - 8005                     brr           DecrementCount
 0478 => "0010001011001000", -- 01DE - 22C8 GotInstruction:     store         r3,r1
-0480 => "0010010111111111", -- 01E0 - 25FF                     loadimm.upper 0xFF
-0482 => "0010010011110010", -- 01E2 - 24F2                     loadimm.lower 0xF2
-0484 => "0010001111011000", -- 01E4 - 23D8                     store         r7,r3
-0486 => "0010010100000000", -- 01E6 - 2500                     loadimm.upper StepSize.hi
-0488 => "0010010000000010", -- 01E8 - 2402                     loadimm.lower StepSize.lo
-0490 => "0000001011011111", -- 01EA - 02DF                     add           r3,r3,r7
-0492 => "0010010100000000", -- 01EC - 2500                     loadimm.upper 0x00
-0494 => "0010010000000001", -- 01EE - 2401                     loadimm.lower 0x01
-0496 => "0000010100100111", -- 01F0 - 0527                     sub           r4,r4,r7
-0498 => "1000000110101110", -- 01F2 - 81AE                     brr           GetProgram
+0480 => "0010010100000000", -- 01E0 - 2500                     loadimm.upper StepSize.hi
+0482 => "0010010000000010", -- 01E2 - 2402                     loadimm.lower StepSize.lo
+0484 => "0000001011011111", -- 01E4 - 02DF                     add           r3,r3,r7
+0486 => "0010010100000000", -- 01E6 - 2500                     loadimm.upper 0x00
+0488 => "0010010000000001", -- 01E8 - 2401                     loadimm.lower 0x01
+0490 => "0000010100100111", -- 01EA - 0527                     sub           r4,r4,r7
+0492 => "1000000110110001", -- 01EC - 81B1                     brr           GetProgram
 
 
 -------------------------------------------------------
@@ -271,7 +268,7 @@ Symbol Table:
 BootVector            1024 (0400)
 BootVector_1          1026 (0402)
 BootVector_2          1028 (0404)
-DecrementCount         492 (01EC)
+DecrementCount         486 (01E6)
 DoneHighByte           380 (017C)
 DoneLowByte            420 (01A4)
 DoneSize               322 (0142)

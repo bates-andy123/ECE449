@@ -47,6 +47,8 @@ architecture Behavioral of fetchStage is
 signal PC_next : std_logic_vector(15 downto 0) := X"0002";
 signal PC_current : std_logic_vector(15 downto 0) := X"0000";
 
+signal PC_setLatched : std_logic_vector(15 downto 0);
+
 signal PC_justHalted, validInstruction : std_logic := '0';
 
 begin
@@ -59,6 +61,16 @@ fetchAddress <= PC_current;
             X"0000" when others;
 
 validInstruction <= PC_justHalted or halt;
+
+process(rst, clk) begin
+    if(rst = '0') then
+        if rising_edge(clk) then
+            PC_setLatched <= PC_set;
+        end if;
+    else
+        PC_setLatched <= X"0000";
+    end if;
+end process;
 
 process(clk)
 begin
@@ -73,9 +85,9 @@ begin
                     PC_next <= std_logic_vector(unsigned(PC_next) + 2);
                     PC_out <= PC_current;            
                 else
-                    PC_current <= PC_set;
-                    PC_next <= std_logic_vector(unsigned(PC_set) + 2);
-                    PC_out <=  PC_set;
+                    PC_current <= PC_setLatched;
+                    PC_next <= std_logic_vector(unsigned(PC_setLatched) + 2);
+                    PC_out <=  PC_setLatched;
                     PC_justHalted <= '1';
                 end if;
                 inputOut <= inputIn;

@@ -93,8 +93,8 @@ signal outaContentRAMBuffer : std_logic_vector(15 downto 0);
 
 begin
 
-readOnlyAddressShifted <= readOnlyAddress(10 downto 1);
-addressARAMShifted <= addressARAM(10 downto 1);
+readOnlyAddressShifted <= "0" & readOnlyAddress(9 downto 1);
+addressARAMShifted <= "0" & addressARAM(9 downto 1);
 
 weaRAMVector <= ("" & weaRAMBuffer);
 
@@ -131,11 +131,21 @@ u1 : ROMController port map(
             inputIn when X"FFF0",
             outaContentRAMBuffer when others;
 
-with readOnlyAddress(10) select
-    outputOnReadOnlyChannel <=
-        outbContentRAM when '1',
-        outContentROM when others;
+--with readOnlyAddress(10) select
+--    outputOnReadOnlyChannel <=
+--        outbContentRAM when '1',
+--        outContentROM when others;
 
+process(clk)	
+begin        
+    if falling_edge(clk) then            
+        if (readOnlyAddress(10) = '1') then            
+            outputOnReadOnlyChannel <= outbContentRAM;    
+         else    
+            outputOnReadOnlyChannel <= outContentROM;    
+        end if;        
+    end if;    
+end process;
 
 process(clk, rst) begin
     if (rst='1') then

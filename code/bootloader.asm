@@ -438,9 +438,9 @@ DoneLowByte: 	in		r2			; See if the packet contains an address or instruction
 
 GotInstruction:	store		r3, r1
 
-		loadimm.upper	0xFF			; Display the instruction we just received
-		loadimm.lower	0xF2
-		store		r7, r3
+;		loadimm.upper	0xFF			; Display the instruction we just received
+;		loadimm.lower	0xF2
+;		store		r7, r3
 		
 		loadimm.upper	StepSize.hi
 		loadimm.lower	StepSize.lo

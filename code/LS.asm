@@ -1,4 +1,4 @@
-	ORG 0x410
+	ORG 0x0410
 	
 	
 	LOADIMM.LOWER 0xF2
