@@ -32,11 +32,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity writeBackStage is Port ( 
-    clk, rst, pipelineReset : in std_logic;
+    clk, rst, pipelineReset, overflowIn : in std_logic;
     inDoWriteBack, doPCWriteBackIn, doOutputUpdateIn : in std_logic;
     inDestRegister : in std_logic_vector(2 downto 0);
     inWriteBackValue, PC_in, CPUinput : in std_logic_vector(15 downto 0);
-    outDoWriteBack, doPCWriteBackOut, doBranchReset : out std_logic := '0';
+    outDoWriteBack, doPCWriteBackOut, doBranchReset, overflowOut : out std_logic := '0';
     outDestRegister : out std_logic_vector(2 downto 0) := "000";
     outWriteBackValue, PC_out, CPUoutput : out std_logic_vector(15 downto 0) := X"0000"
 );
@@ -53,8 +53,12 @@ begin
 
 process(clk) begin
     if (pipelineReset='0') then
-        if (doOutputUpdateIn = '1' and clk='0') then
-            CPUoutput <= CPUinput;
+        if (clk='0') then
+            if doOutputUpdateIn = '1' then
+                CPUoutput <= CPUinput;
+--            else
+--                CPUoutput <= X"0000";
+            end if;
         end if;
     else
         CPUoutput <= X"0000";
@@ -62,16 +66,18 @@ process(clk) begin
 end process;
 
 process(clk) begin
-    if rising_edge(clk) then
+    if falling_edge(clk) then
         if (rst = '0' and pipelineReset='0') then 
             outDoWriteBack<=inDoWriteBack;
             outDestRegister<=inDestRegister;
             outWriteBackValue<=inWriteBackValue;
             PC_out<=PC_in;
+            overflowOut<=overflowIn;
             doPCWriteBackOut<=doPCWriteBackIn;
             doBranchReset<=doPCWriteBackIn;
             
         else
+            overflowOut<='0';
             outDoWriteBack<='0';
             outDestRegister<="000";
             outWriteBackValue<=X"0000";

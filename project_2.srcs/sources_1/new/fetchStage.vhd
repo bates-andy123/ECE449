@@ -33,7 +33,7 @@ use ieee.numeric_std.all;
 --use UNISIM.VComponents.all;
 
 entity fetchStage is Port (
-    clk, rst, halt : in std_logic;
+    clk, rst, rstLoad, halt : in std_logic;
     instruction_out, PC_out: out std_logic_vector(15 downto 0) := X"0000";
     inputIn, instruction_in : in std_logic_vector(15 downto 0);
     inputOut, fetchAddress : out std_logic_vector(15 downto 0) := X"0000";
@@ -46,6 +46,8 @@ architecture Behavioral of fetchStage is
 
 signal PC_next : std_logic_vector(15 downto 0) := X"0002";
 signal PC_current : std_logic_vector(15 downto 0) := X"0000";
+
+signal PC_setLatched : std_logic_vector(15 downto 0);
 
 signal PC_justHalted, validInstruction : std_logic := '0';
 
@@ -60,9 +62,19 @@ fetchAddress <= PC_current;
 
 validInstruction <= PC_justHalted or halt;
 
+process(rst, clk) begin
+    if(rst = '0') then
+        if rising_edge(clk) then
+            PC_setLatched <= PC_set;
+        end if;
+    else
+        PC_setLatched <= X"0000";
+    end if;
+end process;
+
 process(clk)
 begin
-    if(rst = '0') then 
+    if(rst = '0' and rstLoad='0') then 
         if (clk='0' and clk'event) then
                 
                 if (PC_doJump = '0' and halt='0') then -- normal increment mode
@@ -73,22 +85,28 @@ begin
                     PC_next <= std_logic_vector(unsigned(PC_next) + 2);
                     PC_out <= PC_current;            
                 else
-                    PC_current <= PC_set;
-                    PC_next <= std_logic_vector(unsigned(PC_set) + 2);
-                    PC_out <=  PC_set;
+                    PC_current <= PC_setLatched;
+                    PC_next <= std_logic_vector(unsigned(PC_setLatched) + 2);
+                    PC_out <=  PC_setLatched;
                     PC_justHalted <= '1';
                 end if;
                 inputOut <= inputIn;
 
         end if;
     else 
-        PC_next <= X"0002";
-        PC_current <= X"0000";
-        inputOut <= X"0000";
-        PC_justHalted<='0';
-        --validInstruction<='0';
-        PC_out<=X"0000";
-        --instruction_out <= X"0000";
+        
+            inputOut <= X"0000";
+            PC_justHalted<='0';
+            
+            if rstLoad = '1' then
+                PC_next <= X"0004";
+                PC_current <= X"0002";
+                PC_out<=X"0002";
+            else --must be normal rst aka rst_load
+                PC_next <= X"0002";
+                PC_current <= X"0000";
+                PC_out<=X"0000";
+            end if;
     end if;
 
 end process;
