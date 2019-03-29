@@ -101,7 +101,10 @@ process begin
     rstLoad<='0';
     wait until falling_edge(clk);
     input<=X"AA80";
-    
+    wait until rising_edge(output(0));
+    input<=X"0000";
+    wait until falling_edge(output(0));
+    input<=X"0000";
     wait;
 
 end process;

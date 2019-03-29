@@ -56,8 +56,8 @@ process(clk) begin
         if (clk='0') then
             if doOutputUpdateIn = '1' then
                 CPUoutput <= CPUinput;
-            else
-                CPUoutput <= X"0000";
+--            else
+--                CPUoutput <= X"0000";
             end if;
         end if;
     else

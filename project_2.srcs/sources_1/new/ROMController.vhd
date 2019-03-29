@@ -47,14 +47,14 @@ begin
 xpm_memory_sprom_inst : xpm_memory_sprom
 
 generic map (
- ADDR_WIDTH_A => 6, -- DECIMAL
+ ADDR_WIDTH_A => 8, -- DECIMAL
  AUTO_SLEEP_TIME => 0, -- DECIMAL
  ECC_MODE => "no_ecc", -- String
  MEMORY_INIT_FILE => "bootloader.mem", -- String
  MEMORY_INIT_PARAM => "0", -- String
  MEMORY_OPTIMIZATION => "true", -- String
  MEMORY_PRIMITIVE => "auto", -- String
- MEMORY_SIZE => (128*8), -- DECIMAL
+ MEMORY_SIZE => (256*16), -- DECIMAL
  MESSAGE_CONTROL => 0, -- DECIMAL
  READ_DATA_WIDTH_A => 16, -- DECIMAL
  READ_LATENCY_A => 1, -- DECIMAL
@@ -67,7 +67,7 @@ port map (
  dbiterra => open, -- 1-bit output: Leave open.
  douta => douta, -- READ_DATA_WIDTH_A-bit output: Data output for port A read operations.
  sbiterra => open, -- 1-bit output: Leave open.
- addra => addra(5 downto 0), -- ADDR_WIDTH_A-bit input: Address for port A read operations.
+ addra => addra, -- ADDR_WIDTH_A-bit input: Address for port A read operations.
  clka => clka, -- 1-bit input: Clock signal for port A.
  ena => ena, -- 1-bit input: Memory enable signal for port A. Must be high on clock
  -- cycles when read operations are initiated. Pipelined internally.
