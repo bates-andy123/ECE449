@@ -93,7 +93,7 @@ signal outaContentRAMBuffer : std_logic_vector(15 downto 0);
 
 begin
 
-readOnlyAddressShifted <= "0" & readOnlyAddress(9 downto 1);
+readOnlyAddressShifted <= "0" & readOnlyAddress(9 downto 1); -- Shifted by 1 to make 
 addressARAMShifted <= "0" & addressARAM(9 downto 1);
 
 weaRAMVector <= ("" & weaRAMBuffer);

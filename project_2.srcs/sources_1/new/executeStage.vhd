@@ -74,24 +74,22 @@ component alu port(
 );
 end component;
 
-component PC_calculator is Port (
+component PC_calculator is Port ( -- We always we always 
     disp, reg, PC_current: in std_logic_vector(15 downto 0);
     modeBranch : in std_logic_vector(2 downto 0);
     calcedPC : out std_logic_vector(15 downto 0)
 );
 end component;
 
-signal dataForwarderOverflow : std_logic;
+signal dataForwarderOverflow : std_logic; -- Did the data forwarder current have an overflow
 
-signal resultALU : std_logic_vector(15 downto 0);
-signal operand1Buffer, operand2Buffer : std_logic_vector(15 downto 0) := X"0000";
-signal z, n, aluOverflow :  std_logic := '0';
+signal resultALU : std_logic_vector(15 downto 0); -- The ALU result
+signal operand1Buffer, operand2Buffer : std_logic_vector(15 downto 0) := X"0000"; -- Hold data forwarder results
+signal z, n, aluOverflow :  std_logic := '0'; -- resutls from ALU
 
-signal resultCalcedPC : std_logic_vector(15 downto 0);
+signal resultCalcedPC : std_logic_vector(15 downto 0); -- result fo the CalcedPC
 
-signal test2Active : std_logic := '0';
-
-constant mul_op : std_logic_vector(6 downto 0)  := "0000011";
+signal test2Active : std_logic := '0'; -- Is test2 current active from test condition 
 
 begin
 
@@ -145,7 +143,7 @@ u3 : dataForwarder port map(
 --modeMemory <= modeALU(1 downto 0);
 
 process(rst, clk) begin --modeALU, useBranch, useIO, useLS, useBranch) begin
-    if rst = '1' then
+    if rst = '1' then -- Reset everything back to it's ground state
         destRegOut <= "000";
         doWriteBackOut <= '0';
         overflowOut<='0';

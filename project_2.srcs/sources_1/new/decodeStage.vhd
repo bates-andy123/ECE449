@@ -132,18 +132,18 @@ registers : register_file port map(
     wr_overflow <= overflowInFromWriteback;
 
     with instruction(15 downto 9) select
-        operand2Passthrough <= 
+        operand2Passthrough <= -- When 1 this will tell the execute stage to not use Data Forward for operand 2
             '1' when shl_op | shr_op,
             '0' when others;
 
     with instruction(15 downto 9) select
-        rd_index1 <= 
+        rd_index1 <= --rd_index1 selects what to read 
             instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op | load | mov, --| store,
             instruction(8 downto 6) when shl_op | shr_op | test_op | test2_op | out_op | store,
             "000" when others;
             
     with instruction(15 downto 9) select
-        rd_index2 <= 
+        rd_index2 <= --rd_index2 selects what to read
             instruction(2 downto 0) when add_op | sub_op | mul_op | nand_op,
             instruction(5 downto 3) when store,
             instruction(8 downto 6) when br | br_neg | br_zero | br_sub, --| store,
@@ -151,40 +151,40 @@ registers : register_file port map(
             "000" when others;
             
      with instruction(15 downto 9) select
-        useALU <= 
+        useALU <= --Do we need to use the ALU
             '1' when nop_op | add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op,
             '0' when others;
     
     with instruction(15 downto 9) select
-        useIO <=
+        useIO <= -- Is this operation IO
             '1' when in_op | out_op,
             '0' when others;
             
      with instruction(15 downto 9) select
-        destReg <=
+        destReg <= -- Pass the destination register
             instruction(8 downto 6) when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op | load | mov,
             "UUU" when others;
             
     with instruction(15 downto 9) select
-        doWriteBack <=
+        doWriteBack <= -- The result is going to written back
             '1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op ,
             '0' when others;
          
     with instruction(15 downto 9) select
-        modeIO <=
+        modeIO <= -- output or input IO operation
             '1' when in_op ,
             '0' when out_op,
             '0' when others;
        
     with instruction(15 downto 9) select
-        operand2 <=
+        operand2 <= --select operand 2
             rd_data2 when add_op | sub_op | mul_op | nand_op | br | br_neg | br_zero | br_sub | rtn | load_imm | store,
             X"000" & instruction(3 downto 0) when shl_op | shr_op ,
             PC_in when brr | brr_neg | brr_zero,
             X"0000" when others;   
             
     with instruction(15 downto 9) select
-        operand1 <=
+        operand1 <= -- select operand 1 
             rd_data1 when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op | test2_op | out_op | load | store | mov,
             inputIn when in_op ,
             ("0000000" & instruction(8 downto 0)) when load_imm,
@@ -193,37 +193,37 @@ registers : register_file port map(
             X"0000" when others;   
             
     with instruction(8) select
-        signExtenderB1 <=
+        signExtenderB1 <= -- Automatic sign extending if it is needed
             ("1111111") when '1',
             ("0000000") when '0',
             ("0000000") when others;
             
     with instruction(5) select
-        signExtenderB2 <=
+        signExtenderB2 <= -- Automatic sign extending if it is needed
             ("1111111111") when '1',
             ("0000000000") when '0',
             ("0000000000") when others;
     
     with instruction(15 downto 9) select
-        useCustomTest <=
+        useCustomTest <= -- Was test_op2 necessary
             '1' when  test2_op,
             '0' when others;
 
     with instruction(15 downto 9) select
-        useBranch <=
+        useBranch <= -- Is branching needed
             '1' when  brr | brr_neg | brr_zero | br | br_neg | br_zero | br_sub | rtn,
             '0' when others;
             
     with instruction(15 downto 9) select
-        useLS <=
+        useLS <= -- Does the instruction use memory stage
             '1' when load_imm | load | store | mov,        
             '0' when others;
              
-    modeALU <= instruction(11 downto 9);
+    modeALU <= instruction(11 downto 9); -- modeALU is used to identify the bottom 3 bits of op_code
     
-    PC_out <= PC_in;
-    readReg1 <= rd_index1;
-    readReg2 <= rd_index2;
+    PC_out <= PC_in; -- PC_out is passed through
+    readReg1 <= rd_index1; -- The read register 1 index we used
+    readReg2 <= rd_index2; -- The read register 2 index we used
     
 process(clk)
 

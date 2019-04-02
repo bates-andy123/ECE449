@@ -44,31 +44,31 @@ end fetchStage;
 
 architecture Behavioral of fetchStage is
 
-signal PC_next : std_logic_vector(15 downto 0) := X"0002";
-signal PC_current : std_logic_vector(15 downto 0) := X"0000";
+signal PC_next : std_logic_vector(15 downto 0) := X"0002"; -- PC + 2, send to the mem ctrl to get next address in advance
+signal PC_current : std_logic_vector(15 downto 0) := X"0000"; -- The current PC, passed for branching instructions
 
-signal PC_setLatched : std_logic_vector(15 downto 0);
+signal PC_setLatched : std_logic_vector(15 downto 0); -- We latch the value of PC_set. Used if jump necessary
 
-signal PC_justHalted, validInstruction : std_logic := '0';
+signal PC_justHalted, validInstruction : std_logic := '0'; -- Temporary signals used to send out NOP operations when branching
 
 begin
 
-fetchAddress <= PC_current;
+fetchAddress <= PC_current; -- The address we are fetching from is current_PC
 
-    with validInstruction select
-        instruction_out <=
-            instruction_in when '0',
-            X"0000" when others;
+    with validInstruction select 
+        instruction_out <= --output port
+            instruction_in when '0', -- Normal operation
+            X"0000" when others; -- Padding with NOP
 
-validInstruction <= PC_justHalted or halt;
+validInstruction <= PC_justHalted or halt; -- If the PC was halted by jump or halt from decode stage
 
 process(rst, clk) begin
     if(rst = '0') then
         if rising_edge(clk) then
-            PC_setLatched <= PC_set;
+            PC_setLatched <= PC_set; -- Always save PC_set for if jump is necessary
         end if;
     else
-        PC_setLatched <= X"0000";
+        PC_setLatched <= X"0000"; --nullified on reset
     end if;
 end process;
 
@@ -90,15 +90,16 @@ begin
                     PC_out <=  PC_setLatched;
                     PC_justHalted <= '1';
                 end if;
-                inputOut <= inputIn;
+                inputOut <= inputIn; -- Input signal from the CPU port
 
         end if;
     else 
-        
+            -- Nullified all the signals to zero
             inputOut <= X"0000";
             PC_justHalted<='0';
             
-            if rstLoad = '1' then
+            -- Used to start our starting point
+            if rstLoad = '1' then -- When executing we have to start when address in the future
                 PC_next <= X"0004";
                 PC_current <= X"0002";
                 PC_out<=X"0002";

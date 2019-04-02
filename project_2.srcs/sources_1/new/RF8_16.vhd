@@ -38,55 +38,39 @@ begin
             case wr_index(2 downto 0) is
                 when "000" => 
                     reg_file(0) <= wr_data;
-                    --reg_overflow(0) <= wr_overflow;
                 when "001" => 
                     reg_file(1) <= wr_data;
-                    --reg_overflow(1) <= wr_overflow;
                 when "010" => 
                     reg_file(2) <= wr_data;
-                    --reg_overflow(2) <= wr_overflow;
                 when "011" => 
                     reg_file(3) <= wr_data;
-                    --reg_overflow(3) <= wr_overflow;
                 when "100" => 
                     reg_file(4) <= wr_data;
-                    --reg_overflow(4) <= wr_overflow;
                 when "101" => 
                     reg_file(5) <= wr_data;
-                    --reg_overflow(5) <= wr_overflow;
                 when "110" => 
                     reg_file(6) <= wr_data;
-                    --reg_overflow(6) <= wr_overflow;
                 when "111" => 
                     reg_file(7) <= wr_data;
-                    --reg_overflow(7) <= wr_overflow;
                   --fill this part
                 when others => NULL; 
             end case;
             case wr_index(2 downto 0) is
                 when "000" => 
-                    --reg_file(0) <= wr_data;
                     reg_overflow(0) <= wr_overflow;
                 when "001" => 
-                    --reg_file(1) <= wr_data;
                     reg_overflow(1) <= wr_overflow;
                 when "010" => 
-                    --reg_file(2) <= wr_data;
                     reg_overflow(2) <= wr_overflow;
                 when "011" => 
-                    --reg_file(3) <= wr_data;
                     reg_overflow(3) <= wr_overflow;
                 when "100" => 
-                    --reg_file(4) <= wr_data;
                     reg_overflow(4) <= wr_overflow;
                 when "101" => 
-                    --reg_file(5) <= wr_data;
                     reg_overflow(5) <= wr_overflow;
                 when "110" => 
-                    --reg_file(6) <= wr_data;
                     reg_overflow(6) <= wr_overflow;
                 when "111" => 
-                    --reg_file(7) <= wr_data;
                     reg_overflow(7) <= wr_overflow;
                   --fill this part
                 when others => NULL; 
@@ -96,7 +80,7 @@ begin
 end process;
 
 --read operation
-rd_data1 <=	
+rd_data1 <=	-- return register 1 value
 reg_file(0) when(rd_index1="000") else
 reg_file(1) when(rd_index1="001") else
 reg_file(2) when(rd_index1="010") else
@@ -105,7 +89,7 @@ reg_file(4) when(rd_index1="100") else
 reg_file(5) when(rd_index1="101") else
 reg_file(6) when(rd_index1="110") else reg_file(7);
 
-rd_data2 <=
+rd_data2 <= -- return register 2 value
 reg_file(0) when(rd_index2="000") else
 reg_file(1) when(rd_index2="001") else
 reg_file(2) when(rd_index2="010") else
@@ -114,7 +98,7 @@ reg_file(4) when(rd_index2="100") else
 reg_file(5) when(rd_index2="101") else
 reg_file(6) when(rd_index2="110") else reg_file(7);
 
-rd_overflow1 <=	
+rd_overflow1 <=	-- return if the selected register had a saved overflow
 reg_overflow(0) when(rd_index1="000") else
 reg_overflow(1) when(rd_index1="001") else
 reg_overflow(2) when(rd_index1="010") else
@@ -123,7 +107,7 @@ reg_overflow(4) when(rd_index1="100") else
 reg_overflow(5) when(rd_index1="101") else
 reg_overflow(6) when(rd_index1="110") else reg_overflow(7);
 
-rd_overflow2 <=	
+rd_overflow2 <=	-- return if the selected register had a saved overflow
 reg_overflow(0) when(rd_index2="000") else
 reg_overflow(1) when(rd_index2="001") else
 reg_overflow(2) when(rd_index2="010") else
