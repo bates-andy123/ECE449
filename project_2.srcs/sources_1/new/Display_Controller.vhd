@@ -65,9 +65,9 @@ begin
 			q_reg <= (others=>'0');
 		elsif (clk'event and clk='1') then       --If clock is rising q_next assigned to q_reg
             count := count + 1;
-            if count > 400000 then
-                q_reg <= q_next;
-                count := 0;
+            if count > 400000 then -- Sytemclock 100MHZ, shift down by 400000, thus 250 Hz
+                q_reg <= q_next; -- shift in the next segment
+                count := 0; -- Reset to 0 if over 400000
             end if;
 		end if;
 	end process;

@@ -78,17 +78,17 @@ begin
         if (clk='0' and clk'event) then
                 
                 if (PC_doJump = '0' and halt='0') then -- normal increment mode
-                    if(PC_justHalted = '1') then 
-                        PC_justHalted <= '0';
+                    if(PC_justHalted = '1') then -- Did we just halt
+                        PC_justHalted <= '0'; -- If so next time, we won't have just halted
                     end if; 
-                    PC_current <= PC_next;
-                    PC_next <= std_logic_vector(unsigned(PC_next) + 2);
-                    PC_out <= PC_current;            
+                    PC_current <= PC_next; -- The current instruction was the fetched address
+                    PC_next <= std_logic_vector(unsigned(PC_next) + 2); -- increment to get next instruction
+                    PC_out <= PC_current;            --notify the PC that was fetched for possible branching
                 else
-                    PC_current <= PC_setLatched;
-                    PC_next <= std_logic_vector(unsigned(PC_setLatched) + 2);
-                    PC_out <=  PC_setLatched;
-                    PC_justHalted <= '1';
+                    PC_current <= PC_setLatched; -- Use the latched value to update PC
+                    PC_next <= std_logic_vector(unsigned(PC_setLatched) + 2); -- Update the PC for next instruction
+                    PC_out <=  PC_setLatched; --notify the PC that was fetched for possible branching
+                    PC_justHalted <= '1'; -- We just branched so we just Halted
                 end if;
                 inputOut <= inputIn; -- Input signal from the CPU port
 

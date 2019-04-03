@@ -52,12 +52,10 @@ signal inWriteBackValueBuffer : std_logic_vector(15 downto 0);
 begin
 
 process(clk) begin
-    if (pipelineReset='0') then
+    if (pipelineReset='0') then -- was the pipelineReset or was it caused by a brnach
         if (clk='0') then
-            if doOutputUpdateIn = '1' then
+            if doOutputUpdateIn = '1' then -- CPUoutput = input
                 CPUoutput <= CPUinput;
---            else
---                CPUoutput <= X"0000";
             end if;
         end if;
     else
@@ -67,7 +65,7 @@ end process;
 
 process(clk) begin
     if falling_edge(clk) then
-        if (rst = '0' and pipelineReset='0') then 
+        if (rst = '0' and pipelineReset='0') then --latch everything out
             outDoWriteBack<=inDoWriteBack;
             outDestRegister<=inDestRegister;
             outWriteBackValue<=inWriteBackValue;

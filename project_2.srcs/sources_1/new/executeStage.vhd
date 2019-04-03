@@ -103,19 +103,18 @@ u1:alu port map(
     result=>resultALU,
     n=>n, 
     z=>z,
-    overflow=>aluOverflow--,
-    --lastInstructionOverflow=>lastInstructionValidOverflow
+    overflow=>aluOverflow
 );
 
-u2 : PC_calculator Port map(
+u2 : PC_calculator Port map( -- Use this to always calculate what the PC would be due to based on mode
     disp=>operand1, 
     reg=>operand2Buffer, 
     PC_current=>PC_in,
-    modeBranch=>modeALU,
-    calcedPC=>resultCalcedPC
+    modeBranch=>modeALU, -- modeALU is used to indicate the lowest three bytes of the opcode
+    calcedPC=>resultCalcedPC -- updated asyncrhonous 
 );
 
-u3 : dataForwarder port map(
+u3 : dataForwarder port map( -- Used for data forwarding
     doExecuteWriteback=>useExecuteDestValue,
     doMemoryWriteback=>useMemoryDestValue, 
     doWritebackWriteback=>useWritebackDestValue, 

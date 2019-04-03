@@ -93,10 +93,10 @@ signal outaContentRAMBuffer : std_logic_vector(15 downto 0);
 
 begin
 
-readOnlyAddressShifted <= "0" & readOnlyAddress(9 downto 1); -- Shifted by 1 to make 
-addressARAMShifted <= "0" & addressARAM(9 downto 1);
+readOnlyAddressShifted <= "0" & readOnlyAddress(9 downto 1); -- Shifted by 1 to make memory byte addressable 
+addressARAMShifted <= "0" & addressARAM(9 downto 1); -- Shifted by 1 to make memory byte addressable
 
-weaRAMVector <= ("" & weaRAMBuffer);
+weaRAMVector <= ("" & weaRAMBuffer); -- For some reason this is a vector of one
 
 u0 : RAMController port map(
     douta => outaContentRAMBuffer, 
@@ -121,12 +121,12 @@ u1 : ROMController port map(
     rsta => rstaROM
 );
     
-    with addressARAM select
+    with addressARAM select -- If we are writing to a speacil address we don't want to actually write to RAM
         weaRAMBuffer <=
-            '0' when X"FFF2" | X"FFF0",
+            '0' when X"FFF2" | X"FFF0", -- The memory mapped (speacil) address
             weaRAM when others;
 
-    with addressARAM select
+    with addressARAM select -- Read from RAM unless speacil, then take from switches
         outaContentRAM <= 
             inputIn when X"FFF0",
             outaContentRAMBuffer when others;
@@ -139,21 +139,21 @@ u1 : ROMController port map(
 process(clk)	
 begin        
     if falling_edge(clk) then            
-        if (readOnlyAddress(10) = '1') then            
-            outputOnReadOnlyChannel <= outbContentRAM;    
+        if (readOnlyAddress(10) = '1') then   -- Check if we are reading from the ROM or RAM         
+            outputOnReadOnlyChannel <= outbContentRAM;   -- One in 11th bit was RAM 
          else    
-            outputOnReadOnlyChannel <= outContentROM;    
+            outputOnReadOnlyChannel <= outContentROM;    -- Zero in 11th bit was ROM
         end if;        
     end if;    
 end process;
 
 process(clk, rst) begin
     if (rst='1') then
-        hexDigitsOut <= X"0000";
+        hexDigitsOut <= X"0000"; -- Put on zero on reset
     elsif (rising_edge(clk) and weaRAM = '1') then
     
-        if (addressARAM = X"FFF2") then
-            hexDigitsOut <= writeContentRAM;
+        if (addressARAM = X"FFF2") then -- speacial address to write to the digitizer
+            hexDigitsOut <= writeContentRAM; -- Push the info to scree
         end if;
     end if;
 end process;

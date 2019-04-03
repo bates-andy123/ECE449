@@ -55,7 +55,7 @@ signal dispShifted : std_logic_vector(15 downto 0) := X"0000";
 
 begin
 
-    dispShifted <=  disp(14 downto 0) & "0";
+    dispShifted <=  disp(14 downto 0) & "0"; -- This is the same as multiply by two, but alot less expensive
 
     adder1 : addSub port map(
         in1 => dispShifted, 
@@ -73,9 +73,9 @@ begin
 
     with modeBranch select
         calcedPC <=    
-            (PC_CounterDispAdder) when "000" | "001" | "010",
-            (regDispAdder) when "011" | "100" | "101" | "110",
-            (reg) when "111",
-            X"0000" when others;
+            (PC_CounterDispAdder) when "000" | "001" | "010", -- Add the PC counter and disp bits signed extended
+            (regDispAdder) when "011" | "100" | "101" | "110", -- Add the reg plus and disp bits signed extended
+            (reg) when "111", -- Just put out the register for return
+            X"0000" when others; -- Shoul never use
 
 end Behavioral;

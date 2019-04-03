@@ -55,7 +55,7 @@ begin
                   --fill this part
                 when others => NULL; 
             end case;
-            case wr_index(2 downto 0) is
+            case wr_index(2 downto 0) is 
                 when "000" => 
                     reg_overflow(0) <= wr_overflow;
                 when "001" => 

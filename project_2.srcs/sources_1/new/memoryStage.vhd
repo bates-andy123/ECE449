@@ -76,34 +76,35 @@ process(rst, clk) begin
     end if;
 end process;
 
-    memoryModeIsStore <= '1' when modeMemory = "01" else '0';
-    destRegOutMatchIn <= '1' when destRegOutLatched = regUsedIn else '0';
+    memoryModeIsStore <= '1' when modeMemory = "01" else '0'; -- Was this a store operation
+    destRegOutMatchIn <= '1' when destRegOutLatched = regUsedIn else '0'; -- Is the destination reg out the same as the one used in
     
+	-- If we are doing a store, and the destRegout was used with the same value in, we need to use the output value and not the input value
     dataForwardNeededStore <= doWriteBackInLatched and destRegOutMatchIn and memoryModeIsStore;
     
     with dataForwardNeededStore select
         memoryWriteValue <= 
-            outputLatched when '1',
+            outputLatched when '1', -- We latched the output becuase it is being updated
             input when others; 
 
-    memoryModeIsLoad <= '1' when modeMemory = "00" else '0';
-    outputIsLoad <= doMemoryAccess and memoryModeIsLoad;
+    memoryModeIsLoad <= '1' when modeMemory = "00" else '0'; -- "Is memory Mode load"
+    outputIsLoad <= doMemoryAccess and memoryModeIsLoad; -- Are we doing a memory action
 
-    with outputIsLoad select
+    with outputIsLoad select -- If the output is load, get the ouput from memoryReadValue, else it's the input
         outputBuffer <= 
             memoryReadValue when '1',
             input when others;
 
-    memoryAddress <= memoryAddressFromExecuteStage;
+    memoryAddress <= memoryAddressFromExecuteStage; -- Pump the desired memoryAddress to so it's ready on rising edge
     
     with modeMemory select
-        memoryRW <= 
+        memoryRW <= -- We only need to write when doing a store, else read because it has no effect if not used
             '1' when "01",
             '0' when others;
 
 process(clk) begin
     if rst = '0' then
-        if clk='1' then
+        if clk='1' then -- We latched the output on the rising edge when it was gurnateed stable
             doWriteBackInLatched <= doWriteBackOutBuffer;
             destRegOutLatched <= destRegOutBuffer;
             outputLatched <= outputBuffer;
